@@ -303,12 +303,25 @@
   .rd-3 { transition-delay: 0.3s; }
   .rd-4 { transition-delay: 0.4s; }
 
+  /* === Tech Stack === */
+  .tech-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+  .tech-card { background: var(--surface); border: 1px solid var(--separator); border-radius: 20px; padding: 22px 20px;
+    transition: transform 0.4s var(--spring), border-color 0.3s, box-shadow 0.3s; }
+  .tech-card:hover { transform: translateY(-4px); border-color: var(--blue); box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
+  .tech-cat { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; margin-bottom: 14px; color: var(--text); }
+  .tech-emoji { font-size: 22px; }
+  .tech-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .tech-list li { font-size: 13.5px; color: var(--text-2); line-height: 1.5; padding-left: 16px; position: relative; }
+  .tech-list li::before { content: ''; position: absolute; left: 0; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+  .tech-list b { color: var(--text); font-weight: 700; }
+
   @media (max-width: 640px) {
     .summary-grid { grid-template-columns: 1fr; }
     .skills-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
     .skill-icon-bg { width: 52px; height: 52px; border-radius: 14px; font-size: 22px; }
     .portfolio-grid { grid-template-columns: 1fr; }
     .oss-grid { grid-template-columns: 1fr; }
+    .tech-grid { grid-template-columns: 1fr; }
     .contact-grid { grid-template-columns: repeat(2, 1fr); }
     .profile-card { flex-direction: column; align-items: center; text-align: center; }
   }
@@ -910,6 +923,69 @@
 </section>
 
 <!-- Contact -->
+<!-- Tech Stack -->
+<section class="section" id="tech">
+  <div class="section-label reveal">建站技术栈</div>
+  <h2 class="section-headline reveal rd-1">这个简历网站是怎么搭的</h2>
+  <p class="section-desc reveal rd-2">从单文件架构到零依赖部署——下面是构成本站的全部技术。所有交互均为原生实现，无框架、无构建步骤，整站自包含于一个 HTML 文件，可直接双击打开或静态托管。</p>
+  <div class="tech-grid">
+    <div class="tech-card reveal">
+      <div class="tech-cat"><span class="tech-emoji">🧱</span> 前端架构</div>
+      <ul class="tech-list">
+        <li><b>HTML5</b> · 语义化单文件结构</li>
+        <li><b>原生 CSS3</b> · 变量主题 / 玻璃拟态 / 流式排版</li>
+        <li><b>原生 JavaScript</b> · 零框架、零打包</li>
+        <li><b>SVG 内联图标</b> · 零外部图片依赖</li>
+      </ul>
+    </div>
+    <div class="tech-card reveal rd-1">
+      <div class="tech-cat"><span class="tech-emoji">🎨</span> 视觉与响应式</div>
+      <ul class="tech-list">
+        <li><b>CSS 变量</b> 主题（--blue / --orange / --pink…）</li>
+        <li><b>clamp()</b> 流体字号 + Grid / Flexbox 布局</li>
+        <li><b>backdrop-filter</b> 毛玻璃 Dock 与弹窗</li>
+        <li><b>系统字体栈</b> PingFang SC / 微软雅黑</li>
+      </ul>
+    </div>
+    <div class="tech-card reveal rd-2">
+      <div class="tech-cat"><span class="tech-emoji">⚡</span> 交互与动效</div>
+      <ul class="tech-list">
+        <li><b>IntersectionObserver</b> 滚动入场动画</li>
+        <li><b>Smooth Scroll</b> + Dock 滚动高亮联动</li>
+        <li><b>滚动进度条</b> / Dynamic Island 收缩</li>
+        <li><b>搜索 · 筛选 · 排序</b> 作品集交互页</li>
+      </ul>
+    </div>
+    <div class="tech-card reveal rd-3">
+      <div class="tech-cat"><span class="tech-emoji">🗂️</span> 数据管线</div>
+      <ul class="tech-list">
+        <li><b>Python + python-docx</b> 解析作品集</li>
+        <li><b>WebFetch / WebSearch</b> 核实剧集链接</li>
+        <li><b>JSON 内嵌</b> 驱动前端渲染</li>
+        <li><b>零接口依赖</b> · 可离线完整浏览</li>
+      </ul>
+    </div>
+    <div class="tech-card reveal">
+      <div class="tech-cat"><span class="tech-emoji">🚀</span> 部署与托管</div>
+      <ul class="tech-list">
+        <li><b>GitHub Pages</b> · 静态托管 + gh api 推送</li>
+        <li><b>CloudStudio</b> · 国内可访问镜像</li>
+        <li><b>Git / GitHub API</b> 内容同步</li>
+        <li><b>纯静态</b> · 无需服务器与数据库</li>
+      </ul>
+    </div>
+    <div class="tech-card reveal rd-1">
+      <div class="tech-cat"><span class="tech-emoji">🤖</span> AI 辅助生产</div>
+      <ul class="tech-list">
+        <li><b>WorkBuddy</b> 智能体端到端生成与迭代</li>
+        <li><b>智谱 GLM-4-Flash</b> 演示中心真实后端</li>
+        <li><b>DeepSeek / GPT / Claude</b> 撰写与编码</li>
+        <li><b>AI 生成</b> 文案 · 图标 · 页面结构</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <section class="section" id="contact" style="padding-bottom: 160px;">
   <div class="section-label reveal">联系</div>
   <h2 class="section-headline reveal rd-1">期待交流</h2>
