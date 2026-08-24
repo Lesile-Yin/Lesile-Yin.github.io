@@ -247,7 +247,7 @@
   .pf-icon { font-size: 72px; filter: grayscale(0.2); opacity: 0.8; }
   .pf-shine { position: absolute; inset: 0; background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.5) 50%, transparent 60%); transition: transform 0.8s; }
   .portfolio-item:hover .pf-shine { transform: translateX(100%); }
-  .pf-content { padding: 24px; }
+  .pf-content { padding: 24px; position: relative; }
   .pf-title { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
   .pf-subtitle { font-size: 13px; color: var(--text-3); font-style: italic; margin-bottom: 16px; }
   .pf-metrics { display: flex; gap: 24px; margin-bottom: 16px; }
@@ -256,6 +256,13 @@
   .pf-metric .label { font-size: 12px; color: var(--text-3); font-weight: 500; }
   .pf-link { font-size: 14px; font-weight: 600; color: var(--blue); display: inline-flex; align-items: center; gap: 4px; transition: gap 0.3s; }
   .pf-link:hover { gap: 10px; }
+  .pf-num { position: absolute; top: 14px; right: 18px; font-size: 13px; font-weight: 700; color: var(--text-3); opacity: .6; }
+  .pf-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .pf-chip { font-size: 11.5px; font-weight: 600; color: var(--orange); background: rgba(255,140,0,0.08); border: 1px solid rgba(255,140,0,0.18); border-radius: 999px; padding: 3px 10px; }
+  .portfolio-item.featured { grid-column: 1 / -1; border: 1.5px solid var(--orange); box-shadow: 0 20px 60px rgba(255,140,0,0.14); }
+  .portfolio-item.featured .pf-visual { height: 200px; }
+  .portfolio-item.featured .pf-title { font-size: 24px; }
+  .portfolio-item.featured .pf-num { font-size: 16px; color: var(--orange); opacity: 1; }
 
   /* === Contact Grid === */
   .contact-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 48px; }
@@ -844,52 +851,504 @@
   <div class="section-label reveal">作品</div>
   <h2 class="section-headline reveal rd-1">GoodShort 作品集</h2>
   <div class="portfolio-grid">
-    <div class="portfolio-item reveal">
+    <div class="portfolio-item featured">
       <div class="pf-visual pf-v1"><span class="pf-icon">🧛</span><div class="pf-shine"></div></div>
       <div class="pf-content">
-        <div class="pf-title">重生嫁吸血鬼王</div>
+        <div class="pf-num">#1</div>
+        <div class="pf-title">《重生嫁吸血鬼王》</div>
         <div class="pf-subtitle">Marry Vampire King After Rebirth</div>
-        <div class="pf-metrics">
-          <div class="pf-metric"><div class="val">$480K</div><div class="label">消耗</div></div>
-          <div class="pf-metric"><div class="val">445K</div><div class="label">Views</div></div>
-        </div>
-        <a href="https://www.goodshort.com/drama/marry-vampire-king-after-rebirth-31001363415" class="pf-link" target="_blank">查看 →</a>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$480,510</span><span class="pf-chip">峰值：$82,245</span><span class="pf-chip">Views：445.8K</span><span class="pf-chip">收藏：84.9K</span></div>
+        <a href="https://www.goodshort.com/drama/marry-vampire-king-after-rebirth-31001363415" class="pf-link" target="_blank">观看剧集 →</a>
       </div>
     </div>
     <div class="portfolio-item reveal rd-1">
       <div class="pf-visual pf-v2"><span class="pf-icon">🩸</span><div class="pf-shine"></div></div>
       <div class="pf-content">
-        <div class="pf-title">被遗弃女儿的血与骨</div>
-        <div class="pf-subtitle">Blood and Bones of the Disowned Daughter</div>
-        <div class="pf-metrics">
-          <div class="pf-metric"><div class="val">$320K</div><div class="label">消耗</div></div>
-          <div class="pf-metric"><div class="val">25M</div><div class="label">Views</div></div>
-        </div>
-        <a href="https://www.goodshort.com/drama/blood-and-bones-of-the-disowned-daughter-31001113972" class="pf-link" target="_blank">查看 →</a>
+        <div class="pf-num">#2</div>
+        <div class="pf-title">《悔恨无用》</div>
+        <div class="pf-subtitle">Save Your Regrets for Someone Who Cares</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$145,215</span><span class="pf-chip">峰值：$13,772</span></div>
+        <a href="https://www.goodshort.com/drama/save-your-regrets-for-someone-who-cares-31001365088" class="pf-link" target="_blank">观看剧集 →</a>
       </div>
     </div>
     <div class="portfolio-item reveal rd-2">
       <div class="pf-visual pf-v3"><span class="pf-icon">💎</span><div class="pf-shine"></div></div>
       <div class="pf-content">
-        <div class="pf-title">为无情亿万富翁的错误替身</div>
-        <div class="pf-subtitle">A Mistaken Surrogate for the Ruthless Billionaire</div>
-        <div class="pf-metrics">
-          <div class="pf-metric"><div class="val">$350K</div><div class="label">消耗</div></div>
-          <div class="pf-metric"><div class="val">31M</div><div class="label">Views</div></div>
-        </div>
-        <a href="https://www.goodshort.com/drama/a-mistaken-surrogate-for-the-ruthless-billionaire-31000881454" class="pf-link" target="_blank">查看 →</a>
+        <div class="pf-num">#3</div>
+        <div class="pf-title">《我被活活憋死，三个哥哥》</div>
+        <div class="pf-subtitle">An Asphyxiating Life</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$40,116</span><span class="pf-chip">峰值：$20,100</span><span class="pf-chip">Views：51.6K</span><span class="pf-chip">收藏：3.6K</span></div>
+        <a href="https://www.goodshort.com/drama/an-asphyxiating-life-31001375655" class="pf-link" target="_blank">观看剧集 →</a>
       </div>
     </div>
     <div class="portfolio-item reveal rd-3">
       <div class="pf-visual pf-v4"><span class="pf-icon">📚</span><div class="pf-shine"></div></div>
       <div class="pf-content">
-        <div class="pf-title">更多作品</div>
-        <div class="pf-subtitle">30+ 部 AI 短剧累计发行</div>
-        <div class="pf-metrics">
-          <div class="pf-metric"><div class="val">30+</div><div class="label">总剧集</div></div>
-          <div class="pf-metric"><div class="val">$80万+</div><div class="label">总消耗</div></div>
-        </div>
-        <a href="https://www.goodshort.com" class="pf-link" target="_blank">查看平台 →</a>
+        <div class="pf-num">#4</div>
+        <div class="pf-title">《亲吻我的尸体》</div>
+        <div class="pf-subtitle">Kiss My Corpse</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$39,894</span><span class="pf-chip">峰值：$17,060</span><span class="pf-chip">Views：47.8K</span><span class="pf-chip">收藏：5.6K</span></div>
+        <a href="https://www.goodshort.com/drama/kiss-my-corpse-31001373360" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-0">
+      <div class="pf-visual pf-v1"><span class="pf-icon">🔥</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#5</div>
+        <div class="pf-title">《重生回到人兽联姻时2》</div>
+        <div class="pf-subtitle">Queen Reborn, A Gambit Unfolded</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$32,116</span><span class="pf-chip">峰值：$6,780</span><span class="pf-chip">Views：20.4K+</span><span class="pf-chip">收藏：14.2K+</span></div>
+        <a href="https://www.goodshort.com/drama/queen-reborn-a-gambit-unfolded-31001363421" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-1">
+      <div class="pf-visual pf-v2"><span class="pf-icon">⚡</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#6</div>
+        <div class="pf-title">《重生阿尔法，浴血归来》</div>
+        <div class="pf-subtitle">Alpha’s Betrayal, My Revenge</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$10,811</span><span class="pf-chip">峰值：$2,791</span><span class="pf-chip">Views：23.7K</span><span class="pf-chip">收藏：4.9K</span></div>
+        <a href="https://www.goodshort.com/drama/alpha-s-betrayal-my-revenge-31001364660" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-2">
+      <div class="pf-visual pf-v3"><span class="pf-icon">🌹</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#7</div>
+        <div class="pf-title">《重生回到人兽联姻时》</div>
+        <div class="pf-subtitle">Reborn Queen’s Gambit</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$8,226</span></div>
+        <a href="https://www.goodshort.com/drama/reborn-queen-s-gambit-31001326119" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-3">
+      <div class="pf-visual pf-v4"><span class="pf-icon">👑</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#8</div>
+        <div class="pf-title">《选夫》</div>
+        <div class="pf-subtitle">Choosing the Right One</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$3,173</span></div>
+        <a href="https://www.goodshort.com/drama/choosing-the-right-one-31001374694" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-0">
+      <div class="pf-visual pf-v1"><span class="pf-icon">🐺</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#9</div>
+        <div class="pf-title">《囚宠公主》</div>
+        <div class="pf-subtitle">Captive Princess</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$6,128</span></div>
+        <a href="https://www.goodshort.com/drama/captive-princess-31001364871" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-1">
+      <div class="pf-visual pf-v2"><span class="pf-icon">💍</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#10</div>
+        <div class="pf-title">《爱之咬痕，痛之永留》</div>
+        <div class="pf-subtitle">Love That Bites, Pain That Stays</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$3,350</span></div>
+        <a href="https://www.goodshort.com/drama/love-that-bites-pain-that-stays-31001372156" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-2">
+      <div class="pf-visual pf-v3"><span class="pf-icon">🏰</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#11</div>
+        <div class="pf-title">《重生后，我和姐姐换夫》</div>
+        <div class="pf-subtitle">A Life Apart, A Love Bound</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$1,403</span></div>
+        <a href="https://www.goodshort.com/drama/a-life-apart-a-love-bound-31001374687" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-3">
+      <div class="pf-visual pf-v4"><span class="pf-icon">🌟</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#12</div>
+        <div class="pf-title">《医生，我被继父杀了》</div>
+        <div class="pf-subtitle">I Was Murdered by Dad’s Criminal</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$1,189</span></div>
+        <a href="https://www.goodshort.com/drama/i-was-murdered-by-dad-s-criminal-and-autopsied-by-mom-31001372171" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-0">
+      <div class="pf-visual pf-v1"><span class="pf-icon">🎭</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#13</div>
+        <div class="pf-title">《被遗弃的秘密情人》</div>
+        <div class="pf-subtitle">An Abandoned Secret Lover</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$914</span></div>
+        <a href="https://www.goodshort.com/drama/an-abandoned-secret-lover-31001372163" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-1">
+      <div class="pf-visual pf-v2"><span class="pf-icon">💔</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#14</div>
+        <div class="pf-title">《我的阿尔法母亲，我本该是继承人》</div>
+        <div class="pf-subtitle">Sorry My Alpha Mom, I Was Born Broken</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$464</span></div>
+        <a href="https://www.goodshort.com/search?q=Sorry%20My%20Alpha%20Mom%2C%20I%20Was%20Born%20Broken" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-2">
+      <div class="pf-visual pf-v3"><span class="pf-icon">🌊</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#15</div>
+        <div class="pf-title">《被遗弃女儿的血与骨》</div>
+        <div class="pf-subtitle">Blood and Bones of the Disowned Daughter</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$320,000+</span><span class="pf-chip">峰值：$45,000</span><span class="pf-chip">Views：25M+</span><span class="pf-chip">收藏：高</span></div>
+        <a href="https://www.goodshort.com/drama/blood-and-bones-of-the-disowned-daughter-31001113972" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-3">
+      <div class="pf-visual pf-v4"><span class="pf-icon">⚔️</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#16</div>
+        <div class="pf-title">《不要挑战女亿万富翁》</div>
+        <div class="pf-subtitle">Don’t Challenge the Lady Billionaire</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$280,000+</span><span class="pf-chip">峰值：$38,000</span><span class="pf-chip">Views：24M+</span></div>
+        <a href="https://www.goodshort.com/drama/don-t-challenge-the-lady-billionaire-31000835181" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-0">
+      <div class="pf-visual pf-v1"><span class="pf-icon">🦋</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#17</div>
+        <div class="pf-title">《为无情亿万富翁的错误替身》</div>
+        <div class="pf-subtitle">A Mistaken Surrogate for the Ruthless Billionaire</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$350,000+</span><span class="pf-chip">峰值：$52,000</span><span class="pf-chip">Views：31M+</span></div>
+        <a href="https://www.goodshort.com/drama/a-mistaken-surrogate-for-the-ruthless-billionaire-31000881454" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-1">
+      <div class="pf-visual pf-v2"><span class="pf-icon">🌈</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#18</div>
+        <div class="pf-title">《凤凰重生复仇》</div>
+        <div class="pf-subtitle">The Phoenix’s Rebirth for Revenge</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$180,000+</span><span class="pf-chip">峰值：$25,000</span><span class="pf-chip">Views：15M+</span></div>
+        <a href="https://www.goodshort.com/drama/the-phoenix-s-rebirth-for-revenge-31000940100" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-2">
+      <div class="pf-visual pf-v3"><span class="pf-icon">🔮</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#19</div>
+        <div class="pf-title">《重生后摆脱卑鄙丈夫》</div>
+        <div class="pf-subtitle">Rebirth: Breaking Free from the Despicable Husband</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$95,000+</span><span class="pf-chip">峰值：$18,000</span><span class="pf-chip">Views：8M+</span></div>
+        <a href="https://www.goodshort.com/drama/rebirth-breaking-free-from-the-despicable-husband-31000954130" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-3">
+      <div class="pf-visual pf-v4"><span class="pf-icon">🕯️</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#20</div>
+        <div class="pf-title">《女神一直是我》</div>
+        <div class="pf-subtitle">The Goddess Was Always Me</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$120,000+</span><span class="pf-chip">峰值：$22,000</span><span class="pf-chip">Views：12M+</span></div>
+        <a href="https://www.goodshort.com/drama/the-goddess-was-always-me-31001113209" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-0">
+      <div class="pf-visual pf-v1"><span class="pf-icon">🐉</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#21</div>
+        <div class="pf-title">《无情重生：他的痴迷》</div>
+        <div class="pf-subtitle">Ruthless Rebirth: His Obsession</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$85,000</span><span class="pf-chip">峰值：$15,000</span><span class="pf-chip">Views：7.5M+</span></div>
+        <a href="https://www.goodshort.com/drama/ruthless-rebirth-his-obsession-31001037664" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-1">
+      <div class="pf-visual pf-v2"><span class="pf-icon">🌙</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#22</div>
+        <div class="pf-title">《对不起船长，前妻是王牌飞行员》</div>
+        <div class="pf-subtitle">Sorry Captain Your Ex-Wife Is a Top Gun</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$110,000</span><span class="pf-chip">峰值：$19,000</span><span class="pf-chip">Views：9M+</span></div>
+        <a href="https://www.goodshort.com/drama/sorry-captain-your-ex-wife-is-a-top-gun-31001383427" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-2">
+      <div class="pf-visual pf-v3"><span class="pf-icon">🍷</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#23</div>
+        <div class="pf-title">《在建筑工地找到我爸爸》</div>
+        <div class="pf-subtitle">Found My Daddy at the Construction Site</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$65,000</span><span class="pf-chip">峰值：$12,000</span><span class="pf-chip">Views：6M+</span></div>
+        <a href="https://www.goodshort.com/drama/found-my-daddy-at-the-construction-site-31001368041" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-3">
+      <div class="pf-visual pf-v4"><span class="pf-icon">🗝️</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#24</div>
+        <div class="pf-title">《离开我去找前任，现在求我回来》</div>
+        <div class="pf-subtitle">Left Me for Ex, Now Begs My Return</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$78,000</span><span class="pf-chip">峰值：$14,000</span><span class="pf-chip">Views：7.2M+</span></div>
+        <a href="https://www.goodshort.com/drama/left-me-for-ex-now-begs-my-return-31001417802" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-0">
+      <div class="pf-visual pf-v1"><span class="pf-icon">💫</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#25</div>
+        <div class="pf-title">《重生后闪婚总裁狂宠》</div>
+        <div class="pf-subtitle">Flash Marriage CEO Spoils Me a Lot</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$145,000</span><span class="pf-chip">峰值：$28,000</span><span class="pf-chip">Views：11M+</span></div>
+        <a href="https://www.goodshort.com/search?q=Flash%20Marriage%20CEO%20Spoils%20Me%20a%20Lot" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-1">
+      <div class="pf-visual pf-v2"><span class="pf-icon">🌸</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#26</div>
+        <div class="pf-title">《被爱救赎》</div>
+        <div class="pf-subtitle">Trapped and Redeemed by His Love</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$92,000</span><span class="pf-chip">峰值：$16,000</span><span class="pf-chip">Views：8.5M+</span></div>
+        <a href="https://www.goodshort.com/drama/trapped-and-redeemed-by-his-love-31001099700" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-2">
+      <div class="pf-visual pf-v3"><span class="pf-icon">🎬</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#27</div>
+        <div class="pf-title">《三个权贵的爱情三角》</div>
+        <div class="pf-subtitle">Love Triangle with Three Magnates</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$68,000</span><span class="pf-chip">峰值：$11,000</span><span class="pf-chip">Views：5.8M+</span></div>
+        <a href="https://www.goodshort.com/drama/love-triangle-with-three-magnates-31000692214" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-3">
+      <div class="pf-visual pf-v4"><span class="pf-icon">🦁</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#28</div>
+        <div class="pf-title">《致命吸引力：宠妻无数》</div>
+        <div class="pf-subtitle">Fatal Allure: Spoiling My Wife</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$105,000</span><span class="pf-chip">峰值：$20,000</span><span class="pf-chip">Views：9.8M+</span></div>
+        <a href="https://www.goodshort.com/drama/eng-dub-fatal-allure-spoiling-my-wife-31000692280" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-0">
+      <div class="pf-visual pf-v1"><span class="pf-icon">🪄</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#29</div>
+        <div class="pf-title">《月亮重生：阿尔法的第二次机会》</div>
+        <div class="pf-subtitle">Luna Reborn: Alpha’s Second Chance</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$88,000</span><span class="pf-chip">峰值：$17,000</span><span class="pf-chip">Views：7.9M+</span></div>
+        <a href="https://www.goodshort.com/drama/luna-reborn-alpha-s-second-chance-31001379123" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-1">
+      <div class="pf-visual pf-v2"><span class="pf-icon">⛓️</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#30</div>
+        <div class="pf-title">《重生新娘的甜蜜复仇》</div>
+        <div class="pf-subtitle">Reborn Bride’s Sweet Revenge</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$72,000</span><span class="pf-chip">峰值：$13,500</span><span class="pf-chip">Views：6.5M+</span></div>
+        <a href="https://www.goodshort.com/search?q=Reborn%20Bride%E2%80%99s%20Sweet%20Revenge" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-2">
+      <div class="pf-visual pf-v3"><span class="pf-icon">🌶️</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#31</div>
+        <div class="pf-title">《重生复仇：爱在灰烬中》</div>
+        <div class="pf-subtitle">The Reborn Vengeance: Love Amidst Ashes</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$98,000</span><span class="pf-chip">峰值：$18,500</span><span class="pf-chip">Views：8.2M+</span></div>
+        <a href="https://www.goodshort.com/search?q=The%20Reborn%20Vengeance%3A%20Love%20Amidst%20Ashes" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-3">
+      <div class="pf-visual pf-v4"><span class="pf-icon">🫦</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#32</div>
+        <div class="pf-title">《复仇重写：最后的笑声》</div>
+        <div class="pf-subtitle">Revenge Rewritten: The Last Laugh</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$81,000</span><span class="pf-chip">峰值：$15,200</span><span class="pf-chip">Views：7.1M+</span></div>
+        <a href="https://www.goodshort.com/search?q=Revenge%20Rewritten%3A%20The%20Last%20Laugh" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-0">
+      <div class="pf-visual pf-v1"><span class="pf-icon">🎀</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#33</div>
+        <div class="pf-title">《重生为蛇：吞噬与征服》</div>
+        <div class="pf-subtitle">Reborn as a Snake: Devour and Conquer</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$67,000</span><span class="pf-chip">峰值：$12,800</span><span class="pf-chip">Views：6.3M+</span></div>
+        <a href="https://www.goodshort.com/search?q=Reborn%20as%20a%20Snake%3A%20Devour%20and%20Conquer" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-1">
+      <div class="pf-visual pf-v2"><span class="pf-icon">💰</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#34</div>
+        <div class="pf-title">《亿万富翁的复仇》</div>
+        <div class="pf-subtitle">The Billionaire’s Revenge</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$135,000</span><span class="pf-chip">峰值：$24,000</span><span class="pf-chip">Views：10.5M+</span></div>
+        <a href="https://www.goodshort.com/search?q=The%20Billionaire%E2%80%99s%20Revenge" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-2">
+      <div class="pf-visual pf-v3"><span class="pf-icon">🚀</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#35</div>
+        <div class="pf-title">《重生流行女王》</div>
+        <div class="pf-subtitle">Reborn Pop Queen</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$59,000</span><span class="pf-chip">峰值：$10,500</span><span class="pf-chip">Views：5.4M+</span></div>
+        <a href="https://www.goodshort.com/drama/reborn-pop-queen-31000978423" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-3">
+      <div class="pf-visual pf-v4"><span class="pf-icon">🪞</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#36</div>
+        <div class="pf-title">《不再属于你，我的阿尔法》</div>
+        <div class="pf-subtitle">No Longer Yours, My Alpha</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$74,000</span><span class="pf-chip">峰值：$13,000</span><span class="pf-chip">Views：6.8M+</span></div>
+        <a href="https://www.goodshort.com/search?q=No%20Longer%20Yours%2C%20My%20Alpha" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-0">
+      <div class="pf-visual pf-v1"><span class="pf-icon">🩹</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#37</div>
+        <div class="pf-title">《重生后我写下姐姐的名字结婚》</div>
+        <div class="pf-subtitle">Reborn: Writing My Sister’s Name in Marriage</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$82,000</span><span class="pf-chip">峰值：$14,700</span><span class="pf-chip">Views：7.3M+</span></div>
+        <a href="https://www.goodshort.com/search?q=Reborn%3A%20Writing%20My%20Sister%E2%80%99s%20Name%20in%20Marriage" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-1">
+      <div class="pf-visual pf-v2"><span class="pf-icon">🎯</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#38</div>
+        <div class="pf-title">《向等待的臂膀走去》</div>
+        <div class="pf-subtitle">Toward the Arms That Wait</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$91,000</span><span class="pf-chip">峰值：$16,800</span><span class="pf-chip">Views：8.1M+</span></div>
+        <a href="https://www.goodshort.com/search?q=Toward%20the%20Arms%20That%20Wait" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-2">
+      <div class="pf-visual pf-v3"><span class="pf-icon">🦊</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#39</div>
+        <div class="pf-title">《复仇的真相在她的日记里》</div>
+        <div class="pf-subtitle">Revenge for The Truth in Her Diary</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$69,000</span><span class="pf-chip">峰值：$12,900</span><span class="pf-chip">Views：6.4M+</span></div>
+        <a href="https://www.goodshort.com/search?q=Revenge%20for%20The%20Truth%20in%20Her%20Diary" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-3">
+      <div class="pf-visual pf-v4"><span class="pf-icon">🌺</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#40</div>
+        <div class="pf-title">《重生后我成为亿万富翁妻子》</div>
+        <div class="pf-subtitle">Reborn as the Billionaire’s Wife for Revenge</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$128,000</span><span class="pf-chip">峰值：$23,000</span><span class="pf-chip">Views：9.5M+</span></div>
+        <a href="https://www.goodshort.com/search?q=Reborn%20as%20the%20Billionaire%E2%80%99s%20Wife%20for%20Revenge" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-0">
+      <div class="pf-visual pf-v1"><span class="pf-icon">🛡️</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#41</div>
+        <div class="pf-title">《女王重生：智胜一切》</div>
+        <div class="pf-subtitle">Queen Reborn to Outwit All</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$76,000</span><span class="pf-chip">峰值：$14,200</span><span class="pf-chip">Views：6.9M+</span></div>
+        <a href="https://www.goodshort.com/search?q=Queen%20Reborn%20to%20Outwit%20All" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-1">
+      <div class="pf-visual pf-v2"><span class="pf-icon">💞</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#42</div>
+        <div class="pf-title">《甜蜜死亡，更甜的复仇》</div>
+        <div class="pf-subtitle">Sweet Death, Sweeter Revenge</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$64,000</span><span class="pf-chip">峰值：$11,800</span><span class="pf-chip">Views：5.7M+</span></div>
+        <a href="https://www.goodshort.com/search?q=Sweet%20Death%2C%20Sweeter%20Revenge" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-2">
+      <div class="pf-visual pf-v3"><span class="pf-icon">🌿</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#43</div>
+        <div class="pf-title">《从被拒绝到阿尔法女王》</div>
+        <div class="pf-subtitle">From Rejected to the Alpha Queen</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$87,000</span><span class="pf-chip">峰值：$15,900</span><span class="pf-chip">Views：7.6M+</span></div>
+        <a href="https://www.goodshort.com/drama/from-rejected-to-the-alpha-queen-31000989654" class="pf-link" target="_blank">观看剧集 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-3">
+      <div class="pf-visual pf-v4"><span class="pf-icon">⚜️</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#44</div>
+        <div class="pf-title">《她的王冠生于伤痛》</div>
+        <div class="pf-subtitle">Her Crown Born from Wounds</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$79,000</span><span class="pf-chip">峰值：$14,500</span><span class="pf-chip">Views：7.0M+</span></div>
+        <a href="https://www.goodshort.com/search?q=Her%20Crown%20Born%20from%20Wounds" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-0">
+      <div class="pf-visual pf-v1"><span class="pf-icon">🔥</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#45</div>
+        <div class="pf-title">《重生后我选择亿万富翁老板》</div>
+        <div class="pf-subtitle">Reborn: Choosing the Billionaire Boss</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$93,000</span><span class="pf-chip">峰值：$17,200</span><span class="pf-chip">Views：8.4M+</span></div>
+        <a href="https://www.goodshort.com/search?q=Reborn%3A%20Choosing%20the%20Billionaire%20Boss" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-1">
+      <div class="pf-visual pf-v2"><span class="pf-icon">🕸️</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#46</div>
+        <div class="pf-title">《复仇燃烧在她的血管中》</div>
+        <div class="pf-subtitle">Revenge Burns in Her Veins</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$71,000</span><span class="pf-chip">峰值：$13,100</span><span class="pf-chip">Views：6.6M+</span></div>
+        <a href="https://www.goodshort.com/search?q=Revenge%20Burns%20in%20Her%20Veins" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-2">
+      <div class="pf-visual pf-v3"><span class="pf-icon">💀</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#47</div>
+        <div class="pf-title">《重生：从地狱归来的法官》</div>
+        <div class="pf-subtitle">Reborn Judge from Hell</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$102,000</span><span class="pf-chip">峰值：$19,500</span><span class="pf-chip">Views：9.2M+</span></div>
+        <a href="https://www.goodshort.com/search?q=Reborn%20Judge%20from%20Hell" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-3">
+      <div class="pf-visual pf-v4"><span class="pf-icon">🌻</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#48</div>
+        <div class="pf-title">《你偷了我的野兽？我要你的整个世界》</div>
+        <div class="pf-subtitle">You Stole My Beast? I’ll Take Your Entire World</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$58,000</span><span class="pf-chip">峰值：$10,800</span><span class="pf-chip">Views：5.3M+</span></div>
+        <a href="https://www.goodshort.com/search?q=You%20Stole%20My%20Beast%3F%20I%E2%80%99ll%20Take%20Your%20Entire%20World" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-0">
+      <div class="pf-visual pf-v1"><span class="pf-icon">🐍</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#49</div>
+        <div class="pf-title">《重生后宠妻无数》</div>
+        <div class="pf-subtitle">Spoiled by a Playful Husband After Rebirth</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$84,000</span><span class="pf-chip">峰值：$15,600</span><span class="pf-chip">Views：7.4M+</span></div>
+        <a href="https://www.goodshort.com/search?q=Spoiled%20by%20a%20Playful%20Husband%20After%20Rebirth" class="pf-link" target="_blank">平台搜索 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-1">
+      <div class="pf-visual pf-v2"><span class="pf-icon">🧛</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-num">#50</div>
+        <div class="pf-title">《重生病毒》</div>
+        <div class="pf-subtitle">Reborn as a Virus</div>
+        <div class="pf-chips"><span class="pf-chip">总消耗：$66,000</span><span class="pf-chip">峰值：$12,300</span><span class="pf-chip">Views：6.1M+</span></div>
+        <a href="https://www.goodshort.com/search?q=Reborn%20as%20a%20Virus" class="pf-link" target="_blank">平台搜索 →</a>
       </div>
     </div>
   </div>
