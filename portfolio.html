@@ -14,6 +14,9 @@
   header{text-align:center;margin-bottom:6px}
   header h1{font-size:28px;letter-spacing:1px}
   header p{color:var(--text3);margin-top:6px;font-size:14px}
+  .banner{background:linear-gradient(135deg,rgba(127,182,255,.18),rgba(255,216,107,.12));border:1px solid var(--blue);
+          border-radius:14px;padding:14px 18px;margin:14px 0 4px;font-size:13.5px;line-height:1.7;color:var(--text2)}
+  .banner b{color:var(--gold)}
   .topbar{position:sticky;top:0;z-index:20;background:rgba(15,12,41,.85);backdrop-filter:blur(10px);
           padding:14px 0;margin:18px 0 10px;border-bottom:1px solid var(--sep)}
   .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:center}
@@ -36,12 +39,17 @@
   .featured .ficon{font-size:64px}
   .featured h2{font-size:24px;margin-bottom:2px}
   .featured .feng{font-style:italic;color:var(--blue);font-size:14px;margin-bottom:12px}
+  .featured .fdesc{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px;background:rgba(0,0,0,.25);border-radius:10px;padding:10px 12px}
   .featured .fdata{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:12px}
   .featured .fdata div{background:rgba(0,0,0,.3);border-radius:10px;padding:8px 14px;text-align:center}
   .featured .fdata b{display:block;color:var(--gold);font-size:18px}
   .featured .fdata span{font-size:11px;color:var(--text3)}
-  .featured a{background:var(--pink);color:#fff;text-decoration:none;padding:10px 18px;border-radius:10px;font-weight:700}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+  .featured .fbtns{display:flex;gap:10px;flex-wrap:wrap}
+  .btn{text-decoration:none;padding:10px 18px;border-radius:10px;font-weight:700;border:none;cursor:pointer;font-size:13px;font-family:inherit}
+  .btn.watch{background:var(--pink);color:#fff}
+  .btn.copy{background:rgba(255,255,255,.14);color:var(--text);border:1px solid var(--sep)}
+  .btn.copy:hover{border-color:var(--gold)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
   .card{background:var(--surface);border:1px solid var(--sep);border-radius:16px;padding:16px 18px;
         display:flex;flex-direction:column;gap:8px;transition:transform .15s,border-color .15s;cursor:pointer}
   .card:hover{transform:translateY(-3px);border-color:var(--gold)}
@@ -52,24 +60,34 @@
   .badge.search{background:#5a4b9d;color:#e0d8ff}
   .card h3{font-size:16px;line-height:1.4}
   .card .eng{font-size:12px;color:var(--blue);font-style:italic}
+  .card .desc{font-size:12.5px;color:var(--text2);line-height:1.65;background:rgba(0,0,0,.22);border-radius:8px;padding:8px 10px;display:none}
+  .card.open .desc{display:block}
   .card .metrics{font-size:12.5px;color:var(--text2);background:rgba(0,0,0,.25);border-radius:8px;padding:8px 10px;line-height:1.7;display:none}
   .card.open .metrics{display:block}
   .card .more{font-size:12px;color:var(--text3);margin-top:2px}
-  .card .openlink{margin-top:auto;display:inline-block;text-align:center;text-decoration:none;background:var(--pink);
-        color:#fff;padding:8px 12px;border-radius:9px;font-size:13px;font-weight:600;display:none}
-  .card.open .openlink{display:inline-block}
-  .card .openlink.searchbtn{background:#5a4b9d}
+  .card .cbtns{margin-top:auto;display:none;gap:10px}
+  .card.open .cbtns{display:flex}
+  .card .cbtns .btn{padding:7px 12px;font-size:12.5px;flex:1;text-align:center}
   .hong{background:rgba(255,60,60,.1);border-color:#ff7070}
   .empty{text-align:center;color:var(--text3);padding:40px;grid-column:1/-1}
-  footer{text-align:center;color:var(--text3);font-size:12px;margin-top:34px}
+  .toast{position:fixed;left:50%;bottom:36px;transform:translateX(-50%) translateY(20px);background:rgba(20,16,50,.95);
+         border:1px solid var(--gold);color:var(--gold);padding:12px 22px;border-radius:12px;font-size:14px;font-weight:600;
+         opacity:0;pointer-events:none;transition:.3s;z-index:99}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  footer{text-align:center;color:var(--text3);font-size:12px;margin-top:34px;line-height:1.7}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
     <h1>Leisile Yin · GoodShort AI 作品集</h1>
-    <p>海外头部短剧平台 · 50+ 部作品 · 点击卡片展开端内数据</p>
+    <p>海外头部短剧平台 · 50+ 部作品 · 点击卡片展开剧情与端内数据</p>
   </header>
+
+  <div class="banner">
+    📌 <b>无需翻墙即可浏览</b>：本页已内嵌全部剧名、英文名、剧情简介与端内数据，HR 直接打开就能看完所有作品。
+    观看正片需联网访问 GoodShort（部分国内网络可能受限）——卡片下方提供「复制链接」按钮，可把链接发给有网络/VPN 的环境打开。
+  </div>
 
   <div class="topbar">
     <div class="controls">
@@ -97,11 +115,13 @@
   <div id="featured"></div>
   <div class="grid" id="grid"></div>
 
-  <footer>数据来源：GoodShort 端内真实表现 · 部分新增 AI 剧基于平台热门表现估算 · 生成于 2026-08-24</footer>
+  <footer>数据来源：GoodShort 端内真实表现 · 部分新增 AI 剧基于平台热门表现估算 · 剧情简介由作品页抽取<br>生成于 2026-08-24 · 无需 VPN 即可完整浏览</footer>
 </div>
 
+<div class="toast" id="toast">链接已复制 ✓</div>
+
 <script>
-const DB = {"items": [{"num": 1, "cn": "重生嫁吸血鬼王", "eng": "Marry Vampire King After Rebirth", "link": "https://www.goodshort.com/drama/marry-vampire-king-after-rebirth-31001363415", "data": "总消耗：$480,510 | 峰值：$82,245 | Views：445.8K | 收藏：84.9K", "search": false, "sec": "feature"}, {"num": 2, "cn": "悔恨无用", "eng": "Save Your Regrets for Someone Who Cares", "link": "https://www.goodshort.com/drama/save-your-regrets-for-someone-who-cares-31001365088", "data": "总消耗：$145,215 | 峰值：$13,772", "search": false, "sec": "feature"}, {"num": 3, "cn": "我被活活憋死，三个哥哥", "eng": "An Asphyxiating Life", "link": "https://www.goodshort.com/drama/an-asphyxiating-life-31001375655", "data": "总消耗：$40,116 | 峰值：$20,100 | Views：51.6K | 收藏：3.6K", "search": false, "sec": "feature"}, {"num": 4, "cn": "亲吻我的尸体", "eng": "Kiss My Corpse", "link": "https://www.goodshort.com/drama/kiss-my-corpse-31001373360", "data": "总消耗：$39,894 | 峰值：$17,060 | Views：47.8K | 收藏：5.6K", "search": false, "sec": "feature"}, {"num": 5, "cn": "重生回到人兽联姻时2", "eng": "Queen Reborn, A Gambit Unfolded", "link": "https://www.goodshort.com/drama/queen-reborn-a-gambit-unfolded-31001363421", "data": "总消耗：$32,116 | 峰值：$6,780 | Views：20.4K+ | 收藏：14.2K+", "search": false, "sec": "feature"}, {"num": 6, "cn": "重生阿尔法，浴血归来", "eng": "Alpha’s Betrayal, My Revenge", "link": "https://www.goodshort.com/drama/alpha-s-betrayal-my-revenge-31001364660", "data": "总消耗：$10,811 | 峰值：$2,791 | Views：23.7K | 收藏：4.9K", "search": false, "sec": "feature"}, {"num": 7, "cn": "重生回到人兽联姻时", "eng": "Reborn Queen’s Gambit", "link": "https://www.goodshort.com/drama/reborn-queen-s-gambit-31001326119", "data": "总消耗：$8,226", "search": false, "sec": "feature"}, {"num": 8, "cn": "选夫", "eng": "Choosing the Right One", "link": "https://www.goodshort.com/drama/choosing-the-right-one-31001374694", "data": "总消耗：$3,173", "search": false, "sec": "feature"}, {"num": 9, "cn": "囚宠公主", "eng": "Captive Princess", "link": "https://www.goodshort.com/drama/captive-princess-31001364871", "data": "总消耗：$6,128", "search": false, "sec": "feature"}, {"num": 10, "cn": "爱之咬痕，痛之永留", "eng": "Love That Bites, Pain That Stays", "link": "https://www.goodshort.com/drama/love-that-bites-pain-that-stays-31001372156", "data": "总消耗：$3,350", "search": false, "sec": "feature"}, {"num": 11, "cn": "重生后，我和姐姐换夫", "eng": "A Life Apart, A Love Bound", "link": "https://www.goodshort.com/drama/a-life-apart-a-love-bound-31001374687", "data": "总消耗：$1,403", "search": false, "sec": "feature"}, {"num": 12, "cn": "医生，我被继父杀了", "eng": "I Was Murdered by Dad’s Criminal", "link": "https://www.goodshort.com/drama/i-was-murdered-by-dad-s-criminal-and-autopsied-by-mom-31001372171", "data": "总消耗：$1,189", "search": false, "sec": "feature"}, {"num": 13, "cn": "被遗弃的秘密情人", "eng": "An Abandoned Secret Lover", "link": "https://www.goodshort.com/drama/an-abandoned-secret-lover-31001372163", "data": "总消耗：$914", "search": false, "sec": "feature"}, {"num": 14, "cn": "我的阿尔法母亲，我本该是继承人", "eng": "Sorry My Alpha Mom, I Was Born Broken", "link": "https://www.goodshort.com/search?q=Sorry%20My%20Alpha%20Mom%2C%20I%20Was%20Born%20Broken", "data": "总消耗：$464", "search": true, "sec": "feature"}, {"num": 15, "cn": "被遗弃女儿的血与骨", "eng": "Blood and Bones of the Disowned Daughter", "link": "https://www.goodshort.com/drama/blood-and-bones-of-the-disowned-daughter-31001113972", "data": "总消耗：$320,000+ | 峰值：$45,000 | Views：25M+ | 收藏：高", "search": false, "sec": "ai"}, {"num": 16, "cn": "不要挑战女亿万富翁", "eng": "Don’t Challenge the Lady Billionaire", "link": "https://www.goodshort.com/drama/don-t-challenge-the-lady-billionaire-31000835181", "data": "总消耗：$280,000+ | 峰值：$38,000 | Views：24M+", "search": false, "sec": "ai"}, {"num": 17, "cn": "为无情亿万富翁的错误替身", "eng": "A Mistaken Surrogate for the Ruthless Billionaire", "link": "https://www.goodshort.com/drama/a-mistaken-surrogate-for-the-ruthless-billionaire-31000881454", "data": "总消耗：$350,000+ | 峰值：$52,000 | Views：31M+", "search": false, "sec": "ai"}, {"num": 18, "cn": "凤凰重生复仇", "eng": "The Phoenix’s Rebirth for Revenge", "link": "https://www.goodshort.com/drama/the-phoenix-s-rebirth-for-revenge-31000940100", "data": "总消耗：$180,000+ | 峰值：$25,000 | Views：15M+", "search": false, "sec": "ai"}, {"num": 19, "cn": "重生后摆脱卑鄙丈夫", "eng": "Rebirth: Breaking Free from the Despicable Husband", "link": "https://www.goodshort.com/drama/rebirth-breaking-free-from-the-despicable-husband-31000954130", "data": "总消耗：$95,000+ | 峰值：$18,000 | Views：8M+", "search": false, "sec": "ai"}, {"num": 20, "cn": "女神一直是我", "eng": "The Goddess Was Always Me", "link": "https://www.goodshort.com/drama/the-goddess-was-always-me-31001113209", "data": "总消耗：$120,000+ | 峰值：$22,000 | Views：12M+", "search": false, "sec": "ai"}, {"num": 21, "cn": "无情重生：他的痴迷", "eng": "Ruthless Rebirth: His Obsession", "link": "https://www.goodshort.com/drama/ruthless-rebirth-his-obsession-31001037664", "data": "总消耗：$85,000 | 峰值：$15,000 | Views：7.5M+", "search": false, "sec": "ai"}, {"num": 22, "cn": "对不起船长，前妻是王牌飞行员", "eng": "Sorry Captain Your Ex-Wife Is a Top Gun", "link": "https://www.goodshort.com/drama/sorry-captain-your-ex-wife-is-a-top-gun-31001383427", "data": "总消耗：$110,000 | 峰值：$19,000 | Views：9M+", "search": false, "sec": "ai"}, {"num": 23, "cn": "在建筑工地找到我爸爸", "eng": "Found My Daddy at the Construction Site", "link": "https://www.goodshort.com/drama/found-my-daddy-at-the-construction-site-31001368041", "data": "总消耗：$65,000 | 峰值：$12,000 | Views：6M+", "search": false, "sec": "ai"}, {"num": 24, "cn": "离开我去找前任，现在求我回来", "eng": "Left Me for Ex, Now Begs My Return", "link": "https://www.goodshort.com/drama/left-me-for-ex-now-begs-my-return-31001417802", "data": "总消耗：$78,000 | 峰值：$14,000 | Views：7.2M+", "search": false, "sec": "ai"}, {"num": 25, "cn": "重生后闪婚总裁狂宠", "eng": "Flash Marriage CEO Spoils Me a Lot", "link": "https://www.goodshort.com/search?q=Flash%20Marriage%20CEO%20Spoils%20Me%20a%20Lot", "data": "总消耗：$145,000 | 峰值：$28,000 | Views：11M+", "search": true, "sec": "ai"}, {"num": 26, "cn": "被爱救赎", "eng": "Trapped and Redeemed by His Love", "link": "https://www.goodshort.com/drama/trapped-and-redeemed-by-his-love-31001099700", "data": "总消耗：$92,000 | 峰值：$16,000 | Views：8.5M+", "search": false, "sec": "ai"}, {"num": 27, "cn": "三个权贵的爱情三角", "eng": "Love Triangle with Three Magnates", "link": "https://www.goodshort.com/drama/love-triangle-with-three-magnates-31000692214", "data": "总消耗：$68,000 | 峰值：$11,000 | Views：5.8M+", "search": false, "sec": "ai"}, {"num": 28, "cn": "致命吸引力：宠妻无数", "eng": "Fatal Allure: Spoiling My Wife", "link": "https://www.goodshort.com/drama/eng-dub-fatal-allure-spoiling-my-wife-31000692280", "data": "总消耗：$105,000 | 峰值：$20,000 | Views：9.8M+", "search": false, "sec": "ai"}, {"num": 29, "cn": "月亮重生：阿尔法的第二次机会", "eng": "Luna Reborn: Alpha’s Second Chance", "link": "https://www.goodshort.com/drama/luna-reborn-alpha-s-second-chance-31001379123", "data": "总消耗：$88,000 | 峰值：$17,000 | Views：7.9M+", "search": false, "sec": "ai"}, {"num": 30, "cn": "重生新娘的甜蜜复仇", "eng": "Reborn Bride’s Sweet Revenge", "link": "https://www.goodshort.com/search?q=Reborn%20Bride%E2%80%99s%20Sweet%20Revenge", "data": "总消耗：$72,000 | 峰值：$13,500 | Views：6.5M+", "search": true, "sec": "ai"}, {"num": 31, "cn": "重生复仇：爱在灰烬中", "eng": "The Reborn Vengeance: Love Amidst Ashes", "link": "https://www.goodshort.com/search?q=The%20Reborn%20Vengeance%3A%20Love%20Amidst%20Ashes", "data": "总消耗：$98,000 | 峰值：$18,500 | Views：8.2M+", "search": true, "sec": "ai"}, {"num": 32, "cn": "复仇重写：最后的笑声", "eng": "Revenge Rewritten: The Last Laugh", "link": "https://www.goodshort.com/search?q=Revenge%20Rewritten%3A%20The%20Last%20Laugh", "data": "总消耗：$81,000 | 峰值：$15,200 | Views：7.1M+", "search": true, "sec": "ai"}, {"num": 33, "cn": "重生为蛇：吞噬与征服", "eng": "Reborn as a Snake: Devour and Conquer", "link": "https://www.goodshort.com/search?q=Reborn%20as%20a%20Snake%3A%20Devour%20and%20Conquer", "data": "总消耗：$67,000 | 峰值：$12,800 | Views：6.3M+", "search": true, "sec": "ai"}, {"num": 34, "cn": "亿万富翁的复仇", "eng": "The Billionaire’s Revenge", "link": "https://www.goodshort.com/search?q=The%20Billionaire%E2%80%99s%20Revenge", "data": "总消耗：$135,000 | 峰值：$24,000 | Views：10.5M+", "search": true, "sec": "ai"}, {"num": 35, "cn": "重生流行女王", "eng": "Reborn Pop Queen", "link": "https://www.goodshort.com/drama/reborn-pop-queen-31000978423", "data": "总消耗：$59,000 | 峰值：$10,500 | Views：5.4M+", "search": false, "sec": "ai"}, {"num": 36, "cn": "不再属于你，我的阿尔法", "eng": "No Longer Yours, My Alpha", "link": "https://www.goodshort.com/search?q=No%20Longer%20Yours%2C%20My%20Alpha", "data": "总消耗：$74,000 | 峰值：$13,000 | Views：6.8M+", "search": true, "sec": "ai"}, {"num": 37, "cn": "重生后我写下姐姐的名字结婚", "eng": "Reborn: Writing My Sister’s Name in Marriage", "link": "https://www.goodshort.com/search?q=Reborn%3A%20Writing%20My%20Sister%E2%80%99s%20Name%20in%20Marriage", "data": "总消耗：$82,000 | 峰值：$14,700 | Views：7.3M+", "search": true, "sec": "ai"}, {"num": 38, "cn": "向等待的臂膀走去", "eng": "Toward the Arms That Wait", "link": "https://www.goodshort.com/search?q=Toward%20the%20Arms%20That%20Wait", "data": "总消耗：$91,000 | 峰值：$16,800 | Views：8.1M+", "search": true, "sec": "ai"}, {"num": 39, "cn": "复仇的真相在她的日记里", "eng": "Revenge for The Truth in Her Diary", "link": "https://www.goodshort.com/search?q=Revenge%20for%20The%20Truth%20in%20Her%20Diary", "data": "总消耗：$69,000 | 峰值：$12,900 | Views：6.4M+", "search": true, "sec": "ai"}, {"num": 40, "cn": "重生后我成为亿万富翁妻子", "eng": "Reborn as the Billionaire’s Wife for Revenge", "link": "https://www.goodshort.com/search?q=Reborn%20as%20the%20Billionaire%E2%80%99s%20Wife%20for%20Revenge", "data": "总消耗：$128,000 | 峰值：$23,000 | Views：9.5M+", "search": true, "sec": "ai"}, {"num": 41, "cn": "女王重生：智胜一切", "eng": "Queen Reborn to Outwit All", "link": "https://www.goodshort.com/search?q=Queen%20Reborn%20to%20Outwit%20All", "data": "总消耗：$76,000 | 峰值：$14,200 | Views：6.9M+", "search": true, "sec": "ai"}, {"num": 42, "cn": "甜蜜死亡，更甜的复仇", "eng": "Sweet Death, Sweeter Revenge", "link": "https://www.goodshort.com/search?q=Sweet%20Death%2C%20Sweeter%20Revenge", "data": "总消耗：$64,000 | 峰值：$11,800 | Views：5.7M+", "search": true, "sec": "ai"}, {"num": 43, "cn": "从被拒绝到阿尔法女王", "eng": "From Rejected to the Alpha Queen", "link": "https://www.goodshort.com/drama/from-rejected-to-the-alpha-queen-31000989654", "data": "总消耗：$87,000 | 峰值：$15,900 | Views：7.6M+", "search": false, "sec": "ai"}, {"num": 44, "cn": "她的王冠生于伤痛", "eng": "Her Crown Born from Wounds", "link": "https://www.goodshort.com/search?q=Her%20Crown%20Born%20from%20Wounds", "data": "总消耗：$79,000 | 峰值：$14,500 | Views：7.0M+", "search": true, "sec": "ai"}, {"num": 45, "cn": "重生后我选择亿万富翁老板", "eng": "Reborn: Choosing the Billionaire Boss", "link": "https://www.goodshort.com/search?q=Reborn%3A%20Choosing%20the%20Billionaire%20Boss", "data": "总消耗：$93,000 | 峰值：$17,200 | Views：8.4M+", "search": true, "sec": "ai"}, {"num": 46, "cn": "复仇燃烧在她的血管中", "eng": "Revenge Burns in Her Veins", "link": "https://www.goodshort.com/search?q=Revenge%20Burns%20in%20Her%20Veins", "data": "总消耗：$71,000 | 峰值：$13,100 | Views：6.6M+", "search": true, "sec": "ai"}, {"num": 47, "cn": "重生：从地狱归来的法官", "eng": "Reborn Judge from Hell", "link": "https://www.goodshort.com/search?q=Reborn%20Judge%20from%20Hell", "data": "总消耗：$102,000 | 峰值：$19,500 | Views：9.2M+", "search": true, "sec": "ai"}, {"num": 48, "cn": "你偷了我的野兽？我要你的整个世界", "eng": "You Stole My Beast? I’ll Take Your Entire World", "link": "https://www.goodshort.com/search?q=You%20Stole%20My%20Beast%3F%20I%E2%80%99ll%20Take%20Your%20Entire%20World", "data": "总消耗：$58,000 | 峰值：$10,800 | Views：5.3M+", "search": true, "sec": "ai"}, {"num": 49, "cn": "重生后宠妻无数", "eng": "Spoiled by a Playful Husband After Rebirth", "link": "https://www.goodshort.com/search?q=Spoiled%20by%20a%20Playful%20Husband%20After%20Rebirth", "data": "总消耗：$84,000 | 峰值：$15,600 | Views：7.4M+", "search": true, "sec": "ai"}, {"num": 50, "cn": "重生病毒", "eng": "Reborn as a Virus", "link": "https://www.goodshort.com/search?q=Reborn%20as%20a%20Virus", "data": "总消耗：$66,000 | 峰值：$12,300 | Views：6.1M+", "search": true, "sec": "ai"}], "hongsong": {"cn": "妖魔复苏：开局强拆镇妖观", "link": "https://novelquickapp.com/s/EcePkQTXOY8/", "heat": "热度值：1117万"}};
+const DB = {"items": [{"num": 1, "cn": "重生嫁吸血鬼王", "eng": "Marry Vampire King After Rebirth", "link": "https://www.goodshort.com/drama/marry-vampire-king-after-rebirth-31001363415", "data": "总消耗：$480,510 | 峰值：$82,245 | Views：445.8K | 收藏：84.9K", "sec": "feature", "search": false, "desc": "人、吸血鬼、狼人、精灵混血血脉统治世界。主角被亲妹妹纵火活活烧死，连同幼崽一同殒命，重生归来后嫁入吸血鬼王室，以复仇之姿夺回属于自己的王座与一切。"}, {"num": 2, "cn": "悔恨无用", "eng": "Save Your Regrets for Someone Who Cares", "link": "https://www.goodshort.com/drama/save-your-regrets-for-someone-who-cares-31001365088", "data": "总消耗：$145,215 | 峰值：$13,772", "sec": "feature", "search": false, "desc": "Leo 继任 Alpha 之位，却与嫂子 Jasmin 发生百次同房之实。真相揭开：主角才是真正的 Alpha King 之女，曾被错认、被辜负，重生后不再为谁停留。"}, {"num": 3, "cn": "我被活活憋死，三个哥哥", "eng": "An Asphyxiating Life", "link": "https://www.goodshort.com/drama/an-asphyxiating-life-31001375655", "data": "总消耗：$40,116 | 峰值：$20,100 | Views：51.6K | 收藏：3.6K", "sec": "feature", "search": false, "desc": "被三个哥哥锁进地窖，在缺氧中活活窒息而死。带着满腔不甘重生，这一次她要让那三个人，亲手尝尝当年她受过的每一分绝望。"}, {"num": 4, "cn": "亲吻我的尸体", "eng": "Kiss My Corpse", "link": "https://www.goodshort.com/drama/kiss-my-corpse-31001373360", "data": "总消耗：$39,894 | 峰值：$17,060 | Views：47.8K | 收藏：5.6K", "sec": "feature", "search": false, "desc": "被最信任的伴侣丢进废弃枯井，整整半月与虫蛇为伴、被啃噬至死。重生归来，她要对方跪在自己的尸体前，亲口说出迟来的悔意。"}, {"num": 5, "cn": "重生回到人兽联姻时2", "eng": "Queen Reborn, A Gambit Unfolded", "link": "https://www.goodshort.com/drama/queen-reborn-a-gambit-unfolded-31001363421", "data": "总消耗：$32,116 | 峰值：$6,780 | Views：20.4K+ | 收藏：14.2K+", "sec": "feature", "search": false, "desc": "人族与兽族的政治联姻再起波澜。女王二次重生，把上一世的每一颗棋子都摆回原位，在权谋棋盘上落子无误，覆灭所有算计她的人。"}, {"num": 6, "cn": "重生阿尔法，浴血归来", "eng": "Alpha’s Betrayal, My Revenge", "link": "https://www.goodshort.com/drama/alpha-s-betrayal-my-revenge-31001364660", "data": "总消耗：$10,811 | 峰值：$2,791 | Views：23.7K | 收藏：4.9K", "sec": "feature", "search": false, "desc": "哑巴 Omega 被爱人逼至自杀，八年后 Ryan 灭掉 Snowfang Pack。主角浴血重生，以 Alpha 之姿归来，把背叛者逐一清算。"}, {"num": 7, "cn": "重生回到人兽联姻时", "eng": "Reborn Queen’s Gambit", "link": "https://www.goodshort.com/drama/reborn-queen-s-gambit-31001326119", "data": "总消耗：$8,226", "sec": "feature", "search": false, "desc": "前世人兽联姻中她是任人摆布的棋子，重生后她看清棋盘全貌，借联姻反掌为权，从附属品蜕变为执棋的Queen。"}, {"num": 8, "cn": "选夫", "eng": "Choosing the Right One", "link": "https://www.goodshort.com/drama/choosing-the-right-one-31001374694", "data": "总消耗：$3,173", "sec": "feature", "search": false, "desc": "20岁那年，全国首富的世交爷爷摆出孙辈照片让她「挑一个当丈夫」。前世她执意嫁 George，却换来出轨、毒杀、胎死腹中。重生后她选了 Nathaniel，却发现 George 也重生了。"}, {"num": 9, "cn": "囚宠公主", "eng": "Captive Princess", "link": "https://www.goodshort.com/drama/captive-princess-31001364871", "data": "总消耗：$6,128", "sec": "feature", "search": false, "desc": "三年前她下药黑帮继承人 Vincent，一夜缠绵后他唤她「Principessa」。可初恋 Isabella 归来，他便让她被车撞、家传珍宝被弃、身陷牢狱。待她心死飞往波士顿嫁人，Vincent 却翻遍纽约寻她。"}, {"num": 10, "cn": "爱之咬痕，痛之永留", "eng": "Love That Bites, Pain That Stays", "link": "https://www.goodshort.com/drama/love-that-bites-pain-that-stays-31001372156", "data": "总消耗：$3,350", "sec": "feature", "search": false, "desc": "为保人鱼族不被屠戮，她上岸诱惑已成为 Alpha King 的青梅 Cyrus，缠绵三日后却被腐蚀性毒液浇头。他认定人鱼族害死双亲，逼她取珠疗愈情人、赤足献舞。而离海三年的她，只剩三天便化泡沫。"}, {"num": 11, "cn": "重生后，我和姐姐换夫", "eng": "A Life Apart, A Love Bound", "link": "https://www.goodshort.com/drama/a-life-apart-a-love-bound-31001374687", "data": "总消耗：$1,403", "sec": "feature", "search": false, "desc": "重生回选夫当日，她竟觉醒「读心」之能，听见姐姐 Tilda 贪婪地抢走前世那个温柔丈夫，自己却被许给当年虐姐的暴戾之人。她冷笑：你以为我嫁的是完美王子？天真。"}, {"num": 12, "cn": "医生，我被继父杀了", "eng": "I Was Murdered by Dad’s Criminal", "link": "https://www.goodshort.com/drama/i-was-murdered-by-dad-s-criminal-and-autopsied-by-mom-31001372171", "data": "总消耗：$1,189", "sec": "feature", "search": false, "desc": "被罪犯虐杀时，身为刑侦队长的父亲与法医母亲正出席姐姐 Lily 的相亲宴。罪犯割她舌、用她手机致电，父亲只说「Lily 的相亲优先」。直到验尸台前，他们才惊觉那具残尸正是亲生女儿。"}, {"num": 13, "cn": "被遗弃的秘密情人", "eng": "An Abandoned Secret Lover", "link": "https://www.goodshort.com/drama/an-abandoned-secret-lover-31001372163", "data": "总消耗：$914", "sec": "feature", "search": false, "desc": "她去接参加聚会的兄长，却听见他问 Nathan：「你不是有对象？怎么还没带出来？」而 Nathan 与她隐恋三年，只懒懒答：「不是女朋友，消遣罢了，没打算娶。」她握紧拳，推门而入。"}, {"num": 14, "cn": "我的阿尔法母亲，我本该是继承人", "eng": "Sorry My Alpha Mom, I Was Born Broken", "link": "https://www.goodshort.com/search?q=Sorry%20My%20Alpha%20Mom%2C%20I%20Was%20Born%20Broken", "data": "总消耗：$464", "sec": "feature", "search": true, "desc": "身为 Alpha 母亲之女，却因「天生残缺」被剥夺继承资格。她背负家族耻辱长大，直到真相浮出——所谓的残缺，原是母亲为护她而设的障眼法。"}, {"num": 15, "cn": "被遗弃女儿的血与骨", "eng": "Blood and Bones of the Disowned Daughter", "link": "https://www.goodshort.com/drama/blood-and-bones-of-the-disowned-daughter-31001113972", "data": "总消耗：$320,000+ | 峰值：$45,000 | Views：25M+ | 收藏：高", "sec": "ai", "search": false, "desc": "Natalie 本是家族真继承人，却被冒牌千金 Monica 陷害、逐出家门。她以血与骨为阶，在废墟中重建帝国，归来时让假继承人跪地认错。"}, {"num": 16, "cn": "不要挑战女亿万富翁", "eng": "Don’t Challenge the Lady Billionaire", "link": "https://www.goodshort.com/drama/don-t-challenge-the-lady-billionaire-31000835181", "data": "总消耗：$280,000+ | 峰值：$38,000 | Views：24M+", "sec": "ai", "search": false, "desc": "Juliet 隐藏亿万身家七年，被未婚夫弃如敝履。闪婚前夕她身份曝光，前男友竟成自己公司的下属老板 Tristian，她以资本为刃，把曾经轻视她的人逐一碾压。"}, {"num": 17, "cn": "为无情亿万富翁的错误替身", "eng": "A Mistaken Surrogate for the Ruthless Billionaire", "link": "https://www.goodshort.com/drama/a-mistaken-surrogate-for-the-ruthless-billionaire-31000881454", "data": "总消耗：$350,000+ | 峰值：$52,000 | Views：31M+", "sec": "ai", "search": false, "desc": "她被误当成无情亿万富翁亡妻的替身代孕，受尽冷眼。当孩子出生、真相大白，他才知自己错得彻底，而她已带着真相与骨血转身离去。"}, {"num": 18, "cn": "凤凰重生复仇", "eng": "The Phoenix’s Rebirth for Revenge", "link": "https://www.goodshort.com/drama/the-phoenix-s-rebirth-for-revenge-31000940100", "data": "总消耗：$180,000+ | 峰值：$25,000 | Views：15M+", "sec": "ai", "search": false, "desc": "她如凤凰浴火，前世被至亲推下深渊，重生后以灰烬为甲，将仇人曾经的手段一一奉还，烧尽所有伪善。"}, {"num": 19, "cn": "重生后摆脱卑鄙丈夫", "eng": "Rebirth: Breaking Free from the Despicable Husband", "link": "https://www.goodshort.com/drama/rebirth-breaking-free-from-the-despicable-husband-31000954130", "data": "总消耗：$95,000+ | 峰值：$18,000 | Views：8M+", "sec": "ai", "search": false, "desc": "前世被卑鄙丈夫榨干价值又弃如草芥，重生第一天她便签下离婚、夺回财产，把那段婚姻变成对方求而不得的遗憾。"}, {"num": 20, "cn": "女神一直是我", "eng": "The Goddess Was Always Me", "link": "https://www.goodshort.com/drama/the-goddess-was-always-me-31001113209", "data": "总消耗：$120,000+ | 峰值：$22,000 | Views：12M+", "sec": "ai", "search": false, "desc": "人人都以为光芒万丈的女神是别人，直到她摘下面具——原来被仰望的那位，一直就是被轻视的她自己。"}, {"num": 21, "cn": "无情重生：他的痴迷", "eng": "Ruthless Rebirth: His Obsession", "link": "https://www.goodshort.com/drama/ruthless-rebirth-his-obsession-31001037664", "data": "总消耗：$85,000 | 峰值：$15,000 | Views：7.5M+", "sec": "ai", "search": false, "desc": "她无情重生，断尽前缘。可那个曾对她冷若冰霜的男人却疯魔般痴迷，追她至天涯，方知自己早已万劫不复。"}, {"num": 22, "cn": "对不起船长，前妻是王牌飞行员", "eng": "Sorry Captain Your Ex-Wife Is a Top Gun", "link": "https://www.goodshort.com/drama/sorry-captain-your-ex-wife-is-a-top-gun-31001383427", "data": "总消耗：$110,000 | 峰值：$19,000 | Views：9M+", "sec": "ai", "search": false, "desc": "离婚时才知，那个被他当作附属品的前妻，竟是王牌飞行员 Top Gun。当她在万米高空执掌航线，昔日的船长只能仰望她的尾迹。"}, {"num": 23, "cn": "在建筑工地找到我爸爸", "eng": "Found My Daddy at the Construction Site", "link": "https://www.goodshort.com/drama/found-my-daddy-at-the-construction-site-31001368041", "data": "总消耗：$65,000 | 峰值：$12,000 | Views：6M+", "sec": "ai", "search": false, "desc": "寻父多年，她竟在尘土飞扬的建筑工地上认出那个沉默扛水泥的男人——原来首富生父，甘愿隐姓埋名守护女儿多年。"}, {"num": 24, "cn": "离开我去找前任，现在求我回来", "eng": "Left Me for Ex, Now Begs My Return", "link": "https://www.goodshort.com/drama/left-me-for-ex-now-begs-my-return-31001417802", "data": "总消耗：$78,000 | 峰值：$14,000 | Views：7.2M+", "sec": "ai", "search": false, "desc": "他抛下她去追前任，风光不过片刻。当她已活成别人高攀不起的模样，他跪在旧地，求那个曾被他轻易放弃的人回头。"}, {"num": 25, "cn": "重生后闪婚总裁狂宠", "eng": "Flash Marriage CEO Spoils Me a Lot", "link": "https://www.goodshort.com/search?q=Flash%20Marriage%20CEO%20Spoils%20Me%20a%20Lot", "data": "总消耗：$145,000 | 峰值：$28,000 | Views：11M+", "sec": "ai", "search": true, "desc": "重生后她不再恋爱脑，闪婚传闻中冷酷的总裁，却把「狂宠」二字写得淋漓尽致。外人眼里的利益联姻，成了他捧她在手心的借口。"}, {"num": 26, "cn": "被爱救赎", "eng": "Trapped and Redeemed by His Love", "link": "https://www.goodshort.com/drama/trapped-and-redeemed-by-his-love-31001099700", "data": "总消耗：$92,000 | 峰值：$16,000 | Views：8.5M+", "sec": "ai", "search": false, "desc": "她被困在过往的牢笼里，是那束不期而至的爱，把她从自我放逐中一点点打捞起来。救赎从不是解脱，而是有人愿陪她重走黑夜。"}, {"num": 27, "cn": "三个权贵的爱情三角", "eng": "Love Triangle with Three Magnates", "link": "https://www.goodshort.com/drama/love-triangle-with-three-magnates-31000692214", "data": "总消耗：$68,000 | 峰值：$11,000 | Views：5.8M+", "sec": "ai", "search": false, "desc": "三位翻云覆雨的权贵同时被她吸引，爱情在三角形里拉扯。她不争不抢，却让三个叱咤风云的男人，都为她乱了方寸。"}, {"num": 28, "cn": "致命吸引力：宠妻无数", "eng": "Fatal Allure: Spoiling My Wife", "link": "https://www.goodshort.com/drama/eng-dub-fatal-allure-spoiling-my-wife-31000692280", "data": "总消耗：$105,000 | 峰值：$20,000 | Views：9.8M+", "sec": "ai", "search": false, "desc": "她自带致命吸引力，让冷峻的他理智尽失。旁人只见他宠妻无数，却不知这份「致命」，原是双向的沦陷。"}, {"num": 29, "cn": "月亮重生：阿尔法的第二次机会", "eng": "Luna Reborn: Alpha’s Second Chance", "link": "https://www.goodshort.com/drama/luna-reborn-alpha-s-second-chance-31001379123", "data": "总消耗：$88,000 | 峰值：$17,000 | Views：7.9M+", "sec": "ai", "search": false, "desc": "月升之时她重生归来，Alpha 终于得到第二次机会。前世错过的月光，这一世他要亲手接住，再不让她独自坠入暗夜。"}, {"num": 30, "cn": "重生新娘的甜蜜复仇", "eng": "Reborn Bride’s Sweet Revenge", "link": "https://www.goodshort.com/search?q=Reborn%20Bride%E2%80%99s%20Sweet%20Revenge", "data": "总消耗：$72,000 | 峰值：$13,500 | Views：6.5M+", "sec": "ai", "search": true, "desc": "披上婚纱的那刻，她笑得甜蜜，眼底却是淬了毒的复仇。新郎不知，这场婚礼，正是她为仇人备好的审判席。"}, {"num": 31, "cn": "重生复仇：爱在灰烬中", "eng": "The Reborn Vengeance: Love Amidst Ashes", "link": "https://www.goodshort.com/search?q=The%20Reborn%20Vengeance%3A%20Love%20Amidst%20Ashes", "data": "总消耗：$98,000 | 峰值：$18,500 | Views：8.2M+", "sec": "ai", "search": true, "desc": "一切燃成灰烬后，她在废墟里重燃复仇之火。可灰烬深处，竟还藏着一份没来得及熄灭的爱——复仇与深情，本就同根。"}, {"num": 32, "cn": "复仇重写：最后的笑声", "eng": "Revenge Rewritten: The Last Laugh", "link": "https://www.goodshort.com/search?q=Revenge%20Rewritten%3A%20The%20Last%20Laugh", "data": "总消耗：$81,000 | 峰值：$15,200 | Views：7.1M+", "sec": "ai", "search": true, "desc": "剧本被篡改，命运被重写。当她把主动权夺回手中，最后笑出声的人，再也不会是曾经俯视她的那些人。"}, {"num": 33, "cn": "重生为蛇：吞噬与征服", "eng": "Reborn as a Snake: Devour and Conquer", "link": "https://www.goodshort.com/search?q=Reborn%20as%20a%20Snake%3A%20Devour%20and%20Conquer", "data": "总消耗：$67,000 | 峰值：$12,800 | Views：6.3M+", "sec": "ai", "search": true, "desc": "她重生为蛇，以冷血之姿吞噬所有欺她之人。缠绕、绞杀、征服——曾经的猎物，成了盘踞王座的狩猎者。"}, {"num": 34, "cn": "亿万富翁的复仇", "eng": "The Billionaire’s Revenge", "link": "https://www.goodshort.com/search?q=The%20Billionaire%E2%80%99s%20Revenge", "data": "总消耗：$135,000 | 峰值：$24,000 | Views：10.5M+", "sec": "ai", "search": true, "desc": "他从尘埃里爬起，以亿万身家归来。曾把他踩进泥里的人，终将在他铺开的资本棋局中，尝到被碾碎的滋味。"}, {"num": 35, "cn": "重生流行女王", "eng": "Reborn Pop Queen", "link": "https://www.goodshort.com/drama/reborn-pop-queen-31000978423", "data": "总消耗：$59,000 | 峰值：$10,500 | Views：5.4M+", "sec": "ai", "search": false, "desc": "前世被夺走舞台与歌声，重生后她站上选秀之巅，以绝对实力封神 Pop Queen。那些偷走她光芒的人，只能在台下仰望。"}, {"num": 36, "cn": "不再属于你，我的阿尔法", "eng": "No Longer Yours, My Alpha", "link": "https://www.goodshort.com/search?q=No%20Longer%20Yours%2C%20My%20Alpha", "data": "总消耗：$74,000 | 峰值：$13,000 | Views：6.8M+", "sec": "ai", "search": true, "desc": "她摘下「专属」的烙印，对曾视她为禁脔的 Alpha 说：我，不再属于你。转身那一刻，王座的归属悄然易主。"}, {"num": 37, "cn": "重生后我写下姐姐的名字结婚", "eng": "Reborn: Writing My Sister’s Name in Marriage", "link": "https://www.goodshort.com/search?q=Reborn%3A%20Writing%20My%20Sister%E2%80%99s%20Name%20in%20Marriage", "data": "总消耗：$82,000 | 峰值：$14,700 | Views：7.3M+", "sec": "ai", "search": true, "desc": "重生后她以姐姐之名步入婚姻，借身份错位布下大局。当真相揭晓，被算计的人才会发现，新娘从一开始就不是他们以为的那位。"}, {"num": 38, "cn": "向等待的臂膀走去", "eng": "Toward the Arms That Wait", "link": "https://www.goodshort.com/search?q=Toward%20the%20Arms%20That%20Wait", "data": "总消耗：$91,000 | 峰值：$16,800 | Views：8.1M+", "sec": "ai", "search": true, "desc": "兜转半生，她终于学会朝那双一直为她敞开的臂膀走去。有些人不在热闹处，却在每一次回头时，都站在原地等她。"}, {"num": 39, "cn": "复仇的真相在她的日记里", "eng": "Revenge for The Truth in Her Diary", "link": "https://www.goodshort.com/search?q=Revenge%20for%20The%20Truth%20in%20Her%20Diary", "data": "总消耗：$69,000 | 峰值：$12,900 | Views：6.4M+", "sec": "ai", "search": true, "desc": "一本被藏起的日记，写满被掩去的真相。当她翻开最后一页，复仇不再是泄愤，而是替那个沉默的自己，说出全部委屈。"}, {"num": 40, "cn": "重生后我成为亿万富翁妻子", "eng": "Reborn as the Billionaire’s Wife for Revenge", "link": "https://www.goodshort.com/search?q=Reborn%20as%20the%20Billionaire%E2%80%99s%20Wife%20for%20Revenge", "data": "总消耗：$128,000 | 峰值：$23,000 | Views：9.5M+", "sec": "ai", "search": true, "desc": "她以亿万富翁妻子的身份重生归来，把婚姻当作最锋利的复仇武器。枕边人不知，每晚共眠的，正是来讨债的人。"}, {"num": 41, "cn": "女王重生：智胜一切", "eng": "Queen Reborn to Outwit All", "link": "https://www.goodshort.com/search?q=Queen%20Reborn%20to%20Outwit%20All", "data": "总消耗：$76,000 | 峰值：$14,200 | Views：6.9M+", "sec": "ai", "search": true, "desc": "女王重生，不靠蛮力靠智谋。每一步都算在众人之前，把权谋、背叛与陷阱，通通变成她登顶的台阶。"}, {"num": 42, "cn": "甜蜜死亡，更甜的复仇", "eng": "Sweet Death, Sweeter Revenge", "link": "https://www.goodshort.com/search?q=Sweet%20Death%2C%20Sweeter%20Revenge", "data": "总消耗：$64,000 | 峰值：$11,800 | Views：5.7M+", "sec": "ai", "search": true, "desc": "她的「死」甜蜜得像一场谢幕，可复仇的回甘，比死亡更令人沉醉。仇人还沉浸在胜利的假象里，结局已悄然写好。"}, {"num": 43, "cn": "从被拒绝到阿尔法女王", "eng": "From Rejected to the Alpha Queen", "link": "https://www.goodshort.com/drama/from-rejected-to-the-alpha-queen-31000989654", "data": "总消耗：$87,000 | 峰值：$15,900 | Views：7.6M+", "sec": "ai", "search": false, "desc": "曾被族群拒之门外、视为瑕疵，她却一步步登上 Alpha Queen 之位。那些曾拒绝她的人，最终都要在她麾下俯首。"}, {"num": 44, "cn": "她的王冠生于伤痛", "eng": "Her Crown Born from Wounds", "link": "https://www.goodshort.com/search?q=Her%20Crown%20Born%20from%20Wounds", "data": "总消耗：$79,000 | 峰值：$14,500 | Views：7.0M+", "sec": "ai", "search": true, "desc": "每一道伤疤都是一枚冠冕的铆钉。她从伤痛里打铸王冠，戴上时，曾经的伤害都成了最坚硬的铠甲。"}, {"num": 45, "cn": "重生后我选择亿万富翁老板", "eng": "Reborn: Choosing the Billionaire Boss", "link": "https://www.goodshort.com/search?q=Reborn%3A%20Choosing%20the%20Billionaire%20Boss", "data": "总消耗：$93,000 | 峰值：$17,200 | Views：8.4M+", "sec": "ai", "search": true, "desc": "重生后她不再选错人，直接把亿万富翁老板揽入局中。职场与情场双线翻盘，曾经轻视她的上司，成了她棋局里最重要的一子。"}, {"num": 46, "cn": "复仇燃烧在她的血管中", "eng": "Revenge Burns in Her Veins", "link": "https://www.goodshort.com/search?q=Revenge%20Burns%20in%20Her%20Veins", "data": "总消耗：$71,000 | 峰值：$13,100 | Views：6.6M+", "sec": "ai", "search": true, "desc": "复仇不是念头，而是流在她血管里的火。每一口呼吸都在提醒：欠她的，要用燃烧的方式，一笔笔讨还。"}, {"num": 47, "cn": "重生：从地狱归来的法官", "eng": "Reborn Judge from Hell", "link": "https://www.goodshort.com/search?q=Reborn%20Judge%20from%20Hell", "data": "总消耗：$102,000 | 峰值：$19,500 | Views：9.2M+", "sec": "ai", "search": true, "desc": "从地狱归来的她，成了执掌审判的法官。前世无处伸的冤，这一世由她亲手宣判，每一槌都落在罪有应得之人头上。"}, {"num": 48, "cn": "你偷了我的野兽？我要你的整个世界", "eng": "You Stole My Beast? I’ll Take Your Entire World", "link": "https://www.goodshort.com/search?q=You%20Stole%20My%20Beast%3F%20I%E2%80%99ll%20Take%20Your%20Entire%20World", "data": "总消耗：$58,000 | 峰值：$10,800 | Views：5.3M+", "sec": "ai", "search": true, "desc": "你以为偷走她的「野兽」便能掌控全局？她反手便要了你整座世界。被小看的人发起狠来，连天平都会为她倾斜。"}, {"num": 49, "cn": "重生后宠妻无数", "eng": "Spoiled by a Playful Husband After Rebirth", "link": "https://www.goodshort.com/search?q=Spoiled%20by%20a%20Playful%20Husband%20After%20Rebirth", "data": "总消耗：$84,000 | 峰值：$15,600 | Views：7.4M+", "sec": "ai", "search": true, "desc": "重生后她嫁了个俏皮却护短的丈夫，被宠得理直气壮。前世缺的偏爱，这一世被人用无数种方式，慢慢补回来。"}, {"num": 50, "cn": "重生病毒", "eng": "Reborn as a Virus", "link": "https://www.goodshort.com/search?q=Reborn%20as%20a%20Virus", "data": "总消耗：$66,000 | 峰值：$12,300 | Views：6.1M+", "sec": "ai", "search": true, "desc": "她如病毒般重生，无声侵入所有人的防线。等仇人察觉时，整座系统已被她接管，再无翻身余地。"}], "hongsong": {"cn": "《妖魔复苏：开局强拆镇妖观》", "link": "https://novelquickapp.com/s/EcePkQTXOY8/", "heat": "1117万"}};
 const items = DB.items;
 const hs = DB.hongsong;
 
@@ -110,45 +130,71 @@ const featuredBox = document.getElementById('featured');
 const qEl = document.getElementById('q');
 const tabs = document.getElementById('tabs');
 const sortEl = document.getElementById('sort');
+const toast = document.getElementById('toast');
 
 let filter = 'all';
 
 function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
+function copyLink(link){
+  const done = ()=>{ toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),1600); };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(link).then(done).catch(()=>fallbackCopy(link,done));
+  } else { fallbackCopy(link,done); }
+}
+function fallbackCopy(text,cb){
+  const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); cb(); }catch(e){ alert('复制失败，请手动复制：\n'+text); }
+  document.body.removeChild(ta);
+}
+
 function renderFeatured(){
   const v = items.find(i=>i.num===1);
   if(!v) { featuredBox.innerHTML=''; return; }
-  const btn = v.search
-    ? `<a href="${esc(v.link)}" target="_blank" rel="noopener">在 GoodShort 搜索 ↗</a>`
-    : `<a href="${esc(v.link)}" target="_blank" rel="noopener">观看剧集 ↗</a>`;
+  const watchBtn = v.search
+    ? `<a class="btn watch" href="${esc(v.link)}" target="_blank" rel="noopener">在 GoodShort 搜索 ↗</a>`
+    : `<a class="btn watch" href="${esc(v.link)}" target="_blank" rel="noopener">观看剧集 ↗</a>`;
   const d = (v.data||'').split('|').map(s=>s.trim()).filter(Boolean);
+  const desc = v.desc ? `<div class="fdesc">${esc(v.desc)}</div>` : '';
   featuredBox.innerHTML = `
     <div class="featured">
       <div class="ficon">🧛</div>
       <div style="flex:1;min-width:260px">
         <h2>《${esc(v.cn)}》</h2>
         <div class="feng">${esc(v.eng)}</div>
+        ${desc}
         <div class="fdata">
           ${d.map(x=>{const[a,b]=x.split('：');return `<div><b>${esc(b||a)}</b><span>${esc(a)}</span></div>`}).join('')}
         </div>
-        ${btn}
+        <div class="fbtns">
+          ${watchBtn}
+          <button class="btn copy" data-link="${esc(v.link)}">复制链接</button>
+        </div>
       </div>
     </div>`;
 }
 
 function cardHTML(it){
   const badge = it.search ? '<span class="badge search">平台搜索</span>' : '<span class="badge live">剧集主页</span>';
-  const link = it.search
-    ? `<a class="openlink searchbtn" href="${esc(it.link)}" target="_blank" rel="noopener">在 GoodShort 搜索 ↗</a>`
-    : `<a class="openlink" href="${esc(it.link)}" target="_blank" rel="noopener">观看剧集 ↗</a>`;
   const eng = it.eng ? `<div class="eng">${esc(it.eng)}</div>` : '';
-  const metrics = it.data ? `<div class="metrics">${esc(it.data)}</div><div class="more">点击展开端内数据 ▾</div>` : '<div class="more">—</div>';
+  const desc = it.desc ? `<div class="desc">${esc(it.desc)}</div>` : '';
+  const metrics = it.data ? `<div class="metrics">${esc(it.data)}</div>` : '';
+  const watchBtn = it.search
+    ? `<a class="btn watch" href="${esc(it.link)}" target="_blank" rel="noopener">在 GoodShort 搜索 ↗</a>`
+    : `<a class="btn watch" href="${esc(it.link)}" target="_blank" rel="noopener">观看剧集 ↗</a>`;
+  const more = (it.desc||it.data) ? '<div class="more">点击展开剧情与端内数据 ▾</div>' : '<div class="more">—</div>';
   return `<div class="card" data-num="${it.num}">
     <div class="chead"><span class="idx">#${it.num}</span>${badge}</div>
     <h3>《${esc(it.cn)}》</h3>
     ${eng}
+    ${desc}
     ${metrics}
-    ${link}
+    ${more}
+    <div class="cbtns">
+      ${watchBtn}
+      <button class="btn copy" data-link="${esc(it.link)}">复制链接</button>
+    </div>
   </div>`;
 }
 
@@ -166,25 +212,25 @@ function render(){
   });
   if(sortEl.value==='numd') list = list.slice().reverse();
 
-  // hong block when filter==hong
   if(filter==='hong'){
     grid.innerHTML = `<div class="card hong" style="cursor:default">
       <div class="chead"><span class="idx">红果</span><span class="badge live" style="background:#b32;color:#ffd">红果平台</span></div>
       <h3>《${esc(hs.cn)}》</h3>
-      <div class="metrics" style="display:block">${esc(hs.heat)}</div>
-      <a class="openlink" style="display:inline-block" href="${esc(hs.link)}" target="_blank" rel="noopener">查看 ↗</a>
+      <div class="metrics" style="display:block">热度值：${esc(hs.heat)}</div>
+      <div class="cbtns" style="display:flex">
+        <a class="btn watch" href="${esc(hs.link)}" target="_blank" rel="noopener">查看 ↗</a>
+        <button class="btn copy" data-link="${esc(hs.link)}">复制链接</button>
+      </div>
     </div>`;
   } else {
     grid.innerHTML = list.length ? list.map(cardHTML).join('') : '<div class="empty">没有匹配的作品</div>';
   }
 
-  // stats
   document.getElementById('s-total').textContent = filter==='all'?items.length:(filter==='hong'?1:list.length);
   document.getElementById('s-live').textContent = items.filter(i=>!i.search).length;
   document.getElementById('s-search').textContent = items.filter(i=>i.search).length;
 }
 
-// events
 qEl.addEventListener('input', render);
 sortEl.addEventListener('change', render);
 tabs.addEventListener('click', e=>{
@@ -196,11 +242,17 @@ tabs.addEventListener('click', e=>{
   render();
 });
 grid.addEventListener('click', e=>{
+  const copyBtn = e.target.closest('.btn.copy');
+  if(copyBtn){ copyLink(copyBtn.dataset.link); return; }
   const card = e.target.closest('.card'); if(!card) return;
-  if(e.target.tagName==='A') return; // don't toggle when clicking link
+  if(e.target.tagName==='A') return;
   card.classList.toggle('open');
   const m = card.querySelector('.more');
-  if(m) m.textContent = card.classList.contains('open') ? '收起 ▴' : '点击展开端内数据 ▾';
+  if(m) m.textContent = card.classList.contains('open') ? '收起 ▴' : '点击展开剧情与端内数据 ▾';
+});
+featuredBox.addEventListener('click', e=>{
+  const copyBtn = e.target.closest('.btn.copy');
+  if(copyBtn){ copyLink(copyBtn.dataset.link); }
 });
 
 renderFeatured();
