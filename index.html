@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Lesile Yin</title>
+<style>
+  :root {
+    --bg: #f2f2f7; --surface: #ffffff; --surface-2: #f5f5f7;
+    --text: #000000; --text-2: #3c3c43; --text-3: #8e8e93;
+    --separator: rgba(60,60,67,0.12);
+    --blue: #007aff; --green: #34c759; --orange: #ff9500; --pink: #ff2d55; --purple: #af52de; --indigo: #5856d6; --teal: #5ac8fa; --yellow: #ffcc00;
+    --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro", "PingFang SC", sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; background: var(--bg); }
+  body { font-family: var(--font); color: var(--text); background: var(--bg); line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { text-decoration: none; color: inherit; }
+  ::-webkit-scrollbar { width: 0; }
+
+  /* === Progress Bar === */
+  .progress-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; height: 2px; background: transparent; }
+  .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width 0.1s linear; }
+
+  /* === Dynamic Island (Fixed Top) === */
+  .dynamic-island {
+    position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 10001;
+    background: #000; border-radius: 24px; padding: 8px 18px;
+    display: flex; align-items: center; gap: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+    transition: all 0.5s var(--spring);
+    cursor: pointer;
+  }
+  .dynamic-island:hover { padding: 10px 24px; border-radius: 28px; }
+  .di-avatar { width: 26px; height: 26px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+  .di-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .di-name { font-size: 13px; font-weight: 600; color: #fff; }
+  .di-divider { width: 1px; height: 14px; background: rgba(255,255,255,0.15); }
+  .di-status { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: var(--green); }
+  .di-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: breathe 2s ease-in-out infinite; }
+  .di-expanded { position: fixed; top: 12px; left: 50%; transform: translateX(-50%) scale(0.9); z-index: 10001;
+    background: #000; border-radius: 32px; padding: 24px; width: 320px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    opacity: 0; pointer-events: none; transition: all 0.4s var(--spring);
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .di-expanded.open { opacity: 1; pointer-events: all; transform: translateX(-50%) scale(1); }
+  .di-expanded .di-header { display: flex; align-items: center; gap: 12px; }
+  .di-expanded .di-header img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+  .di-expanded .di-header div { display: flex; flex-direction: column; }
+  .di-expanded .di-header .din { font-size: 16px; font-weight: 700; color: #fff; }
+  .di-expanded .di-header .dir { font-size: 13px; color: rgba(255,255,255,0.6); }
+  .di-expanded .di-body { display: flex; flex-direction: column; gap: 10px; }
+  .di-expanded .di-row { display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgba(255,255,255,0.85); }
+  .di-expanded .di-row span { font-size: 16px; }
+  .di-expanded .di-close { align-self: center; font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px; cursor: pointer; }
+  .di-expanded .di-close:hover { color: rgba(255,255,255,0.7); }
+
+  /* === Hero (Left-aligned) === */
+  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 80px 20px; position: relative; }
+  .hero-inner { max-width: 920px; margin: 0 auto; width: 100%; }
+  .hero-intro { display: flex; align-items: center; gap: 16px; margin-bottom: 40px; }
+  .hero-intro-avatar { width: 64px; height: 64px; border-radius: 50%; overflow: hidden; flex-shrink: 0; box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+  .hero-intro-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .hero-intro-text { display: flex; flex-direction: column; gap: 2px; }
+  .hero-intro-name { font-size: 20px; font-weight: 700; color: var(--text); }
+  .hero-intro-role { font-size: 14px; color: var(--text-3); }
+  .hero-title { font-size: clamp(40px, 8vw, 80px); font-weight: 800; letter-spacing: -3px; line-height: 1.05; margin-bottom: 16px; }
+  .hero-subtitle { font-size: clamp(18px, 3vw, 24px); font-weight: 400; color: var(--text-2); max-width: 560px; line-height: 1.4; margin-bottom: 48px; }
+  .hero-cta { display: inline-flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 600; color: var(--blue); transition: opacity 0.3s; }
+  .hero-cta:hover { opacity: 0.7; }
+  .hero-cta::after { content: '↓'; animation: bounce 2s infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+  @keyframes breathe { 0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(52,199,89,0.4); } 50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(52,199,89,0); } }
+
+  /* === Section === */
+  .section { max-width: 920px; margin: 0 auto; padding: 80px 20px; }
+  .section-label { font-size: 13px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .section-headline { font-size: clamp(28px, 5vw, 48px); font-weight: 700; letter-spacing: -1px; line-height: 1.1; margin-bottom: 16px; }
+  .section-desc { font-size: 17px; color: var(--text-2); line-height: 1.5; max-width: 600px; }
+
+  /* === Summary Cards (Health Summary style) === */
+  .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 48px; }
+  .summary-card { border-radius: 32px; padding: 32px; color: #fff; position: relative; overflow: hidden; transition: all 0.4s var(--spring); }
+  .summary-card:hover { transform: scale(1.02); }
+  .summary-card::before { content: ''; position: absolute; top: -50%; right: -50%; width: 200%; height: 200%; border-radius: 50%; background: rgba(255,255,255,0.08); }
+  .sc-orange { background: linear-gradient(135deg, #ff9500, #ff6b00); }
+  .sc-green { background: linear-gradient(135deg, #34c759, #30b350); }
+  .sc-blue { background: linear-gradient(135deg, #007aff, #5856d6); }
+  .sc-pink { background: linear-gradient(135deg, #ff2d55, #ff6b81); }
+  .sc-label { font-size: 15px; font-weight: 600; opacity: 0.9; position: relative; z-index: 1; }
+  .sc-value { font-size: clamp(40px, 6vw, 56px); font-weight: 800; letter-spacing: -2px; line-height: 1; margin-top: 8px; position: relative; z-index: 1; }
+  .sc-detail { font-size: 14px; font-weight: 500; opacity: 0.8; margin-top: 8px; position: relative; z-index: 1; }
+
+  /* === Profile Card === */
+  .profile-card { background: var(--surface); border-radius: 32px; padding: 40px; display: flex; gap: 24px; align-items: flex-start; transition: all 0.4s var(--spring); }
+  .profile-card:hover { transform: translateY(-2px); box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
+  .profile-avatar { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; flex-shrink: 0; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+  .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .profile-info h3 { font-size: 22px; font-weight: 700; margin-bottom: 2px; }
+  .profile-info .cn { font-size: 15px; color: var(--text-3); font-weight: 400; }
+  .profile-bio { font-size: 15px; color: var(--text-2); line-height: 1.6; margin-top: 12px; }
+  .profile-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .profile-tag { font-size: 13px; font-weight: 500; padding: 6px 14px; border-radius: 14px; background: var(--surface-2); color: var(--text-2); }
+  .github-svg { width: 15px; height: 15px; vertical-align: -2px; margin-right: 5px; fill: currentColor; flex: 0 0 auto; }
+  .ci-icon .github-svg { width: 28px; height: 28px; margin: 0; }
+
+  /* === Experience List (Messages style) === */
+  .exp-list { background: var(--surface); border-radius: 32px; overflow: hidden; margin-top: 48px; }
+  .exp-item { display: flex; gap: 16px; padding: 20px 24px; border-bottom: 1px solid var(--separator); transition: all 0.2s; cursor: pointer; }
+  .exp-item:hover { background: var(--surface-2); }
+  .exp-item:last-child { border-bottom: none; }
+  .exp-avatar { width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: #fff; }
+  .ea-1 { background: linear-gradient(135deg, #007aff, #5856d6); }
+  .ea-2 { background: linear-gradient(135deg, #ff2d55, #ff6b81); }
+  .ea-3 { background: linear-gradient(135deg, #34c759, #30b350); }
+  .ea-4 { background: linear-gradient(135deg, #ff9500, #ff6b00); }
+  .exp-content { flex: 1; min-width: 0; }
+  .exp-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .exp-title { font-size: 17px; font-weight: 600; }
+  .exp-period { font-size: 13px; color: var(--text-3); font-weight: 500; flex-shrink: 0; margin-left: 8px; }
+  .exp-company { font-size: 14px; color: var(--blue); font-weight: 600; margin-bottom: 4px; }
+  .exp-desc { font-size: 14px; color: var(--text-2); line-height: 1.5; }
+  .exp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .exp-tag { font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 8px; background: var(--surface-2); color: var(--text-2); transition: all 0.2s; }
+  .exp-tag:hover { background: var(--blue); color: #fff; }
+  .exp-award { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #fff; background: linear-gradient(135deg, #FF9F43, #FF6B6B); padding: 5px 12px; border-radius: 10px; margin-bottom: 8px; max-width: 100%; }
+  .exp-award::before { content: '🏆'; }
+  .eng-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
+  .eng-card { background: var(--surface); border: 1px solid var(--separator); border-radius: 20px; padding: 22px; transition: all 0.3s var(--spring); }
+  .eng-card:hover { transform: translateY(-4px); border-color: var(--blue); }
+  .eng-card-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .eng-card-desc { font-size: 13.5px; color: var(--text-2); line-height: 1.55; }
+  .eng-card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .eng-card-tag { font-size: 11.5px; padding: 2px 9px; border-radius: 7px; background: var(--surface-2); color: var(--text-2); }
+
+  /* === Skills Grid (Home Screen style) === */
+  .skills-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 48px; }
+  .skill-icon-item { display: flex; flex-direction: column; align-items: center; gap: 8px; transition: all 0.3s var(--spring); cursor: pointer; }
+  .skill-icon-item:hover { transform: scale(1.1); }
+  .skill-icon-bg { width: 64px; height: 64px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .si-blue { background: linear-gradient(135deg, #007aff, #5856d6); }
+  .si-purple { background: linear-gradient(135deg, #af52de, #5856d6); }
+  .si-orange { background: linear-gradient(135deg, #ff9500, #ff6b00); }
+  .si-green { background: linear-gradient(135deg, #34c759, #30b350); }
+  .si-pink { background: linear-gradient(135deg, #ff2d55, #ff6b81); }
+  .si-teal { background: linear-gradient(135deg, #5ac8fa, #34c759); }
+  .si-indigo { background: linear-gradient(135deg, #5856d6, #007aff); }
+  .si-yellow { background: linear-gradient(135deg, #ffcc00, #ff9500); }
+  .skill-icon-name { font-size: 13px; font-weight: 600; color: var(--text-2); text-align: center; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 32px; }
+  .skill-tag { font-size: 13px; font-weight: 500; padding: 6px 14px; border-radius: 14px; background: var(--surface); color: var(--text-2); border: 1px solid var(--separator); transition: all 0.2s; }
+  .skill-tag:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+  /* === Skills Detail (25 Skills) === */
+  .skills-detail { margin-top: 48px; display: flex; flex-direction: column; gap: 16px; }
+  .skills-category { background: var(--surface); border-radius: 24px; padding: 24px; border: 1px solid var(--separator); transition: all 0.3s; }
+  .skills-category:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+  .skills-cat-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .skills-cat-bar { width: 4px; height: 20px; border-radius: 2px; }
+  .skills-cat-bar.cb-dev { background: linear-gradient(to bottom, var(--blue), var(--purple)); }
+  .skills-cat-bar.cb-search { background: linear-gradient(to bottom, var(--green), var(--teal)); }
+  .skills-cat-bar.cb-img { background: linear-gradient(to bottom, var(--pink), var(--orange)); }
+  .skills-cat-bar.cb-video { background: linear-gradient(to bottom, var(--purple), var(--pink)); }
+  .skills-cat-bar.cb-content { background: linear-gradient(to bottom, var(--orange), var(--yellow)); }
+  .skills-cat-bar.cb-sys { background: linear-gradient(to bottom, var(--indigo), var(--blue)); }
+  .skills-cat-title { font-size: 15px; font-weight: 700; }
+  .skills-list { display: flex; flex-direction: column; gap: 10px; }
+  .skills-item { display: flex; flex-direction: column; gap: 2px; padding: 8px 12px; border-radius: 12px; background: var(--surface-2); transition: all 0.2s; }
+  .skills-item:hover { background: var(--bg); }
+  .skills-item-name { font-size: 14px; font-weight: 600; color: var(--text); }
+  .skills-item-desc { font-size: 12px; color: var(--text-2); line-height: 1.4; }
+  .skills-badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: var(--bg); color: var(--text-3); margin-left: auto; flex-shrink: 0; }
+  .skills-item-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+
+  /* === Prompt Optimizer Demo === */
+  .prompt-demo { background: var(--surface); border-radius: 32px; padding: 32px; border: 1px solid var(--separator); margin-top: 48px; }
+  .prompt-demo-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .prompt-demo-header .icon { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--blue), var(--purple)); display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; }
+  .prompt-demo-header h3 { font-size: 17px; font-weight: 700; }
+  .prompt-demo-header p { font-size: 13px; color: var(--text-3); }
+  .prompt-examples { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .prompt-example-btn { padding: 6px 14px; border-radius: 14px; font-size: 13px; font-weight: 500; background: var(--surface-2); color: var(--text-2); border: 1px solid var(--separator); cursor: pointer; transition: all 0.2s; }
+  .prompt-example-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .prompt-input-wrap { position: relative; margin-bottom: 16px; }
+  .prompt-input { width: 100%; min-height: 80px; padding: 14px 16px; border-radius: 16px; border: 1px solid var(--separator); background: var(--surface-2); font-family: var(--font); font-size: 15px; color: var(--text); resize: vertical; outline: none; transition: all 0.2s; }
+  .prompt-input:focus { border-color: var(--blue); background: var(--surface); box-shadow: 0 0 0 3px rgba(0,122,255,0.1); }
+  .prompt-input::placeholder { color: var(--text-3); }
+  .prompt-btn { padding: 12px 28px; border-radius: 16px; border: none; background: linear-gradient(135deg, var(--blue), var(--purple)); color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s var(--spring); display: inline-flex; align-items: center; gap: 8px; }
+  .prompt-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,122,255,0.3); }
+  .prompt-btn:active { transform: scale(0.97); }
+  .prompt-output { margin-top: 24px; display: none; }
+  .prompt-output.show { display: block; animation: fadeUp 0.5s var(--ease); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .prompt-block { background: var(--surface-2); border-radius: 16px; padding: 16px 18px; margin-bottom: 12px; border-left: 3px solid var(--blue); }
+  .prompt-block.pb-role { border-left-color: var(--purple); }
+  .prompt-block.pb-task { border-left-color: var(--blue); }
+  .prompt-block.pb-constraint { border-left-color: var(--orange); }
+  .prompt-block.pb-format { border-left-color: var(--green); }
+  .prompt-block.pb-accept { border-left-color: var(--pink); }
+  .prompt-block-title { font-size: 12px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .prompt-block-body { font-size: 14px; color: var(--text); line-height: 1.6; }
+  .prompt-block-body br { line-height: 2; }
+
+  /* === Skill Demo Hub === */
+  .demo-hub { background: linear-gradient(135deg, rgba(0,122,255,0.05), rgba(175,82,222,0.05)); border-radius: 32px; padding: 40px; margin-top: 48px; border: 1px solid var(--separator); }
+  .demo-hub-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #1a7f37; background: rgba(52,199,89,0.12); border: 1px solid rgba(52,199,89,0.35); padding: 6px 14px; border-radius: 20px; margin-bottom: 16px; }
+  .demo-hub-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: breathe 2s ease-in-out infinite; }
+  .demo-hub-desc { font-size: 16px; color: var(--text-2); line-height: 1.6; max-width: 640px; margin-top: 14px; }
+  .demo-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .demo-pill { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 16px; background: var(--surface); border: 1px solid var(--separator); font-size: 14px; font-weight: 600; color: var(--text-2); cursor: pointer; transition: all 0.25s var(--spring); }
+  .demo-pill:hover { transform: translateY(-2px); border-color: var(--blue); color: var(--blue); box-shadow: 0 8px 24px rgba(0,122,255,0.15); }
+  .demo-pill .em { font-size: 16px; }
+  .demo-live { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--green), #2db34a); padding: 4px 11px; border-radius: 10px; margin-left: auto; flex-shrink: 0; }
+  .demo-live .dot { width: 6px; height: 6px; border-radius: 50%; background: #fff; animation: breathe 2s ease-in-out infinite; }
+
+  /* === Open Source Skills === */
+  .oss-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 48px; }
+  .oss-card { background: var(--surface); border: 1px solid var(--separator); border-radius: 20px; padding: 22px; transition: all 0.3s var(--spring); text-decoration: none; display: block; }
+  .oss-card:hover { transform: translateY(-4px); border-color: var(--blue); box-shadow: 0 16px 48px rgba(0,0,0,0.08); }
+  .oss-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .oss-name { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--text); }
+  .oss-name .github-svg { width: 18px; height: 18px; fill: var(--text); }
+  .oss-lang { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--text-3); margin-left: auto; flex-shrink: 0; }
+  .oss-lang .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .oss-desc { font-size: 13.5px; color: var(--text-2); line-height: 1.55; }
+  .oss-meta { display: flex; gap: 14px; margin-top: 14px; font-size: 12px; color: var(--text-3); }
+  .oss-meta span { display: inline-flex; align-items: center; gap: 5px; }
+
+  /* === Demo card accent === */
+  .prompt-demo { position: relative; overflow: hidden; }
+  .prompt-demo::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(to bottom, var(--blue), var(--purple)); border-radius: 32px 0 0 32px; }
+
+  /* === Portfolio Grid (Photos style) === */
+  .portfolio-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 48px; }
+  .portfolio-item { background: var(--surface); border-radius: 32px; overflow: hidden; transition: all 0.4s var(--spring); border: 1px solid var(--separator); }
+  .portfolio-item:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
+  .pf-visual { height: 220px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .pf-v1 { background: linear-gradient(135deg, #ede9f6, #d4c9f0); }
+  .pf-v2 { background: linear-gradient(135deg, #e9f0f6, #c9ddf0); }
+  .pf-v3 { background: linear-gradient(135deg, #f0f6e9, #d4e0c9); }
+  .pf-v4 { background: linear-gradient(135deg, #f6e9f0, #e0c9d4); }
+  .pf-icon { font-size: 72px; filter: grayscale(0.2); opacity: 0.8; }
+  .pf-shine { position: absolute; inset: 0; background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.5) 50%, transparent 60%); transition: transform 0.8s; }
+  .portfolio-item:hover .pf-shine { transform: translateX(100%); }
+  .pf-content { padding: 24px; }
+  .pf-title { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
+  .pf-subtitle { font-size: 13px; color: var(--text-3); font-style: italic; margin-bottom: 16px; }
+  .pf-metrics { display: flex; gap: 24px; margin-bottom: 16px; }
+  .pf-metric { display: flex; flex-direction: column; }
+  .pf-metric .val { font-size: 22px; font-weight: 800; letter-spacing: -1px; color: var(--orange); }
+  .pf-metric .label { font-size: 12px; color: var(--text-3); font-weight: 500; }
+  .pf-link { font-size: 14px; font-weight: 600; color: var(--blue); display: inline-flex; align-items: center; gap: 4px; transition: gap 0.3s; }
+  .pf-link:hover { gap: 10px; }
+
+  /* === Contact Grid === */
+  .contact-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 48px; }
+  .contact-item { background: var(--surface); border-radius: 24px; padding: 28px 20px; text-align: center; transition: all 0.4s var(--spring); border: 1px solid var(--separator); cursor: pointer; }
+  .contact-item:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
+  .contact-item .ci-icon { font-size: 28px; margin-bottom: 8px; transition: transform 0.3s var(--spring); }
+  .contact-item:hover .ci-icon { transform: scale(1.15); }
+  .ci-label { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+  .ci-value { font-size: 13px; color: var(--text-2); }
+
+  /* === WeChat QR Modal === */
+  .qr-modal { position: fixed; inset: 0; z-index: 20000; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); opacity: 0; pointer-events: none; transition: opacity 0.3s var(--ease); }
+  .qr-modal.open { opacity: 1; pointer-events: all; }
+  .qr-card { background: var(--surface); border-radius: 32px; padding: 40px; text-align: center; max-width: 360px; width: 90%; box-shadow: 0 40px 100px rgba(0,0,0,0.2); transform: scale(0.9); transition: transform 0.4s var(--spring); }
+  .qr-modal.open .qr-card { transform: scale(1); }
+  .qr-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .qr-card p { font-size: 14px; color: var(--text-2); margin-bottom: 24px; }
+  .qr-card img { width: 200px; height: 200px; border-radius: 16px; margin-bottom: 20px; }
+  .qr-close { padding: 12px 32px; border-radius: 20px; background: var(--surface-2); color: var(--text); font-size: 15px; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s; }
+  .qr-close:hover { background: var(--text-2); color: #fff; }
+
+  /* === Dock === */
+  .dock { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 9999;
+    display: flex; gap: 6px; padding: 10px 14px; background: rgba(255,255,255,0.72); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-radius: 24px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    transition: transform 0.4s var(--spring), opacity 0.4s; }
+  .dock.hidden { transform: translateX(-50%) translateY(100px); opacity: 0; }
+  .dock-item { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--text-3); transition: all 0.3s var(--spring); cursor: pointer; position: relative; }
+  .dock-item:hover { transform: scale(1.15); background: rgba(0,0,0,0.04); color: var(--text); }
+  .dock-item.active { background: rgba(0,122,255,0.1); color: var(--blue); }
+  .dock-item.active::after { content: ''; position: absolute; bottom: -3px; width: 4px; height: 4px; border-radius: 50%; background: var(--blue); }
+
+  /* === Reveal === */
+  .reveal { opacity: 0; transform: translateY(40px); transition: all 0.9s var(--ease); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .rd-1 { transition-delay: 0.1s; }
+  .rd-2 { transition-delay: 0.2s; }
+  .rd-3 { transition-delay: 0.3s; }
+  .rd-4 { transition-delay: 0.4s; }
+
+  @media (max-width: 640px) {
+    .summary-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .skill-icon-bg { width: 52px; height: 52px; border-radius: 14px; font-size: 22px; }
+    .portfolio-grid { grid-template-columns: 1fr; }
+    .oss-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: repeat(2, 1fr); }
+    .profile-card { flex-direction: column; align-items: center; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- Dynamic Island -->
+<div class="dynamic-island" id="dynamicIsland" onclick="toggleDI()">
+  <span class="di-name">Lesile Yin</span>
+  <div class="di-divider"></div>
+  <div class="di-status"><span class="di-dot"></span>求职中</div>
+</div>
+
+<!-- Dynamic Island Expanded -->
+<div class="di-expanded" id="diExpanded" onclick="toggleDI(event)">
+  <div class="di-header">
+    <img src="photo.jpg" alt="Lesile Yin">
+    <div>
+      <span class="din">Lesile Yin</span>
+      <span class="dir">殷南杰 · AIGC Agent Operator</span>
+    </div>
+  </div>
+  <div class="di-body">
+    <div class="di-row"><span>📧</span> yinnanjie@vip.qq.com</div>
+    <div class="di-row"><span>📱</span> 182 0867 7740</div>
+    <div class="di-row"><span>📍</span> 北京 · 20-35K</div>
+  </div>
+  <div class="di-close">点击收起</div>
+</div>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-inner">
+    <div class="hero-intro reveal">
+      <div class="hero-intro-avatar"><img src="photo.jpg" alt="Lesile Yin"></div>
+      <div class="hero-intro-text">
+        <div class="hero-intro-name">Lesile Yin</div>
+        <div class="hero-intro-role">殷南杰 · AIGC Agent Operator</div>
+      </div>
+    </div>
+    <h1 class="hero-title reveal rd-1">AIGC Agent<br>Operator</h1>
+    <p class="hero-subtitle reveal rd-2">2 年实战经验，主导 AI Agent 短剧生产系统从 0 到 1<br>完成 DeepSeek 等多模型 App 端接入，累计投流 $80万+</p>
+    <a class="hero-cta reveal rd-3" href="#metrics">向下探索</a>
+  </div>
+</section>
+
+<!-- Metrics (Summary Cards) -->
+<section class="section" id="metrics">
+  <div class="section-label reveal">核心数据</div>
+  <h2 class="section-headline reveal rd-1">用数据说话</h2>
+  <div class="summary-grid">
+    <div class="summary-card sc-orange reveal">
+      <div class="sc-label">AI 短剧</div>
+      <div class="sc-value">30+</div>
+      <div class="sc-detail">GoodShort 平台</div>
+    </div>
+    <div class="summary-card sc-green reveal rd-1">
+      <div class="sc-label">投流消耗</div>
+      <div class="sc-value">$80万+</div>
+      <div class="sc-detail">峰值单日 $82K</div>
+    </div>
+    <div class="summary-card sc-blue reveal rd-2">
+      <div class="sc-label">ROI</div>
+      <div class="sc-value">35%+</div>
+      <div class="sc-detail">素材占比 88%</div>
+    </div>
+    <div class="summary-card sc-pink reveal rd-3">
+      <div class="sc-label">Agent Skills</div>
+      <div class="sc-value">80+</div>
+      <div class="sc-detail">99.82% 缓存命中</div>
+    </div>
+  </div>
+</section>
+
+<!-- Profile -->
+<section class="section" id="profile">
+  <div class="section-label reveal">关于我</div>
+  <div class="profile-card reveal rd-1">
+    <div class="profile-avatar"><img src="photo.jpg" alt="Lesile Yin"></div>
+    <div class="profile-info">
+      <h3>Lesile Yin <span class="cn">殷南杰</span></h3>
+      <p class="profile-bio">2 年 AIGC 实战，主导 AI Agent 驱动的短剧生产系统从 0 到 1，完成 DeepSeek V4 等多模态模型 App 端接入。具备 Agent 工程化（Context Engineering / 多智能体编排 / RAG）、后端与全栈交付能力，精通 LLM、多模态模型调度与 Vibe Coding。</p>
+      <div class="profile-tags">
+        <span class="profile-tag">yinnanjie@vip.qq.com</span>
+        <span class="profile-tag">182 0867 7740</span>
+        <span class="profile-tag">北京</span>
+        <span class="profile-tag">20-35K</span>
+        <a class="profile-tag" href="https://github.com/Lesile-Yin" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;text-decoration:none;color:inherit"><svg class="github-svg" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>github.com/Lesile-Yin</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Competitions / Awards -->
+<section class="section" id="awards">
+  <div class="section-label reveal">竞赛 / 荣誉</div>
+  <h2 class="section-headline reveal rd-1">比赛排名</h2>
+  <div class="exp-list">
+    <div class="exp-item reveal">
+      <div class="exp-avatar ea-4">🏆</div>
+      <div class="exp-content">
+        <div class="exp-header">
+          <div class="exp-title">Kaggle 机器学习竞赛</div>
+          <div class="exp-period">Titanic</div>
+        </div>
+        <div class="exp-company">Public Leaderboard 0.7679</div>
+        <div class="exp-desc">Kaggle「Titanic: Machine Learning from Disaster」入门机器学习竞赛，公开榜得分 0.7679，验证特征工程与二分类模型调优能力。</div>
+        <div class="exp-tags"><span class="exp-tag">Kaggle</span><span class="exp-tag">机器学习</span><span class="exp-tag">特征工程</span><span class="exp-tag">LB 0.7679</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Experience (Messages List) -->
+<section class="section" id="experience">
+  <div class="section-label reveal">经历</div>
+  <h2 class="section-headline reveal rd-1">工作经历</h2>
+  <div class="exp-list">
+    <div class="exp-item reveal">
+      <div class="exp-avatar ea-1"><img src="logo-hongsong.jpg" alt="红松" style="width:100%;height:100%;border-radius:14px;object-fit:cover"></div>
+      <div class="exp-content">
+        <div class="exp-header">
+          <div class="exp-title">AI 短剧生产系统产品负责人</div>
+          <div class="exp-period">2026.05 — 至今</div>
+        </div>
+        <div class="exp-company">红松集团 · 北京</div>
+        <div class="exp-award">《中国企业家》2026 未来之星 · 21 家高成长性创新企业（银发赛道唯一，与 Kimi、阶跃星辰同台，红杉等一线 VC 评审）</div>
+        <div class="exp-desc">在入选"未来之星"的银发文娱科技平台，主导 AI Agent 驱动短剧生产系统从 0 到 1：6 大模块覆盖工具接入→剧本理解→AI 生成→剪辑合成→投流优化全链路。完成 DeepSeek V4 等多模型 App 端接入与调优，构建统一模型调用层与 RAG 智能助手。沉淀 80+ Skills、120+ Prompt 模板、120+ 标准化案例，优质 Prompt 稳定率 40%→75%；通信优化至 889 tokens/1m22s，缓存命中率 99.82%。单条 30s 内容 3 小时→40 分钟，8 周支撑 3000+ 人次生产 1200+ 条内容。</div>
+        <div class="exp-tags"><span class="exp-tag">Agent 架构</span><span class="exp-tag">DeepSeek App 接入</span><span class="exp-tag">RAG</span><span class="exp-tag">99.82% 缓存命中</span><span class="exp-tag">未来之星</span></div>
+      </div>
+    </div>
+    <div class="exp-item reveal rd-1">
+      <div class="exp-avatar ea-2"><img src="logo-goodshort.jpg" alt="GoodShort" style="width:100%;height:100%;border-radius:14px;object-fit:cover"></div>
+      <div class="exp-content">
+        <div class="exp-header">
+          <div class="exp-title">AI 短剧出海全链路负责人</div>
+          <div class="exp-period">2026.02 — 2026.05</div>
+        </div>
+        <div class="exp-company">新阅科技 · 北京</div>
+        <div class="exp-award">GoodShort 全球短剧平台 TOP7（电影级品质路线，巴西 iOS 免费榜 #1）</div>
+        <div class="exp-desc">依托 GoodNovel（全球图书收入榜 TOP3）IP 池评估 500+ 部、筛选 14 部完成短剧全球化发行。总消耗 $80万+、峰值单日 $82K，ROI 稳定 35%+。设计 Seedance / Kling / Runway 多模型编排与差异化路由，角色一致性 95%+、崩坏率 <5%；有效素材占比 58%→88%+。独立开发 MacOS 端 AI 剧集管理系统，接入钉钉 API 实现多项目实时追踪与协同调度。</div>
+        <div class="exp-tags"><span class="exp-tag">GoodShort TOP7</span><span class="exp-tag">$80万+ 投流</span><span class="exp-tag">多模型调度</span><span class="exp-tag">Vibe Coding</span><span class="exp-tag">出海</span></div>
+      </div>
+    </div>
+    <div class="exp-item reveal rd-2">
+      <div class="exp-avatar ea-3">耘</div>
+      <div class="exp-content">
+        <div class="exp-header">
+          <div class="exp-title">海外社媒运营 & AIGC</div>
+          <div class="exp-period">2025.09 — 2026.01</div>
+        </div>
+        <div class="exp-company">耘瓴端 · 北京</div>
+        <div class="exp-desc">负责 Facebook、YouTube 多平台影视 IP 内容运营，差异化策略驱动数百万播放量、千万级曝光，海外市场渗透率提升 30%。从 0 到 1 搭建 AI 漫剧制作 SOP，单集周期缩短 65%、成本降 55%，月均产出 50+ 集。独立操盘《妖魔复苏》全链路运营，红果平台热度 1117 万；主导《镇妖关》样片研发，满意度 92%。</div>
+        <div class="exp-tags"><span class="exp-tag">社媒运营</span><span class="exp-tag">AI 漫剧</span><span class="exp-tag">千万级曝光</span><span class="exp-tag">SOP</span></div>
+      </div>
+    </div>
+  </div>
+  <h2 class="section-headline reveal" style="margin-top:64px">项目经历</h2>
+  <div class="exp-list">
+    <div class="exp-item reveal">
+      <div class="exp-avatar ea-1">SK</div>
+      <div class="exp-content">
+        <div class="exp-header">
+          <div class="exp-title">开源 Agent Skills 主理人</div>
+          <div class="exp-period">2026.08 — 至今</div>
+        </div>
+        <div class="exp-company">个人开源项目 · <a href="https://github.com/Lesile-Yin/agent-skills" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center"><svg class="github-svg" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>github.com/Lesile-Yin/agent-skills</a></div>
+        <div class="exp-award">Python · 3 Stars · 适配 Claude Code / Codex CLI</div>
+        <div class="exp-desc">面向 AI 编码 Agent 的 4 个实用 Skill：prompt-forge（CRAFT 提示词工程）、prism-review（四维并行代码审查）、token-warden（Token 预算管理）等。以 SKILL.md 标准化封装，从一线 Agent 实战中沉淀，开源供社区复用。</div>
+        <div class="exp-tags"><span class="exp-tag">开源</span><span class="exp-tag">Python</span><span class="exp-tag">4 Skills</span><span class="exp-tag">prompt-forge</span><span class="exp-tag">Claude Code</span></div>
+      </div>
+    </div>
+    <div class="exp-item reveal">
+      <div class="exp-avatar ea-3">vX</div>
+      <div class="exp-content">
+        <div class="exp-header">
+          <div class="exp-title">macOS AI Agent 工程师</div>
+          <div class="exp-period">2025.12 — 2026.02</div>
+        </div>
+        <div class="exp-company">个人项目 · Apple Virtualization · <a href="https://github.com/Lesile-Yin" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center"><svg class="github-svg" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>GitHub</a></div>
+        <div class="exp-desc">基于 Apple Virtualization.framework 构建 macOS 端 iOS 虚拟化 AI Agent，纯 Swift 实现 iOS 60+ 系统组件适配、ARM64 架构与 APFS 镜像处理；通过 vphone-cli 集成 super-tart 等工具库，支撑 iPhone 13/14/15 系列自动化与 CI 流水线，打通 iOS 端到端 Agent 工作流。</div>
+        <div class="exp-tags"><span class="exp-tag">Swift</span><span class="exp-tag">Apple Virtualization</span><span class="exp-tag">ARM64</span><span class="exp-tag">CI/CD</span><span class="exp-tag">iOS 自动化</span></div>
+      </div>
+    </div>
+    <div class="exp-item reveal">
+      <div class="exp-avatar ea-2">JC</div>
+      <div class="exp-content">
+        <div class="exp-header">
+          <div class="exp-title">JobCopilot · BOSS 直聘自动投递</div>
+          <div class="exp-period">2026.08</div>
+        </div>
+        <div class="exp-company">个人开源项目 · <a href="https://github.com/Lesile-Yin/JobCopilot" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center"><svg class="github-svg" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>github.com/Lesile-Yin/JobCopilot</a></div>
+        <div class="exp-award">JavaScript · 基于智谱 GLM-4-Flash</div>
+        <div class="exp-desc">Chrome 扩展形态的求职助手：AI 解析 JD 完成岗位筛选，自动审核勾选匹配项，并按策略批量自动投递 BOSS 直聘职位。把重复的人工海投流程用 Agent 自动化，提升求职投递效率。</div>
+        <div class="exp-tags"><span class="exp-tag">开源</span><span class="exp-tag">JavaScript</span><span class="exp-tag">智谱 GLM-4</span><span class="exp-tag">BOSS 直聘</span><span class="exp-tag">自动化投递</span></div>
+      </div>
+    </div>
+    <div class="exp-item reveal rd-1">
+      <div class="exp-avatar ea-2">⭐</div>
+      <div class="exp-content">
+        <div class="exp-header">
+          <div class="exp-title">awesome-claude-skills</div>
+          <div class="exp-period">2026.08</div>
+        </div>
+        <div class="exp-company">个人开源项目 · <a href="https://github.com/Lesile-Yin/awesome-claude-skills" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center"><svg class="github-svg" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>github.com/Lesile-Yin/awesome-claude-skills</a></div>
+        <div class="exp-award">精选合集 · Claude Code / Claude.ai / API</div>
+        <div class="exp-desc">系统性整理的 50+ 经过验证的 Claude Skills 精选清单，覆盖 TDD、调试、Git 工作流、文档生成等高频场景，帮助开发者快速复用社区最佳实践，提升编码 Agent 生产力。</div>
+        <div class="exp-tags"><span class="exp-tag">开源</span><span class="exp-tag">50+ Skills</span><span class="exp-tag">Claude</span><span class="exp-tag">精选清单</span><span class="exp-tag">生产力</span></div>
+      </div>
+    </div>
+    <div class="exp-item reveal rd-3">
+      <div class="exp-avatar ea-4">影</div>
+      <div class="exp-content">
+        <div class="exp-header">
+          <div class="exp-title">影视电影博主 / KOC</div>
+          <div class="exp-period">2021.01 — 至今</div>
+        </div>
+        <div class="exp-company">个人账号 · 多平台</div>
+        <div class="exp-desc">专注电影测评、首映礼现场报道与新片宣发内容创作，独立完成脚本、拍摄、剪辑与运营全流程。累计产出 100万+ 点赞内容，单条首映礼视频最高播放 600万+，带动影片话题登上平台热榜。以 KOC 身份受邀参与成龙《捕风追影》等头部院线首映礼，长期与 Mtime 时光观影团等头部宣发渠道合作。</div>
+        <div class="exp-tags"><span class="exp-tag">KOC</span><span class="exp-tag">爆款内容</span><span class="exp-tag">首映礼</span><span class="exp-tag">内容运营</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Skills (Home Screen Icons) -->
+<section class="section" id="skills">
+  <div class="section-label reveal">技能</div>
+  <h2 class="section-headline reveal rd-1">核心能力</h2>
+  <div class="skills-grid">
+    <div class="skill-icon-item reveal">
+      <div class="skill-icon-bg si-blue">🤖</div>
+      <div class="skill-icon-name">LLM</div>
+    </div>
+    <div class="skill-icon-item reveal rd-1">
+      <div class="skill-icon-bg si-purple">🎨</div>
+      <div class="skill-icon-name">多模态</div>
+    </div>
+    <div class="skill-icon-item reveal rd-2">
+      <div class="skill-icon-bg si-orange">💻</div>
+      <div class="skill-icon-name">Coding</div>
+    </div>
+    <div class="skill-icon-item reveal rd-3">
+      <div class="skill-icon-bg si-green">📊</div>
+      <div class="skill-icon-name">数据</div>
+    </div>
+    <div class="skill-icon-item reveal">
+      <div class="skill-icon-bg si-pink">🎬</div>
+      <div class="skill-icon-name">短剧</div>
+    </div>
+    <div class="skill-icon-item reveal rd-1">
+      <div class="skill-icon-bg si-teal">🌍</div>
+      <div class="skill-icon-name">出海</div>
+    </div>
+    <div class="skill-icon-item reveal rd-2">
+      <div class="skill-icon-bg si-indigo">⚡</div>
+      <div class="skill-icon-name">Agent</div>
+    </div>
+    <div class="skill-icon-item reveal rd-3">
+      <div class="skill-icon-bg si-yellow">📈</div>
+      <div class="skill-icon-name">增长</div>
+    </div>
+  </div>
+  <div class="skill-tags">
+    <span class="skill-tag">DeepSeek</span><span class="skill-tag">GPT</span><span class="skill-tag">Claude</span><span class="skill-tag">RAG</span><span class="skill-tag">Seedance</span><span class="skill-tag">Kling</span><span class="skill-tag">Runway</span><span class="skill-tag">Midjourney</span><span class="skill-tag">Python</span><span class="skill-tag">TypeScript</span><span class="skill-tag">ROI 优化</span><span class="skill-tag">A/B 测试</span>
+  </div>
+
+  <div class="skills-detail">
+    <div class="skills-category reveal">
+      <div class="skills-cat-header"><div class="skills-cat-bar cb-dev"></div><div class="skills-cat-title">编程与开发效率（5）</div></div>
+      <div class="skills-list">
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">token-saviour</span><span class="skills-badge">节省 ~70% token</span></div><div class="skills-item-desc">按任务类型智能路由到最优 token 效率工具，四层工具路由（serena / rtk / caveman / Ponytail）</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">audit-swarm</span><span class="skills-badge">并行审计</span></div><div class="skills-item-desc">并行启动 4 个专业审计 Agent，从回归/安全/性能/覆盖四个维度同时审查代码</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">grill-me</span><span class="skills-badge">跨模型评审</span></div><div class="skills-item-desc">Claude 负责规划，Codex 负责多轮质疑，打破单一模型"回声室效应"</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">caveman</span><span class="skills-badge">46K+ 星标</span></div><div class="skills-item-desc">穴居人通信模式，删除冗余表达，实测节省 65% 输出 token 且保持 100% 技术准确性</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">optimize-prompt</span><span class="skills-badge">提示词工程</span></div><div class="skills-item-desc">将模糊需求转化为结构清晰的工程级提示词，减少返工</div></div>
+      </div>
+    </div>
+    <div class="skills-category reveal rd-1">
+      <div class="skills-cat-header"><div class="skills-cat-bar cb-search"></div><div class="skills-cat-title">搜索与信息获取（2）</div></div>
+      <div class="skills-list">
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">anysearch</span><span class="skills-badge">2.3K+ 使用</span></div><div class="skills-item-desc">AI Agent 搜索基础设施，23 类垂直数据库 + 结构化输出 + 匿名免登</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">agent-reach</span><span class="skills-badge">13 平台</span></div><div class="skills-item-desc">给 AI Agent 装上"互联网之眼"，覆盖 GitHub/小红书/B站/V2EX 等 13 个平台，零 API 费用</div></div>
+      </div>
+    </div>
+    <div class="skills-category reveal rd-2">
+      <div class="skills-cat-header"><div class="skills-cat-bar cb-img"></div><div class="skills-cat-title">图像生成与处理（4）</div></div>
+      <div class="skills-list">
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">gpt-image</span><span class="skills-badge">OpenAI</span></div><div class="skills-item-desc">通过红松网关调用 gpt-image-2 模型，在 Codex 中直接生成高质量图片</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">doubao-image</span><span class="skills-badge">豆包</span></div><div class="skills-item-desc">调用豆包 Seedream 文生图模型，中文语义理解优秀，中国文化风格素材首选</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">chatgpt-image2-word</span><span class="skills-badge">OCR</span></div><div class="skills-item-desc">图片 OCR 识别并转换为结构化 Word 文档，扫描件/截图一键文字化</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">老照片修复</span><span class="skills-badge">多模型</span></div><div class="skills-item-desc">gpt-image-2 + Gemini 协作修复老照片，模糊五官还原、去水印、清晰度增强</div></div>
+      </div>
+    </div>
+    <div class="skills-category reveal rd-3">
+      <div class="skills-cat-header"><div class="skills-cat-bar cb-video"></div><div class="skills-cat-title">视频生成（4）</div></div>
+      <div class="skills-list">
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">doubao-video</span><span class="skills-badge">Seedance 2.0</span></div><div class="skills-item-desc">豆包 Seedance 2.0 视频生成，首尾帧精确控制、文生视频、变装视频</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">kling-video</span><span class="skills-badge">可灵</span></div><div class="skills-item-desc">快手可灵 AI 视频生成，流畅度和画质突出，文生/图生/视频编辑三模式</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">happyhorse-video</span><span class="skills-badge">人脸锁定</span></div><div class="skills-item-desc">人脸锁定 + 风景动态化，多人场景面部一致性保持，50+ 版迭代项目主力</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">face-lock-video</span><span class="skills-badge">群像</span></div><div class="skills-item-desc">专门针对群像/多人场景的图生视频，全程锁定目标人物面部稳定一致</div></div>
+      </div>
+    </div>
+    <div class="skills-category reveal">
+      <div class="skills-cat-header"><div class="skills-cat-bar cb-content"></div><div class="skills-cat-title">内容分析与自动化（2）</div></div>
+      <div class="skills-list">
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">douyin-analyzer</span><span class="skills-badge">三通道分析</span></div><div class="skills-item-desc">抖音语音+OCR+视觉三通道深度分析，评赞比/转赞比/藏赞比 + 爆款五维拆解</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">PPT 自动化脚本</span><span class="skills-badge">批量处理</span></div><div class="skills-item-desc">python-pptx 批量处理 20+ 套 PPT，布局标准化/流程图生成/红松适老风格适配</div></div>
+      </div>
+    </div>
+    <div class="skills-category reveal rd-1">
+      <div class="skills-cat-header"><div class="skills-cat-bar cb-sys"></div><div class="skills-cat-title">系统工具与基础设施（8）</div></div>
+      <div class="skills-list">
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">Hermes Agent</span><span class="skills-badge">开源框架</span></div><div class="skills-item-desc">开源 AI Agent 框架，支持长期记忆和自学习，Mac + iPhone Termux 双环境部署</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">super-tart</span><span class="skills-badge">Swift</span></div><div class="skills-item-desc">iOS Swift 工具库，含 benchmark 和 integration-tests，与 vphone-cli 项目集成</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">libirecovery</span><span class="skills-badge">DFU</span></div><div class="skills-item-desc">iOS 恢复模式通信库，DFU/Recovery 模式通信、固件操作、设备状态管理</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">Channeling 优化</span><span class="skills-badge">通信优化</span></div><div class="skills-item-desc">Codex Agent 通信管道优化，1m22s / 889 tokens 高效通道，与 caveman 协同</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">DeepSeek Desktop</span><span class="skills-badge">快捷启动</span></div><div class="skills-item-desc">macOS .command 桌面快捷启动器，一键启动 DeepSeek，多模型快速对比</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">Codex CLI iPhone</span><span class="skills-badge">移动端</span></div><div class="skills-item-desc">探索 Codex CLI 在 iPhone Termux 运行，移动端 AI 编程可行性验证</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">猫眼.app</span><span class="skills-badge">iOS 应用</span></div><div class="skills-item-desc">iOS 应用项目，clean/v2/mac 三版本迭代，与 vphone-cli 形成工具链闭环</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">aircraft_blueprint</span><span class="skills-badge">CAD</span></div><div class="skills-item-desc">DWG/DXF 飞机蓝图 CAD 图纸处理，1:1 精确比例，AI 辅助图纸分析标注</div></div>
+      </div>
+    </div>
+  </div>
+  </section>
+
+<!-- Open Source Skills -->
+<section class="section" id="oss-skills">
+  <div class="section-label reveal">开源 Skill 作品</div>
+  <h2 class="section-headline reveal rd-1">系统级开源 Skill</h2>
+  <p class="section-desc reveal rd-2">从 iOS 虚拟化到 AI Agent 框架，以下是我在实战中沉淀并已开源的系统级 Skill 与工具库。</p>
+  <div class="oss-grid">
+    <a class="oss-card reveal" href="https://github.com/Lesile-Yin" target="_blank" rel="noopener">
+      <div class="oss-card-top">
+        <span class="oss-name"><svg class="github-svg" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>super-tart</span>
+        <span class="oss-lang"><span class="dot" style="background:#f05138"></span>Swift</span>
+      </div>
+      <div class="oss-desc">iOS Swift 工具库，含 benchmark 与 integration-tests，与 vphone-cli 深度集成，支撑 iPhone 13/14/15 系列自动化与 CI 流水线。</div>
+      <div class="oss-meta"><span>🔧 工具库</span><span>🍎 iOS</span><span>↗ 查看仓库</span></div>
+    </a>
+    <a class="oss-card reveal rd-1" href="https://github.com/Lesile-Yin" target="_blank" rel="noopener">
+      <div class="oss-card-top">
+        <span class="oss-name"><svg class="github-svg" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>libirecovery</span>
+        <span class="oss-lang"><span class="dot" style="background:#555555"></span>C</span>
+      </div>
+      <div class="oss-desc">iOS 恢复模式通信库，实现 DFU / Recovery 模式通信、固件操作与设备状态管理，是 iOS 底层工具链核心组件。</div>
+      <div class="oss-meta"><span>🔌 DFU</span><span>🍎 iOS</span><span>↗ 查看仓库</span></div>
+    </a>
+    <a class="oss-card reveal rd-2" href="https://github.com/Lesile-Yin" target="_blank" rel="noopener">
+      <div class="oss-card-top">
+        <span class="oss-name"><svg class="github-svg" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>猫眼.app</span>
+        <span class="oss-lang"><span class="dot" style="background:#f05138"></span>Swift</span>
+      </div>
+      <div class="oss-desc">iOS 应用项目，clean / v2 / mac 三版本迭代，与 vphone-cli 形成完整工具链闭环，覆盖日常自动化场景。</div>
+      <div class="oss-meta"><span>📱 iOS 应用</span><span>🔁 多版本</span><span>↗ 查看仓库</span></div>
+    </a>
+    <a class="oss-card reveal rd-3" href="https://github.com/Lesile-Yin" target="_blank" rel="noopener">
+      <div class="oss-card-top">
+        <span class="oss-name"><svg class="github-svg" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>Hermes Agent</span>
+        <span class="oss-lang"><span class="dot" style="background:#3572A5"></span>Python</span>
+      </div>
+      <div class="oss-desc">开源 AI Agent 框架，支持长期记忆与自学习，已部署到 Mac + iPhone Termux 双环境，是 Agent 工程能力的基座。</div>
+      <div class="oss-meta"><span>🤖 开源框架</span><span>🧠 自学习</span><span>↗ 查看仓库</span></div>
+    </a>
+  </div>
+</section>
+
+<!-- Engineering Capabilities -->
+<section class="section" id="engineering">
+  <div class="section-label reveal">工程能力</div>
+  <h2 class="section-headline reveal rd-1">从 Agent 到全栈的落地能力</h2>
+  <div class="eng-grid">
+    <div class="eng-card reveal">
+      <div class="eng-card-title">🤖 Agent Harness 工程</div>
+      <div class="eng-card-desc">Context Engineering / Tool Use / 任务编排 / 多智能体协作 / DAG 工作流；精通 LangChain / LangGraph / OpenViking / AutoGen。曾用 Agent 跑通 50 部短剧全链路制片（总消耗 $80万），覆盖任务拆解、工具调度、质量交付。</div>
+      <div class="eng-card-tags"><span class="eng-card-tag">Prompt 优化</span><span class="eng-card-tag">异步长任务</span><span class="eng-card-tag">记忆管理</span></div>
+    </div>
+    <div class="eng-card reveal rd-1">
+      <div class="eng-card-title">🔍 RAG 全流程调优</div>
+      <div class="eng-card-desc">熟悉向量库（Milvus / PGVector）、Embedding 模型、文档切分、混合检索、重排序、溯源校验等关键环节，落地过生产级知识检索。</div>
+      <div class="eng-card-tags"><span class="eng-card-tag">Milvus</span><span class="eng-card-tag">混合检索</span><span class="eng-card-tag">重排序</span></div>
+    </div>
+    <div class="eng-card reveal rd-2">
+      <div class="eng-card-title">🧩 后端 & 全栈</div>
+      <div class="eng-card-desc">熟练掌握 Python / Swift，熟悉 TypeScript / Go。可独立完成前后端开发、接口设计、联调、交付、上线；熟悉微服务、消息队列、分布式、高并发、K8s / Docker / CI-CD。具备系统级开发经验（iOS 虚拟化 vphone-cli，60+ Swift 文件，自研 ARM64 反汇编器/编码器），可开发结合硬件的 AI 应用原型。</div>
+      <div class="eng-card-tags"><span class="eng-card-tag">Python</span><span class="eng-card-tag">Swift</span><span class="eng-card-tag">Go</span><span class="eng-card-tag">CI/CD</span></div>
+    </div>
+    <div class="eng-card reveal">
+      <div class="eng-card-title">⚡ LLM Agent 技术栈</div>
+      <div class="eng-card-desc">深入理解 Prompt Engineering、Tool Use / Function Calling、Context Window 等核心概念；熟练 LangChain / LangGraph，有 Codex CLI、Reasonix 自研 Agent 框架实战。</div>
+      <div class="eng-card-tags"><span class="eng-card-tag">Function Calling</span><span class="eng-card-tag">自研框架</span></div>
+    </div>
+    <div class="eng-card reveal rd-1">
+      <div class="eng-card-title">🏗 系统设计</div>
+      <div class="eng-card-desc">能独立设计高可用、高并发分布式系统。做过 Agent 生产调度系统，涉及多工具并发调用、资源编排与任务分发，对分布式场景有直接积累。</div>
+      <div class="eng-card-tags"><span class="eng-card-tag">高并发</span><span class="eng-card-tag">调度编排</span></div>
+    </div>
+    <div class="eng-card reveal rd-2">
+      <div class="eng-card-title">📡 可观测性闭环</div>
+      <div class="eng-card-desc">搭建过覆盖 trace / metrics / logging 的监控体系，通过 Replay 机制定位问题并推动迭代，将有效素材产出率从 58% 提升至 88%+，形成"评测→归因→优化→再评测"闭环。</div>
+      <div class="eng-card-tags"><span class="eng-card-tag">监控体系</span><span class="eng-card-tag">58%→88%+</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Skill Demo Hub -->
+<section class="section" id="demo-hub">
+  <div class="section-label reveal">Skill 演示中心</div>
+  <h2 class="section-headline reveal rd-1">4 个 AI Skill 已接入真实后端</h2>
+  <div class="demo-hub reveal rd-2">
+    <div class="demo-hub-badge"><span class="dot"></span>✅ 全部接入智谱 GLM-4-Flash · 真实模型实时生成</div>
+    <p class="demo-hub-desc">下面每个 Skill 都是可直接交互的真实能力，不是截图或录屏。点击入口跳转到对应演示，输入内容即可看到 AI 实时返回结果。</p>
+    <div class="demo-pills">
+      <div class="demo-pill" onclick="scrollTo('prompt-demo')"><span class="em">✨</span>提示词优化</div>
+      <div class="demo-pill" onclick="scrollTo('caveman-demo')"><span class="em">🪨</span>穴居人压缩</div>
+      <div class="demo-pill" onclick="scrollTo('audit-demo')"><span class="em">🛡</span>代码审计</div>
+      <div class="demo-pill" onclick="scrollTo('token-demo')"><span class="em">🪙</span>Token 压缩</div>
+    </div>
+  </div>
+</section>
+
+<!-- Prompt Optimizer Demo -->
+<section class="section" id="prompt-demo">
+  <div class="section-label reveal">交互演示</div>
+  <h2 class="section-headline reveal rd-1">optimize-prompt</h2>
+  <div class="prompt-demo reveal rd-2">
+    <div class="prompt-demo-header">
+      <div class="icon">✨</div>
+      <div>
+        <h3>提示词优化器</h3>
+        <p>接入智谱 GLM-4-Flash，将模糊需求转化为工程级结构化提示词</p>
+      </div>
+      <span class="demo-live"><span class="dot"></span>LIVE</span>
+    </div>
+    <div class="prompt-examples">
+      <button class="prompt-example-btn" onclick="setExample('帮我做一个个人简历网站，要有作品集展示')">简历网站</button>
+      <button class="prompt-example-btn" onclick="setExample('帮我写一个爬虫抓取BOSS直聘上的AIGC岗位信息')">爬虫</button>
+      <button class="prompt-example-btn" onclick="setExample('帮我搭建一个AI短剧数据分析仪表盘')">数据仪表盘</button>
+      <button class="prompt-example-btn" onclick="setExample('帮我开发一个微信小程序，展示我的AI作品集')">小程序</button>
+    </div>
+    <div class="prompt-input-wrap">
+      <textarea class="prompt-input" id="promptInput" placeholder="输入你的需求，例如：帮我做一个可以展示作品集的个人网站..."></textarea>
+    </div>
+    <button class="prompt-btn" id="promptBtn" onclick="optimizePrompt()">
+      <span>⚡</span> AI 优化提示词
+    </button>
+    <div class="prompt-output" id="promptOutput"></div>
+  </div>
+</section>
+
+<!-- Caveman Demo -->
+<section class="section" id="caveman-demo">
+  <div class="section-label reveal">交互演示</div>
+  <h2 class="section-headline reveal rd-1">caveman · 穴居人压缩</h2>
+  <div class="prompt-demo reveal rd-2">
+    <div class="prompt-demo-header">
+      <div class="icon">🪨</div>
+      <div>
+        <h3>穴居人通信压缩器</h3>
+        <p>接入智谱 GLM-4-Flash，删除冗余表达，实测节省 ~65% 输出 token 且保持 100% 技术准确性</p>
+      </div>
+      <span class="demo-live"><span class="dot"></span>LIVE</span>
+    </div>
+    <div class="prompt-examples">
+      <button class="prompt-example-btn" onclick="setCavemanExample('你好，请问能不能麻烦你帮我看一下这个函数的性能问题，我觉得它运行得有点慢，希望你能给我一些优化的建议，谢谢你啦')">啰嗦中文</button>
+      <button class="prompt-example-btn" onclick="setCavemanExample('Could you please help me take a look at this code and let me know if there is any way we could improve its performance, thank you so much')">客套英文</button>
+      <button class="prompt-example-btn" onclick="setCavemanExample('我们团队希望能够在下个迭代中，把这个数据看板的加载速度提升到可以接受的范围内，麻烦您给个方案')">团队需求</button>
+    </div>
+    <div class="prompt-input-wrap">
+      <textarea class="prompt-input" id="cavemanInput" placeholder="输入一段啰嗦、充满客套话的文本，例如：你好，请问能不能麻烦你帮我看一下..."></textarea>
+    </div>
+    <button class="prompt-btn" id="cavemanBtn" onclick="cavemanCompress()">
+      <span>🪨</span> 穴居人压缩
+    </button>
+    <div class="prompt-output" id="cavemanOutput"></div>
+  </div>
+</section>
+
+<!-- Audit Demo -->
+<section class="section" id="audit-demo">
+  <div class="section-label reveal">交互演示</div>
+  <h2 class="section-headline reveal rd-1">audit-swarm · 代码审计</h2>
+  <div class="prompt-demo reveal rd-2">
+    <div class="prompt-demo-header">
+      <div class="icon">🛡</div>
+      <div>
+        <h3>四维并行代码审计</h3>
+        <p>接入智谱 GLM-4-Flash，从意图回归 / 安全隐私 / 性能可靠 / 契约覆盖 四个维度审查代码或需求</p>
+      </div>
+      <span class="demo-live"><span class="dot"></span>LIVE</span>
+    </div>
+    <div class="prompt-examples">
+      <button class="prompt-example-btn" onclick="setAuditExample('function login(user, pass){\n  const sql = &quot;SELECT * FROM users WHERE name=&quot; + user + &quot; AND pwd=&quot; + pass;\n  db.query(sql);\n  return true;\n}')">SQL 注入</button>
+      <button class="prompt-example-btn" onclick="setAuditExample('用 Python 写一个定时从公开 API 拉取数据并写入 MySQL 的脚本，要求高并发')">并发需求</button>
+      <button class="prompt-example-btn" onclick="setAuditExample('const cache = {};\nfunction getUser(id){\n  if(cache[id]) return cache[id];\n  const u = db.find(id);\n  cache[id] = u;\n  return u;\n}')">缓存逻辑</button>
+    </div>
+    <div class="prompt-input-wrap">
+      <textarea class="prompt-input" id="auditInput" placeholder="粘贴一段代码，或描述一个需求 / 变更，例如：function login(user, pass){...}"></textarea>
+    </div>
+    <button class="prompt-btn" id="auditBtn" onclick="auditReview()">
+      <span>🛡</span> 代码审计
+    </button>
+    <div class="prompt-output" id="auditOutput"></div>
+  </div>
+</section>
+
+<!-- Token Saviour Demo -->
+<section class="section" id="token-demo">
+  <div class="section-label reveal">交互演示</div>
+  <h2 class="section-headline reveal rd-1">token-saviour · Token 压缩计算器</h2>
+  <div class="prompt-demo reveal rd-2">
+    <div class="prompt-demo-header">
+      <div class="icon">🪙</div>
+      <div>
+        <h3>Token 审计与压缩</h3>
+        <p>接入智谱 GLM-4-Flash，粘贴任意文本或代码，实时估算 token 数，智能路由到最优压缩层，输出节省报告</p>
+      </div>
+      <span class="demo-live"><span class="dot"></span>LIVE</span>
+    </div>
+    <div class="prompt-examples">
+      <button class="prompt-example-btn" onclick="setTokenExample('你好呀，是这样的，我们团队最近在做一个小程序项目，然后我想麻烦你帮我们看一下，就是首页那个轮播图组件，它现在加载的时候会有点卡顿，大概要两秒钟左右才能渲染出来，我希望你能抽空帮我优化一下这个性能问题，如果可以的话顺便告诉我一下大概是什么原因导致的，谢谢谢谢')">啰嗦需求</button>
+      <button class="prompt-example-btn" onclick="setTokenExample('Could you please kindly take a moment to review the attached pull request when you have a chance? I would really appreciate it if you could let me know your thoughts at your earliest convenience, thank you so much for your time and help with this')">客套邮件</button>
+      <button class="prompt-example-btn" onclick="setTokenExample('// 用户登录处理函数\n// 这个函数用来验证用户身份\nfunction handleUserLogin(userName, userPassword) {\n  // 打印一下日志方便调试\n  console.log(\"user login\", userName);\n  \n  // 先检查用户名和密码是否为空\n  if (userName == null || userName == \"\") {\n    return false;\n  }\n  if (userPassword == null || userPassword == \"\") {\n    return false;\n  }\n  \n  // 调用接口验证\n  const result = apiCall(\"/login\", { name: userName, pwd: userPassword });\n  return result;\n}')">冗余代码</button>
+    </div>
+    <div class="prompt-input-wrap">
+      <textarea class="prompt-input" id="tokenInput" placeholder="粘贴一段啰嗦的文本或带注释的代码，实时计算 token 并压缩，例如：你好，请问能不能麻烦你帮我看一下..."></textarea>
+    </div>
+    <button class="prompt-btn" id="tokenBtn" onclick="tokenCalc()">
+      <span>🪙</span> 开始审计压缩
+    </button>
+    <div class="prompt-output" id="tokenOutput"></div>
+  </div>
+</section>
+
+<!-- Portfolio (Photos Grid) -->
+<section class="section" id="portfolio">
+  <div class="section-label reveal">作品</div>
+  <h2 class="section-headline reveal rd-1">GoodShort 作品集</h2>
+  <div class="portfolio-grid">
+    <div class="portfolio-item reveal">
+      <div class="pf-visual pf-v1"><span class="pf-icon">🧛</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-title">重生嫁吸血鬼王</div>
+        <div class="pf-subtitle">Marry Vampire King After Rebirth</div>
+        <div class="pf-metrics">
+          <div class="pf-metric"><div class="val">$480K</div><div class="label">消耗</div></div>
+          <div class="pf-metric"><div class="val">445K</div><div class="label">Views</div></div>
+        </div>
+        <a href="https://www.goodshort.com/drama/marry-vampire-king-after-rebirth-31001363415" class="pf-link" target="_blank">查看 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-1">
+      <div class="pf-visual pf-v2"><span class="pf-icon">🩸</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-title">被遗弃女儿的血与骨</div>
+        <div class="pf-subtitle">Blood and Bones of the Disowned Daughter</div>
+        <div class="pf-metrics">
+          <div class="pf-metric"><div class="val">$320K</div><div class="label">消耗</div></div>
+          <div class="pf-metric"><div class="val">25M</div><div class="label">Views</div></div>
+        </div>
+        <a href="https://www.goodshort.com/drama/blood-and-bones-of-the-disowned-daughter-31001113972" class="pf-link" target="_blank">查看 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-2">
+      <div class="pf-visual pf-v3"><span class="pf-icon">💎</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-title">为无情亿万富翁的错误替身</div>
+        <div class="pf-subtitle">A Mistaken Surrogate for the Ruthless Billionaire</div>
+        <div class="pf-metrics">
+          <div class="pf-metric"><div class="val">$350K</div><div class="label">消耗</div></div>
+          <div class="pf-metric"><div class="val">31M</div><div class="label">Views</div></div>
+        </div>
+        <a href="https://www.goodshort.com/drama/a-mistaken-surrogate-for-the-ruthless-billionaire-31000881454" class="pf-link" target="_blank">查看 →</a>
+      </div>
+    </div>
+    <div class="portfolio-item reveal rd-3">
+      <div class="pf-visual pf-v4"><span class="pf-icon">📚</span><div class="pf-shine"></div></div>
+      <div class="pf-content">
+        <div class="pf-title">更多作品</div>
+        <div class="pf-subtitle">30+ 部 AI 短剧累计发行</div>
+        <div class="pf-metrics">
+          <div class="pf-metric"><div class="val">30+</div><div class="label">总剧集</div></div>
+          <div class="pf-metric"><div class="val">$80万+</div><div class="label">总消耗</div></div>
+        </div>
+        <a href="https://www.goodshort.com" class="pf-link" target="_blank">查看平台 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="section" id="contact" style="padding-bottom: 160px;">
+  <div class="section-label reveal">联系</div>
+  <h2 class="section-headline reveal rd-1">期待交流</h2>
+  <div class="contact-grid">
+    <a href="mailto:yinnanjie@vip.qq.com" class="contact-item reveal">
+      <div class="ci-icon">📧</div><div class="ci-label">邮箱</div><div class="ci-value">yinnanjie@vip.qq.com</div>
+    </a>
+    <a href="tel:18208677740" class="contact-item reveal rd-1">
+      <div class="ci-icon">📱</div><div class="ci-label">电话</div><div class="ci-value">182 0867 7740</div>
+    </a>
+    <a href="https://github.com/Lesile-Yin" target="_blank" rel="noopener" class="contact-item reveal rd-2">
+      <div class="ci-icon"><svg class="github-svg" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></div><div class="ci-label">GitHub</div><div class="ci-value">Lesile-Yin</div>
+    </a>
+    <div class="contact-item reveal rd-3" onclick="openQR()">
+      <div class="ci-icon">💬</div><div class="ci-label">微信</div><div class="ci-value">添加好友</div>
+    </div>
+    <div class="contact-item reveal rd-3">
+      <div class="ci-icon">📍</div><div class="ci-label">城市</div><div class="ci-value">北京</div>
+    </div>
+    <a href="https://6b33d8aec1444b33bb1b63147988543a.bj7.agentos-app.net" target="_blank" rel="noopener" class="contact-item reveal">
+      <div class="ci-icon">🌐</div><div class="ci-label">主页</div><div class="ci-value">在线简历</div>
+    </a>
+  </div>
+</section>
+
+<!-- WeChat QR Modal -->
+<div class="qr-modal" id="qrModal" onclick="closeQR(event)">
+  <div class="qr-card">
+    <h3>添加微信</h3>
+    <p>扫码添加好友，备注「简历」</p>
+    <img src="wechat-qr.jpg" alt="微信二维码">
+    <button class="qr-close" onclick="closeQR()">关闭</button>
+  </div>
+</div>
+
+<!-- Dock -->
+<nav class="dock" id="dock">
+  <div class="dock-item active" onclick="scrollTo('hero')" title="首页">🏠</div>
+  <div class="dock-item" onclick="scrollTo('metrics')" title="数据">📊</div>
+  <div class="dock-item" onclick="scrollTo('experience')" title="经历">💼</div>
+  <div class="dock-item" onclick="scrollTo('skills')" title="技能">⚡</div>
+  <div class="dock-item" onclick="scrollTo('engineering')" title="工程">🧩</div>
+  <div class="dock-item" onclick="scrollTo('portfolio')" title="作品">🎬</div>
+  <div class="dock-item" onclick="scrollTo('prompt-demo')" title="演示">✨</div>
+  <div class="dock-item" onclick="scrollTo('contact')" title="联系">📬</div>
+</nav>
+
+<script>
+  const progressFill = document.getElementById('progressFill');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    progressFill.style.width = (window.scrollY / h * 100) + '%';
+  });
+
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  let lastY = 0;
+  const dock = document.getElementById('dock');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y > lastY && y > 100) dock.classList.add('hidden'); else dock.classList.remove('hidden');
+    lastY = y;
+  });
+
+  const dockItems = document.querySelectorAll('.dock-item');
+  const sections = ['hero','metrics','experience','skills','engineering','portfolio','prompt-demo','contact'];
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY + 300; let cur = 0;
+    sections.forEach((id, i) => { const el = document.getElementById(id); if (el && el.offsetTop <= y) cur = i; });
+    dockItems.forEach((item, i) => item.classList.toggle('active', i === cur));
+  });
+  function scrollTo(id) { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth' }); }
+
+  const di = document.getElementById('dynamicIsland');
+  const diExp = document.getElementById('diExpanded');
+  let diOpen = false;
+
+  // Dynamic Island scroll shrink
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y > 100) { di.style.transform = 'translateX(-50%) scale(0.85)'; di.style.opacity = '0.9'; }
+    else { di.style.transform = 'translateX(-50%) scale(1)'; di.style.opacity = '1'; }
+    if (diOpen) { diOpen = false; diExp.classList.remove('open'); }
+  });
+  di.addEventListener('click', (e) => { e.stopPropagation(); diOpen = true; diExp.classList.add('open'); });
+  function toggleDI(e) { if (!e || e.target.classList.contains('di-close') || e.target === diExp) { diOpen = false; diExp.classList.remove('open'); } }
+  document.addEventListener('click', (e) => { if (diOpen && !di.contains(e.target) && !diExp.contains(e.target)) { diOpen = false; diExp.classList.remove('open'); } });
+
+  // Prompt Optimizer Demo — calls backend proxy (/api/optimize), falls back to smart template
+  // API_BASE：统一指向腾讯云 CloudBase 云接入域名（CORS 已开 *，所有域名均可调）
+  const API_BASE = 'https://jay2217-d1guaifym2f21e570-1437141048.ap-shanghai.app.tcloudbase.com';
+  function setExample(text) { document.getElementById('promptInput').value = text; document.getElementById('promptOutput').classList.remove('show'); }
+
+  // 保存最近一次「真实 AI 优化出的提示词」，供「生成实际结果」按钮使用
+  let lastOptimizedPrompt = '';
+
+  function optimizePrompt() {
+    const input = document.getElementById('promptInput').value.trim();
+    if (!input) return;
+    const output = document.getElementById('promptOutput');
+    const btn = document.getElementById('promptBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span>⏳</span> AI 思考中...';
+    output.innerHTML = '<div style="text-align:center;padding:40px;color:#8e8e93;font-size:14px;">🧠 正在调用真实 AI 模型（智谱 GLM-4）生成提示词...</div>';
+    output.classList.add('show');
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 90000);
+
+    // 实时渲染容器：一个随内容增长的大框
+    const liveBox = document.createElement('div');
+    liveBox.className = 'prompt-block pb-role';
+    liveBox.style.opacity = '1';
+    liveBox.style.transform = 'none';
+    liveBox.style.whiteSpace = 'pre-wrap';
+    liveBox.innerHTML = '<div class="prompt-block-title">实时生成中…</div><div class="prompt-block-body"></div>';
+    const liveBody = liveBox.querySelector('.prompt-block-body');
+    let acc = '';
+
+    // 云接入版：直接调用 JSON 云函数（云接入对 SSE 流式支持不稳定，统一走 JSON）
+    fallbackJSON();
+
+    // 阶段2：非流式 JSON 真 AI（SSE 不可用时的可靠兜底，仍调用真实模型）
+    function fallbackJSON() {
+      return fetch(API_BASE + '/optimizeApi', {
+        method: 'POST',
+        signal: controller.signal,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ input: input })
+      })
+      .then(r => { if (!r.ok) throw new Error('API ' + r.status); return r.json(); })
+      .then(data => {
+        const raw = data.result || '';
+        clearTimeout(timeoutId);
+        if (raw.trim()) {
+          renderPromptResult(raw, false);            // ✅ 真 AI（JSON）
+          btn.disabled = false; btn.innerHTML = '<span>⚡</span> AI 优化提示词';
+        } else {
+          throw new Error('empty');
+        }
+      })
+      .catch(err => {
+        clearTimeout(timeoutId);
+        console.log('All AI endpoints failed, using offline template:', err.message);
+        renderSmartTemplate(input);                  // ⚠️ 离线模板（明确标注）
+        btn.disabled = false; btn.innerHTML = '<span>⚡</span> 优化提示词';
+      });
+    }
+  }
+
+  function renderPromptResult(raw, isTemplate) {
+    lastOptimizedPrompt = raw;
+    const output = document.getElementById('promptOutput');
+    const sections = [
+      { key: '角色定义', cls: 'pb-role' },
+      { key: '任务描述', cls: 'pb-task' },
+      { key: '约束条件', cls: 'pb-constraint' },
+      { key: '输出格式', cls: 'pb-format' },
+      { key: '验收标准', cls: 'pb-accept' }
+    ];
+
+    output.innerHTML = '';
+    const badge = document.createElement('div');
+    if (isTemplate) {
+      badge.style.cssText = 'text-align:center;font-size:12.5px;color:#b3500a;font-weight:600;margin-bottom:16px;padding:8px 14px;background:rgba(255,149,0,0.12);border:1px solid rgba(255,149,0,0.35);border-radius:20px;display:inline-block;';
+      badge.textContent = '⚠️ 离线演示模板：当前未连接 AI 后端，以下为示例结构（非真实模型生成）';
+    } else {
+      badge.style.cssText = 'text-align:center;font-size:12.5px;color:#1a7f37;font-weight:600;margin-bottom:16px;padding:8px 14px;background:rgba(52,199,89,0.12);border:1px solid rgba(52,199,89,0.35);border-radius:20px;display:inline-block;';
+      badge.textContent = '✅ 由智谱 GLM-4 实时生成';
+    }
+    output.appendChild(badge);
+
+    let remaining = raw;
+    sections.forEach((sec, i) => {
+      const regex = new RegExp('###\\s*' + sec.key + '\\s*###\\s*([\\s\\S]*?)(?=###|$)');
+      const match = remaining.match(regex);
+      let body = match ? match[1].trim() : '（该模块未生成内容）';
+
+      const div = document.createElement('div');
+      div.className = 'prompt-block ' + sec.cls;
+      div.style.opacity = '0';
+      div.style.transform = 'translateY(12px)';
+      div.style.transition = 'all 0.4s var(--ease)';
+      div.innerHTML = '<div class="prompt-block-title">' + sec.key + '</div><div class="prompt-block-body">' + body.replace(/\n/g, '<br>') + '</div>';
+      output.appendChild(div);
+      setTimeout(() => { div.style.opacity = '1'; div.style.transform = 'translateY(0)'; }, i * 150);
+    });
+
+    // 「生成实际结果」入口：无论真 AI（绿标）还是离线模板（红标）都展示，点按后调用真 AI 生成成品
+    {
+      const genWrap = document.createElement('div');
+      genWrap.style.cssText = 'margin-top:22px;border-top:1px solid var(--separator);padding-top:18px;';
+      const genBtn = document.createElement('button');
+      genBtn.className = 'prompt-example-btn';
+      genBtn.style.cssText = 'background:var(--blue);color:#fff;border-color:var(--blue);font-size:14px;font-weight:600;padding:11px 20px;border-radius:14px;';
+      genBtn.innerHTML = '▶ 用此提示词生成实际结果';
+      genBtn.onclick = generateResult;
+      genWrap.appendChild(genBtn);
+      const genOut = document.createElement('div');
+      genOut.id = 'genResult';
+      genOut.style.marginTop = '16px';
+      genWrap.appendChild(genOut);
+      output.appendChild(genWrap);
+    }
+  }
+
+  // 把优化好的提示词再喂给智谱，真正产出可交付的成品（分镜/代码/文案等）
+  function generateResult() {
+    const prompt = lastOptimizedPrompt;
+    const genOut = document.getElementById('genResult');
+    if (!prompt || !genOut) return;
+    genOut.innerHTML = '<div style="text-align:center;padding:24px;color:#8e8e93;font-size:14px;">🎬 模型正在根据你的提示词生成实际交付物...</div>';
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 120000);
+
+    const liveBox = document.createElement('div');
+    liveBox.className = 'prompt-block pb-role';
+    liveBox.style.opacity = '1';
+    liveBox.style.transform = 'none';
+    liveBox.style.whiteSpace = 'pre-wrap';
+    liveBox.innerHTML = '<div class="prompt-block-title">生成中…</div><div class="prompt-block-body"></div>';
+    const liveBody = liveBox.querySelector('.prompt-block-body');
+    let acc = '';
+
+    // 云接入版：直接调用 JSON 云函数（云接入对 SSE 流式支持不稳定，统一走 JSON）
+    genJSON();
+
+    // 阶段2：JSON 真 AI 兜底
+    function genJSON() {
+      return fetch(API_BASE + '/generateApi', {
+        method: 'POST', signal: controller.signal,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      })
+      .then(r => { if (!r.ok) throw new Error('API ' + r.status); return r.json(); })
+      .then(data => { const raw = data.result || ''; clearTimeout(timeoutId); if (raw.trim()) { renderGenResult(genOut, raw, false); } else throw new Error('empty'); })
+      .catch(err => { clearTimeout(timeoutId); console.log('Generate failed:', err.message); renderGenResult(genOut, '', true); });
+    }
+  }
+
+  // 渲染「实际生成结果」区块
+  function renderGenResult(container, raw, isTemplate) {
+    container.innerHTML = '';
+    const badge = document.createElement('div');
+    if (isTemplate) {
+      badge.style.cssText = 'text-align:center;font-size:12.5px;color:#b3500a;font-weight:600;margin-bottom:14px;padding:8px 14px;background:rgba(255,149,0,0.12);border:1px solid rgba(255,149,0,0.35);border-radius:20px;display:inline-block;';
+      badge.textContent = '⚠️ 离线演示：当前未连接 AI 后端，无法生成实际结果';
+    } else {
+      badge.style.cssText = 'text-align:center;font-size:12.5px;color:#1a7f37;font-weight:600;margin-bottom:14px;padding:8px 14px;background:rgba(52,199,89,0.12);border:1px solid rgba(52,199,89,0.35);border-radius:20px;display:inline-block;';
+      badge.textContent = '✅ 实际交付物（由智谱 GLM-4 生成）';
+    }
+    container.appendChild(badge);
+    const box = document.createElement('div');
+    box.style.cssText = 'white-space:pre-wrap;line-height:1.75;font-size:14px;color:var(--text-1);background:var(--surface-2);border:1px solid var(--separator);border-radius:14px;padding:18px;';
+    box.textContent = isTemplate ? '（当前环境未连接 AI 后端，请在带后端的链接中打开以生成实际结果）' : raw;
+    container.appendChild(box);
+  }
+
+  // Smart template fallback when AI API is unavailable (CORS, no key, etc.)
+  function renderSmartTemplate(input) {
+    const t = input.toLowerCase();
+    let type = 'general';
+    if (t.includes('网站') || t.includes('网页') || t.includes('web') || t.includes('page') || t.includes('landing') || t.includes('官网')) type = 'web';
+    else if (t.includes('爬虫') || t.includes('抓取') || t.includes('爬取') || t.includes('spider') || t.includes('采集')) type = 'crawler';
+    else if (t.includes('数据') || t.includes('分析') || t.includes('报表') || t.includes('仪表盘') || t.includes('dashboard') || t.includes('可视化')) type = 'data';
+    else if (t.includes('小程序') || t.includes('app') || t.includes('应用') || t.includes('移动端') || t.includes('ios') || t.includes('android')) type = 'app';
+    else if (t.includes('api') || t.includes('接口') || t.includes('后端') || t.includes('服务器') || t.includes('服务')) type = 'api';
+    else if (t.includes('ai') || t.includes('模型') || t.includes('训练') || t.includes('机器学习') || t.includes('深度学习')) type = 'ai';
+    else if (t.includes('自动化') || t.includes('脚本') || t.includes('工具') || t.includes('效率')) type = 'automation';
+
+    const templates = {
+      web: {
+        role: '你是一位资深前端工程师，精通 React / Vue / Next.js / 原生 HTML/CSS/JS，擅长响应式设计、性能优化和现代化 UI 开发。',
+        task: '根据以下需求，设计并构建一个完整的 Web 应用：\n' + input + '\n\n需求分析：该需求属于 Web 前端开发范畴，需要关注用户体验、交互设计、性能优化和跨端兼容性。',
+        constraint: '● 技术栈：React 18+（推荐）或 Vue 3，配合 TypeScript\n● 响应式设计：支持 320px ~ 2560px 全尺寸适配\n● 性能指标：首屏 < 1.5s，Lighthouse 评分 > 90，TTI < 3.5s\n● 无障碍：遵循 WCAG 2.1 AA 标准，支持键盘导航和屏幕阅读器\n● SEO：语义化 HTML，Open Graph 标签，结构化数据',
+        format: '1. 技术方案文档（选型理由 + 架构图）\n2. 项目目录结构和核心文件说明\n3. 核心组件实现（含类型定义和注释）\n4. 样式系统（CSS Modules / Tailwind / Styled Components）\n5. 动画和交互实现（Framer Motion / GSAP）\n6. 测试方案（单元测试 + E2E）\n7. CI/CD 配置和部署文档',
+        accept: '● 代码零报错，TypeScript 类型完整\n● Chrome / Safari / Firefox / Edge 最新两版本兼容\n● 移动端 iOS Safari 和 Android Chrome 正常\n● Core Web Vitals 全部绿灯（LCP < 2.5s, FID < 100ms, CLS < 0.1）'
+      },
+      crawler: {
+        role: '你是一位数据工程师，精通 Python 爬虫开发、反爬对抗、数据清洗和分布式采集系统架构。',
+        task: '根据以下需求，开发一个高效、稳定的数据抓取系统：\n' + input + '\n\n需求分析：该需求涉及网络数据采集，需要平衡抓取效率和目标网站的承受能力，同时保证数据质量。',
+        constraint: '● 语言：Python 3.10+，使用 asyncio 异步编程\n● 框架：Scrapy / Playwright / requests + BeautifulSoup 按需选择\n● 反爬策略：动态请求间隔（1-5s 随机）、User-Agent 池（50+）、代理 IP 池、Cookie 轮换\n● 数据存储：支持 JSON / CSV / SQLite / MySQL / MongoDB\n● 合规性：遵守 robots.txt，请求频率不超过网站承受极限',
+        format: '1. 目标网站结构分析和 URL 策略\n2. 反爬对抗方案（检测机制 + 应对策略对照表）\n3. 核心抓取代码（异步 + 异常处理 + 重试机制）\n4. 数据清洗和验证流程\n5. 存储方案和数据模型\n6. 监控和日志系统\n7. requirements.txt 和部署说明',
+        accept: '● 单机抓取成功率 > 95%，失败自动重试 3 次\n● 数据完整率 100%，字段缺失率 < 1%\n● 支持断点续爬，异常中断后可恢复\n● 日志清晰，可定位每个请求的状态和耗时'
+      },
+      data: {
+        role: '你是一位数据分析师兼全栈工程师，精通 Python 数据分析栈、可视化工具和 BI 系统开发。',
+        task: '根据以下需求，构建一个数据分析仪表盘或报表系统：\n' + input + '\n\n需求分析：该需求涉及数据可视化、交互式分析和实时数据展示，需要兼顾美观性和功能性。',
+        constraint: '● 后端：Python FastAPI 或 Node.js + 数据库（PostgreSQL / ClickHouse）\n● 前端：React + ECharts / AntV / D3.js\n● 实时性：支持 WebSocket 推送和定时刷新（5s ~ 5min 可调）\n● 响应式：桌面端为主，平板端适配\n● 安全：数据脱敏、权限控制、SQL 注入防护',
+        format: '1. 数据源接入方案（API / 数据库 / 文件）\n2. 数据模型和 ETL 流程\n3. 后端 API 设计（REST / GraphQL）\n4. 前端仪表盘架构（组件化 + 状态管理）\n5. 图表配置和交互设计\n6. 导出功能（PDF / Excel / PNG）\n7. 性能优化和缓存策略',
+        accept: '● 页面加载 < 3s，图表渲染 < 1s\n● 数据刷新无闪烁，过渡动画流畅\n● 支持 50+ 并发用户，响应时间 < 500ms\n● 导出文件格式正确、内容完整、排版美观'
+      },
+      app: {
+        role: '你是一位移动端开发工程师，精通微信小程序、React Native、Flutter 和原生 iOS/Android 开发。',
+        task: '根据以下需求，开发一个移动端应用：\n' + input + '\n\n需求分析：该需求涉及移动端用户体验，需要关注性能、包体积、平台特性和上架合规。',
+        constraint: '● 跨平台：微信小程序（首选）或 React Native / Flutter\n● 包体积：小程序 < 2MB（分包后 < 8MB），App < 50MB\n● 性能：冷启动 < 2s，页面切换 < 300ms，内存占用合理\n● 设计规范：遵循 iOS HIG 和 Material Design 3\n● 兼容性：iOS 13+ / Android 8+',
+        format: '1. 技术方案对比和选型理由\n2. 页面路由和导航结构\n3. 核心页面实现（含 UI 和逻辑）\n4. 状态管理和数据流\n5. 原生能力调用（相机、定位、推送等）\n6. 性能优化清单\n7. 测试方案和上线路径',
+        accept: '● 所有页面可正常访问，无白屏、无闪退\n● 核心交互（点击、滑动、下拉刷新）响应 < 100ms\n● iPhone 和 Android 各一款真机测试通过\n● 审核合规，无违规内容，可正常上架/发布'
+      },
+      api: {
+        role: '你是一位后端架构师，精通 RESTful API 设计、微服务架构、数据库建模和系统性能优化。',
+        task: '根据以下需求，设计并实现一套后端 API 系统：\n' + input + '\n\n需求分析：该需求涉及服务端架构设计，需要关注可扩展性、安全性、性能和可维护性。',
+        constraint: '● 语言：Python（FastAPI / Django）或 Node.js（NestJS / Express）\n● 协议：RESTful + OpenAPI 3.0 规范\n● 安全：JWT 认证、RBAC 权限、速率限制、输入校验、SQL 注入防护\n● 数据库：PostgreSQL（主）+ Redis（缓存）+ 消息队列\n● 文档：自动生成 Swagger UI，包含请求/响应示例',
+        format: '1. 系统架构图和模块划分\n2. 数据库 ER 图和 Schema 定义\n3. API 端点清单（Method / Path / 参数 / 响应 / 错误码）\n4. 认证和授权流程\n5. 核心接口实现代码\n6. 测试用例（单元 + 集成 + 压力）\n7. 部署方案（Docker + K8s / 云函数）',
+        accept: '● 所有 API 返回正确 JSON，状态码规范\n● 输入校验覆盖率 100%，非法参数返回清晰错误\n● 并发 200 请求下 P95 响应 < 200ms\n● 单元测试覆盖率 > 80%，核心流程 100%'
+      },
+      ai: {
+        role: '你是一位 AI 应用工程师，精通大语言模型（LLM）集成、RAG 架构、Agent 系统和多模态 AI 应用开发。',
+        task: '根据以下需求，构建一个 AI 驱动的应用或系统：\n' + input + '\n\n需求分析：该需求涉及 AI 能力集成，需要平衡模型性能、成本和用户体验，同时处理 AI 的不确定性输出。',
+        constraint: '● 模型：OpenAI GPT-4 / Claude / 智谱 GLM-4 / DeepSeek 按需选择\n● 架构：RAG（检索增强生成）或 Agent 工作流，支持多轮对话\n● 成本控制：Token 用量监控、缓存策略、模型降级方案\n● 安全：输入过滤、输出审核、敏感信息脱敏\n● 可观测性：对话日志、Token 消耗、用户满意度追踪',
+        format: '1. AI 架构设计（模型选择 + 管道设计）\n2. Prompt 工程方案（系统提示词 + 少样本示例）\n3. RAG / Agent 实现（向量数据库 + 工具调用）\n4. 核心代码（API 集成 + 流式输出 + 错误处理）\n5. 评估方案（自动评估 + 人工标注）\n6. 部署和扩缩容策略',
+        accept: '● 响应时间 < 3s（含模型推理），流式首字 < 500ms\n● 输出准确率 > 85%（经人工抽样验证）\n● 幻觉率 < 5%，拒绝回答率 < 10%\n● 支持 100+ 并发，系统稳定性 99.9%'
+      },
+      automation: {
+        role: '你是一位自动化工程师，精通脚本开发、CI/CD 流水线、DevOps 工具链和效率工具开发。',
+        task: '根据以下需求，开发一个自动化工具或脚本：\n' + input + '\n\n需求分析：该需求涉及重复性工作的自动化，需要关注可靠性、可维护性和异常处理。',
+        constraint: '● 语言：Python（首选）或 Node.js / Bash\n● 可靠性：异常重试、日志记录、状态持久化\n● 可配置：参数化设计，支持配置文件和环境变量\n● 安全：敏感信息不硬编码，使用环境变量或密钥管理\n● 文档：README 包含安装、配置、使用和排障指南',
+        format: '1. 自动化流程图和触发条件\n2. 核心脚本实现（模块化 + 注释）\n3. 配置方案（YAML / JSON / 环境变量）\n4. 错误处理和告警机制\n5. 日志和监控\n6. 定时任务配置（crontab / systemd / CI）\n7. 测试和部署说明',
+        accept: '● 脚本可独立运行，零外部依赖（除 requirements）\n● 成功率 > 98%，失败时自动告警并保留现场\n● 日志清晰，可在 5 分钟内定位问题根因\n● 新用户可在 10 分钟内完成配置并运行'
+      },
+      general: {
+        role: '你是一位全栈工程师，具备从需求分析、架构设计到部署运维的完整项目交付能力。',
+        task: '根据以下需求，完成项目交付：\n' + input + '\n\n需求分析：该需求需要综合评估技术方案、开发周期和资源投入，选择最优实现路径。',
+        constraint: '● 技术选型需说明理由，优先选择成熟稳定的方案\n● 代码规范：遵循团队编码规范，包含完整注释\n● 安全：OWASP Top 10 防护、数据加密、访问控制\n● 可扩展性：模块化设计，支持后续功能迭代\n● 可维护性：文档完整、监控完善、告警及时',
+        format: '1. 需求分析和功能拆解（用户故事 + 优先级）\n2. 技术架构设计（选型对比 + 架构图）\n3. 核心模块实现代码\n4. 数据库设计和 API 定义\n5. 测试方案（单元 + 集成 + E2E）\n6. 部署文档和运维监控方案\n7. 项目排期和里程碑',
+        accept: '● 核心功能完整可用，无阻塞性 Bug\n● 代码审查通过，符合团队规范\n● 文档齐全，新成员 30 分钟内可本地跑通\n● 生产环境稳定运行 14 天无故障，监控告警正常'
+      }
+    };
+
+    const tpl = templates[type];
+    const raw = '### 角色定义 ###\n' + tpl.role + '\n\n### 任务描述 ###\n' + tpl.task + '\n\n### 约束条件 ###\n' + tpl.constraint + '\n\n### 输出格式 ###\n' + tpl.format + '\n\n### 验收标准 ###\n' + tpl.accept;
+    renderPromptResult(raw, true);
+  }
+
+  const qrModal = document.getElementById('qrModal');
+  function openQR() { qrModal.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeQR(e) { if (!e || e.target === qrModal || e.target.classList.contains('qr-close')) { qrModal.classList.remove('open'); document.body.style.overflow = ''; } }
+
+  // Caveman Demo — calls backend proxy (/cavemanApi), falls back to offline note
+  function setCavemanExample(text) {
+    document.getElementById('cavemanInput').value = text;
+    document.getElementById('cavemanOutput').classList.remove('show');
+  }
+  function cavemanCompress() {
+    const input = document.getElementById('cavemanInput').value.trim();
+    if (!input) return;
+    const output = document.getElementById('cavemanOutput');
+    const btn = document.getElementById('cavemanBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span>⏳</span> 压缩中...';
+    output.innerHTML = '<div style="text-align:center;padding:40px;color:#8e8e93;font-size:14px;">🪨 正在用穴居人模式压缩文本（智谱 GLM-4）...</div>';
+    output.classList.add('show');
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 60000);
+    fetch(API_BASE + '/cavemanApi', {
+      method: 'POST', signal: controller.signal,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ input: input })
+    })
+    .then(r => { if (!r.ok) throw new Error('API ' + r.status); return r.json(); })
+    .then(data => {
+      const raw = (data.result || '').trim();
+      clearTimeout(timeoutId);
+      if (raw) {
+        renderCavemanResult(raw);
+        btn.disabled = false; btn.innerHTML = '<span>🪨</span> 穴居人压缩';
+      } else throw new Error('empty');
+    })
+    .catch(err => {
+      clearTimeout(timeoutId);
+      console.log('caveman failed:', err.message);
+      output.innerHTML = '<div style="text-align:center;padding:24px;color:#b3500a;font-size:14px;">⚠️ 离线演示：当前未连接 AI 后端，无法压缩</div>';
+      btn.disabled = false; btn.innerHTML = '<span>🪨</span> 穴居人压缩';
+    });
+  }
+  function renderCavemanResult(raw) {
+    const output = document.getElementById('cavemanOutput');
+    output.innerHTML = '';
+    const badge = document.createElement('div');
+    badge.style.cssText = 'text-align:center;font-size:12.5px;color:#1a7f37;font-weight:600;margin-bottom:16px;padding:8px 14px;background:rgba(52,199,89,0.12);border:1px solid rgba(52,199,89,0.35);border-radius:20px;display:inline-block;';
+    badge.textContent = '✅ 由智谱 GLM-4 实时生成';
+    output.appendChild(badge);
+    const box = document.createElement('div');
+    box.style.cssText = 'white-space:pre-wrap;line-height:1.75;font-size:14px;color:var(--text-1);background:var(--surface-2);border:1px solid var(--separator);border-radius:14px;padding:18px;';
+    box.textContent = raw;
+    output.appendChild(box);
+  }
+
+  // Audit Demo — calls backend proxy (/auditApi), falls back to offline note
+  function setAuditExample(text) {
+    document.getElementById('auditInput').value = text;
+    document.getElementById('auditOutput').classList.remove('show');
+  }
+  function auditReview() {
+    const input = document.getElementById('auditInput').value.trim();
+    if (!input) return;
+    const output = document.getElementById('auditOutput');
+    const btn = document.getElementById('auditBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span>⏳</span> 审计中...';
+    output.innerHTML = '<div style="text-align:center;padding:40px;color:#8e8e93;font-size:14px;">🛡 正在从四个维度审查（意图回归 / 安全隐私 / 性能可靠 / 契约覆盖）...</div>';
+    output.classList.add('show');
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 90000);
+    fetch(API_BASE + '/auditApi', {
+      method: 'POST', signal: controller.signal,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ input: input })
+    })
+    .then(r => { if (!r.ok) throw new Error('API ' + r.status); return r.json(); })
+    .then(data => {
+      const raw = (data.result || '').trim();
+      clearTimeout(timeoutId);
+      if (raw) {
+        renderAuditResult(raw);
+        btn.disabled = false; btn.innerHTML = '<span>🛡</span> 代码审计';
+      } else throw new Error('empty');
+    })
+    .catch(err => {
+      clearTimeout(timeoutId);
+      console.log('audit failed:', err.message);
+      output.innerHTML = '<div style="text-align:center;padding:24px;color:#b3500a;font-size:14px;">⚠️ 离线演示：当前未连接 AI 后端，无法审计</div>';
+      btn.disabled = false; btn.innerHTML = '<span>🛡</span> 代码审计';
+    });
+  }
+  function renderAuditResult(raw) {
+    const output = document.getElementById('auditOutput');
+    output.innerHTML = '';
+    const badge = document.createElement('div');
+    badge.style.cssText = 'text-align:center;font-size:12.5px;color:#1a7f37;font-weight:600;margin-bottom:16px;padding:8px 14px;background:rgba(52,199,89,0.12);border:1px solid rgba(52,199,89,0.35);border-radius:20px;display:inline-block;';
+    badge.textContent = '✅ 由智谱 GLM-4 实时生成';
+    output.appendChild(badge);
+    const box = document.createElement('div');
+    box.style.cssText = 'white-space:pre-wrap;line-height:1.75;font-size:14px;color:var(--text-1);background:var(--surface-2);border:1px solid var(--separator);border-radius:14px;padding:18px;';
+    box.textContent = raw;
+    output.appendChild(box);
+  }
+
+  // Token Saviour Demo — calls backend proxy (/tokenApi), structured render with animated savings
+  function setTokenExample(text) {
+    document.getElementById('tokenInput').value = text;
+    document.getElementById('tokenOutput').classList.remove('show');
+  }
+  function tokenCalc() {
+    const input = document.getElementById('tokenInput').value.trim();
+    if (!input) return;
+    const output = document.getElementById('tokenOutput');
+    const btn = document.getElementById('tokenBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span>⏳</span> 审计中...';
+    output.innerHTML = '<div style="text-align:center;padding:40px;color:#8e8e93;font-size:14px;">🪙 正在估算 token、路由压缩层并调用智谱 GLM-4 压缩...</div>';
+    output.classList.add('show');
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 90000);
+    fetch(API_BASE + '/tokenApi', {
+      method: 'POST', signal: controller.signal,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ input: input })
+    })
+    .then(r => { if (!r.ok) throw new Error('API ' + r.status); return r.json(); })
+    .then(data => {
+      clearTimeout(timeoutId);
+      if (data && data.compressed) {
+        renderTokenResult(data);
+        btn.disabled = false; btn.innerHTML = '<span>🪙</span> 开始审计压缩';
+      } else throw new Error('empty');
+    })
+    .catch(err => {
+      clearTimeout(timeoutId);
+      console.log('token failed:', err.message);
+      output.innerHTML = '<div style="text-align:center;padding:24px;color:#b3500a;font-size:14px;">⚠️ 离线演示：当前未连接 AI 后端，无法压缩</div>';
+      btn.disabled = false; btn.innerHTML = '<span>🪙</span> 开始审计压缩';
+    });
+  }
+  function renderTokenResult(d) {
+    const output = document.getElementById('tokenOutput');
+    output.innerHTML = '';
+    const badge = document.createElement('div');
+    badge.style.cssText = 'text-align:center;font-size:12.5px;color:#1a7f37;font-weight:600;margin-bottom:16px;padding:8px 14px;background:rgba(52,199,89,0.12);border:1px solid rgba(52,199,89,0.35);border-radius:20px;display:inline-block;';
+    badge.textContent = '✅ 由智谱 GLM-4 实时生成';
+    output.appendChild(badge);
+
+    // 路由决策条
+    const route = document.createElement('div');
+    route.style.cssText = 'display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;padding:12px 16px;background:rgba(10,132,255,0.10);border:1px solid rgba(10,132,255,0.30);border-radius:14px;font-size:13px;color:var(--text-1);';
+    route.innerHTML = '<span style="font-weight:700;color:var(--blue);">🧭 路由决策</span><span>输入识别为 <b>' + (d.type === 'code' ? '代码' : '自然语言') + '</b> · ' + d.layer + ' · ' + d.chars + ' 字符</span>';
+    output.appendChild(route);
+
+    // 统计卡片：原文 token / 压缩后 / 节省
+    const grid = document.createElement('div');
+    grid.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;';
+    const cards = [
+      { v: d.originalTokens.toLocaleString(), l: '原文 token（估算）', c: '#ff9f0a' },
+      { v: d.compressedTokens.toLocaleString(), l: '压缩后 token', c: '#0a84ff' },
+      { v: '−' + d.savedPct + '%', l: '节省 ' + d.savedTokens.toLocaleString() + ' tokens', c: '#30d158' }
+    ];
+    cards.forEach((c, i) => {
+      const card = document.createElement('div');
+      card.style.cssText = 'text-align:center;padding:18px 10px;background:var(--surface-2);border:1px solid var(--separator);border-radius:16px;opacity:0;transform:translateY(10px);transition:all 0.4s var(--ease);';
+      card.innerHTML = '<div style="font-size:30px;font-weight:800;color:' + c.c + ';letter-spacing:-0.5px;">' + c.v + '</div><div style="font-size:12px;color:var(--text-2);margin-top:6px;">' + c.l + '</div>';
+      grid.appendChild(card);
+      setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 120 + i * 150);
+    });
+    output.appendChild(grid);
+
+    // 压缩结果
+    const box = document.createElement('div');
+    box.style.cssText = 'white-space:pre-wrap;line-height:1.75;font-size:14px;color:var(--text-1);background:var(--surface-2);border:1px solid var(--separator);border-radius:14px;padding:18px;';
+    box.textContent = d.compressed;
+    output.appendChild(box);
+  }
+</script>
+</body>
+</html>
