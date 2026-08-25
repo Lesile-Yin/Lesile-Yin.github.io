@@ -346,6 +346,16 @@
     .contact-grid { grid-template-columns: repeat(2, 1fr); }
     .profile-card { flex-direction: column; align-items: center; text-align: center; }
   }
+  /* === deSkill Demo Gallery === */
+  .demo-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 48px; }
+  @media (max-width: 720px) { .demo-gallery { grid-template-columns: 1fr; } }
+  .demo-shot { width: 100%; border-radius: 18px; border: 1px solid var(--separator); cursor: zoom-in; transition: all 0.3s var(--spring); background: var(--surface); display: block; }
+  .demo-shot:hover { transform: translateY(-4px); border-color: var(--blue); box-shadow: 0 16px 48px rgba(0,0,0,0.1); }
+  .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.88); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 40px; cursor: zoom-out; }
+  .lightbox.active { display: flex; }
+  .lightbox img { max-width: 92vw; max-height: 92vh; border-radius: 14px; box-shadow: 0 24px 80px rgba(0,0,0,0.6); }
+  .lightbox-caption { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.85); font-size: 13px; padding: 6px 14px; background: rgba(0,0,0,0.45); border-radius: 20px; pointer-events: none; }
+
 </style>
 </head>
 <body>
@@ -481,6 +491,19 @@
       <div class="oss-desc">开源 AI Agent 框架，支持长期记忆与自学习，已部署到 Mac + iPhone Termux 双环境，是 Agent 工程能力的基座。</div>
       <div class="oss-meta"><span>🤖 开源框架</span><span>🧠 自学习</span><span>↗ 查看仓库</span></div>
     </a>
+  </div>
+</section>
+
+<!-- deSkill Demo -->
+<section class="section" id="deskill-demo">
+  <div class="section-label reveal">项目演示</div>
+  <h2 class="section-headline reveal rd-1">deSkill 演示 Demo</h2>
+  <p class="section-desc reveal rd-2">开源 Agent Skills（prompt-forge / prism-review / token-warden / slide-smith）真实运行演示。点击任意图片可放大查看，按 Esc 关闭。</p>
+  <div class="demo-gallery reveal rd-3">
+    <img class="demo-shot" src="demos/deskill-demo-1.png" alt="agent-skills 项目演示 1" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+    <img class="demo-shot" src="demos/deskill-demo-2.png" alt="agent-skills 项目演示 2" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+    <img class="demo-shot" src="demos/deskill-demo-3.png" alt="agent-skills 项目演示 3" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+    <img class="demo-shot" src="demos/deskill-demo-4.png" alt="agent-skills 项目演示 4" onclick="openLightbox(this.src, this.alt)" loading="lazy">
   </div>
 </section>
 
@@ -1589,5 +1612,24 @@
     output.appendChild(box);
   }
 </script>
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="">
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
+<script>
+function openLightbox(src, alt) {
+  document.getElementById('lightbox-img').src = src;
+  var cap = document.getElementById('lightbox-caption');
+  if (cap) cap.textContent = alt || '';
+  document.getElementById('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeLightbox(); });
+</script>
+
 </body>
 </html>
