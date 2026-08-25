@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Lesile Yin · AI Agent / RAG 平台工程师 | 简历</title>
@@ -12,13 +12,13 @@
 <meta property="og:type" content="website">
 <style>
   :root {
-    --bg: #f2f2f7; --surface: #ffffff; --surface-2: #f5f5f7;
-    --text: #000000; --text-2: #3c3c43; --text-3: #8e8e93; --text-1: #1d1d1f;
-    --separator: rgba(60,60,67,0.12);
+    --bg: #f5f5f7; --surface: #ffffff; --surface-2: #f5f5f7;
+    --text: #1d1d1f; --text-2: #6e6e73; --text-3: #8e8e93; --text-1: #1d1d1f;
+    --separator: rgba(0,0,0,0.1);
     --blue: #0071e3; --green: #34c759; --orange: #ff9500; --pink: #ff2d55; --purple: #af52de; --indigo: #5856d6; --teal: #5ac8fa; --yellow: #ffcc00;
     --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     --ease: cubic-bezier(0.4, 0, 0.2, 1);
-    --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro", "PingFang SC", sans-serif;
+    --font: "SF Pro SC", "SF Pro Text", "SF Pro Display", "PingFang SC", -apple-system, BlinkMacSystemFont, sans-serif;
   }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
   html { scroll-behavior: smooth; background: var(--bg); }
@@ -65,7 +65,7 @@
   .di-expanded .di-close:hover { color: rgba(255,255,255,0.7); }
 
   /* === Hero (Apple-style centered) === */
-  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 132px 20px 120px; position: relative; overflow: hidden; }
+  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: calc(132px + env(safe-area-inset-top)) max(20px, env(safe-area-inset-left)) calc(120px + env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-right)); position: relative; overflow: hidden; }
   .hero-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: clamp(120px, 30vw, 360px); font-weight: 900; letter-spacing: -12px; color: rgba(0,0,0,0.035); z-index: 0; pointer-events: none; white-space: nowrap; will-change: transform; }
   .hero-inner { max-width: 920px; margin: 0 auto; width: 100%; text-align: center; position: relative; z-index: 1; will-change: transform, opacity; }
   .hero-intro { display: inline-flex; align-items: center; gap: 14px; margin-bottom: 36px; padding: 7px 16px 7px 7px; border-radius: 999px; background: rgba(255,255,255,0.6); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 8px 32px rgba(0,0,0,0.06); }
@@ -296,7 +296,7 @@
   .qr-close:hover { background: var(--text-2); color: #fff; }
 
   /* === Dock === */
-  .dock { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 9999;
+  .dock { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); z-index: 9999;
     display: flex; gap: 6px; padding: 10px 14px; background: rgba(255,255,255,0.72); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%);
     border-radius: 24px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 8px 32px rgba(0,0,0,0.08);
     transition: transform 0.4s var(--spring), opacity 0.4s;
@@ -342,7 +342,7 @@
   .jd-tags { display: flex; flex-wrap: wrap; gap: 6px; }
   .jd-tag { font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 8px; background: var(--surface-2); color: var(--text-2); }
 
-  @media (max-width: 640px) {
+  @media (max-width: 734px) {
     .summary-grid { grid-template-columns: 1fr; }
     .skills-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
     .skill-icon-bg { width: 52px; height: 52px; border-radius: 14px; font-size: 22px; }
@@ -355,7 +355,7 @@
   }
   /* === deSkill Demo Gallery === */
   .demo-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 48px; }
-  @media (max-width: 720px) { .demo-gallery { grid-template-columns: 1fr; } }
+  @media (max-width: 734px) { .demo-gallery { grid-template-columns: 1fr; } }
   .demo-shot { width: 100%; border-radius: 18px; border: 1px solid var(--separator); cursor: zoom-in; transition: all 0.3s var(--spring); background: var(--surface); display: block; }
   .demo-shot:hover { transform: translateY(-4px); border-color: var(--blue); box-shadow: 0 16px 48px rgba(0,0,0,0.1); }
   .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.88); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 40px; cursor: zoom-out; }
@@ -375,7 +375,7 @@
   .hl-emoji { font-size: 26px; margin-bottom: 10px; display: block; }
   .hl-title { font-size: 16px; font-weight: 700; margin-bottom: 3px; }
   .hl-desc { font-size: 12.5px; color: var(--text-3); line-height: 1.4; }
-  @media (max-width: 640px) { .hl-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 734px) { .hl-grid { grid-template-columns: repeat(2, 1fr); } }
 
   /* === Apple-style inline SVG icons === */
   .ico { width: 22px; height: 22px; display: inline-block; flex-shrink: 0; vertical-align: middle; color: inherit; }
@@ -391,7 +391,7 @@
   .tech-svg { color: var(--text); }
 
   /* === 响应式：电脑横屏 / 桌面宽幅（Apple 式宽幅多列）=== */
-  @media (min-width: 980px) {
+  @media (min-width: 1068px) {
     .section, .hero-inner, .highlights { max-width: 1120px; }
     .hl-grid { grid-template-columns: repeat(5, 1fr); }
     .summary-grid { grid-template-columns: repeat(4, 1fr); }
@@ -407,7 +407,7 @@
     .section, .hero-inner, .highlights { max-width: 1200px; }
   }
   /* === 响应式：手机竖屏（单列窄屏）=== */
-  @media (orientation: portrait) and (max-width: 760px) {
+  @media (orientation: portrait) and (max-width: 734px) {
     .section, .hero-inner, .highlights { max-width: 100%; }
     .summary-grid, .portfolio-grid, .tech-grid, .jd-grid, .eng-grid, .oss-grid { grid-template-columns: 1fr; }
     .skills-grid { grid-template-columns: repeat(4, 1fr); }
@@ -417,8 +417,8 @@
   }
 
   /* === Apple-style Top Nav（头像左上） === */
-  .topnav { position: fixed; top: 0; left: 0; right: 0; z-index: 10002; height: 52px;
-    display: flex; align-items: center; justify-content: space-between; padding: 0 22px;
+  .topnav { position: fixed; top: 0; left: 0; right: 0; z-index: 10002; height: calc(52px + env(safe-area-inset-top));
+    display: flex; align-items: center; justify-content: space-between; padding: env(safe-area-inset-top) max(22px, env(safe-area-inset-left)) 0 max(22px, env(safe-area-inset-right));
     background: rgba(255,255,255,0.72); backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid rgba(0,0,0,0.08); }
   .tn-left { display: flex; align-items: center; gap: 10px; }
@@ -431,12 +431,16 @@
   .tn-link { font-size: 13px; font-weight: 500; color: var(--text-2); padding: 6px 12px; border-radius: 999px; cursor: pointer; transition: all .2s var(--ease); white-space: nowrap; }
   .tn-link:hover { color: var(--text-1); background: rgba(0,0,0,0.05); }
   .tn-link.active { color: var(--blue); background: rgba(0,113,227,0.1); }
-  @media (max-width: 820px) { .tn-links { display: none; } .tn-role { display: none; } }
+  @media (max-width: 734px) { .tn-links { display: none; } .tn-role { display: none; } }
   /* section eyebrow 图标（先刷重点风格全局化） */
   .section-label { display: inline-flex; align-items: center; }
   .sl-ico { width: 18px; height: 18px; margin-right: 8px; color: var(--blue); flex-shrink: 0; }
   /* 固定顶栏锚点偏移 */
   .section, .highlights, .hero { scroll-margin-top: 64px; }
+
+  @supports (padding: max(0px)) {
+    .section, .highlights, .hero-inner { padding-left: max(20px, env(safe-area-inset-left)); padding-right: max(20px, env(safe-area-inset-right)); }
+  }
 </style>
 </head>
 <body>
@@ -481,10 +485,10 @@
 </defs>
 </svg>
 
-<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
 
 <!-- Apple-style Top Nav（头像左上） -->
-<header class="topnav" id="topnav">
+<header class="topnav" id="topnav" role="banner" aria-label="主导航">
   <div class="tn-left">
     <div class="tn-avatar"><img src="photo.jpg" alt="Lesile Yin"></div>
     <div class="tn-name-wrap">
@@ -492,15 +496,15 @@
       <span class="tn-role">殷南杰 · AI Agent / RAG 平台工程师</span>
     </div>
   </div>
-  <nav class="tn-links">
-    <span class="tn-link" onclick="scrollTo('highlights')">先刷重点</span>
-    <span class="tn-link" onclick="scrollTo('profile')">关于我</span>
-    <span class="tn-link" onclick="scrollTo('experience')">经历</span>
-    <span class="tn-link" onclick="scrollTo('skills')">技能</span>
-    <span class="tn-link" onclick="scrollTo('engineering')">工程</span>
-    <span class="tn-link" onclick="scrollTo('portfolio')">作品</span>
-    <span class="tn-link" onclick="scrollTo('demo-hub')">演示</span>
-    <span class="tn-link" onclick="scrollTo('contact')">联系</span>
+  <nav class="tn-links" aria-label="区块快速导航">
+    <a class="tn-link" href="#highlights">先刷重点</a>
+    <a class="tn-link" href="#profile">关于我</a>
+    <a class="tn-link" href="#experience">经历</a>
+    <a class="tn-link" href="#skills">技能</a>
+    <a class="tn-link" href="#engineering">工程</a>
+    <a class="tn-link" href="#portfolio">作品</a>
+    <a class="tn-link" href="#demo-hub">演示</a>
+    <a class="tn-link" href="#contact">联系</a>
   </nav>
 </header>
 
@@ -527,11 +531,11 @@
   <div class="section-label reveal"><svg class="ico sl-ico" aria-hidden="true"><use href="#ic-bolt"/></svg>先刷重点</div>
   <h2 class="section-headline reveal rd-1">一份简历，<br>能聊的不止履历。</h2>
   <div class="hl-grid">
-    <div class="hl-card reveal rd-1" onclick="scrollTo('metrics')"><span class="hl-emoji"><svg class="ico"><use href="#ic-chart"/></svg></span><div class="hl-title">核心数据</div><div class="hl-desc">30+ 短剧 · $80万 投流 · 80+ Skills</div></div>
-    <div class="hl-card reveal rd-2" onclick="scrollTo('experience')"><span class="hl-emoji"><svg class="ico"><use href="#ic-briefcase"/></svg></span><div class="hl-title">工作经历</div><div class="hl-desc">Agent 平台 0→1 主导落地</div></div>
-    <div class="hl-card reveal rd-2" onclick="scrollTo('oss-skills')"><span class="hl-emoji"><svg class="ico"><use href="#ic-wrench"/></svg></span><div class="hl-title">开源 Agent</div><div class="hl-desc">Hermes Agent · super-tart</div></div>
-    <div class="hl-card reveal rd-3" onclick="scrollTo('deskill-demo')"><span class="hl-emoji"><svg class="ico"><use href="#ic-image"/></svg></span><div class="hl-title">项目 Demo</div><div class="hl-desc">agent-skills 真实运行演示</div></div>
-    <div class="hl-card reveal rd-3" onclick="scrollTo('prompt-demo')"><span class="hl-emoji"><svg class="ico"><use href="#ic-sparkle"/></svg></span><div class="hl-title">交互演示</div><div class="hl-desc">4 个 Skill 接入真实 AI 后端</div></div>
+    <div class="hl-card" role="button" tabindex="0" reveal rd-1" onclick="scrollTo('metrics')"><span class="hl-emoji"><svg class="ico"><use href="#ic-chart"/></svg></span><div class="hl-title">核心数据</div><div class="hl-desc">30+ 短剧 · $80万 投流 · 80+ Skills</div></div>
+    <div class="hl-card" role="button" tabindex="0" reveal rd-2" onclick="scrollTo('experience')"><span class="hl-emoji"><svg class="ico"><use href="#ic-briefcase"/></svg></span><div class="hl-title">工作经历</div><div class="hl-desc">Agent 平台 0→1 主导落地</div></div>
+    <div class="hl-card" role="button" tabindex="0" reveal rd-2" onclick="scrollTo('oss-skills')"><span class="hl-emoji"><svg class="ico"><use href="#ic-wrench"/></svg></span><div class="hl-title">开源 Agent</div><div class="hl-desc">Hermes Agent · super-tart</div></div>
+    <div class="hl-card" role="button" tabindex="0" reveal rd-3" onclick="scrollTo('deskill-demo')"><span class="hl-emoji"><svg class="ico"><use href="#ic-image"/></svg></span><div class="hl-title">项目 Demo</div><div class="hl-desc">agent-skills 真实运行演示</div></div>
+    <div class="hl-card" role="button" tabindex="0" reveal rd-3" onclick="scrollTo('prompt-demo')"><span class="hl-emoji"><svg class="ico"><use href="#ic-sparkle"/></svg></span><div class="hl-title">交互演示</div><div class="hl-desc">4 个 Skill 接入真实 AI 后端</div></div>
   </div>
 </section>
 
@@ -918,10 +922,10 @@
     <div class="demo-hub-badge"><span class="dot"></span><svg class="ico" style="width:16px;height:16px;vertical-align:-3px;color:#1a7f37"><use href="#ic-check"/></svg> 全部接入智谱 GLM-4-Flash · 真实模型实时生成</div>
     <p class="demo-hub-desc">下面每个 Skill 都是可直接交互的真实能力，不是截图或录屏。点击入口跳转到对应演示，输入内容即可看到 AI 实时返回结果。</p>
     <div class="demo-pills">
-      <div class="demo-pill" onclick="scrollTo('prompt-demo')">提示词优化</div>
-      <div class="demo-pill" onclick="scrollTo('caveman-demo')"><span class="em"><svg class="ico" style="width:18px;height:18px;vertical-align:-3px"><use href="#ic-rock"/></svg></span>穴居人压缩</div>
-      <div class="demo-pill" onclick="scrollTo('audit-demo')">代码审计</div>
-      <div class="demo-pill" onclick="scrollTo('token-demo')"><span class="em"><svg class="ico" style="width:18px;height:18px;vertical-align:-3px"><use href="#ic-coin"/></svg></span>Token 压缩</div>
+      <div class="demo-pill" role="button" tabindex="0" onclick="scrollTo('prompt-demo')">提示词优化</div>
+      <div class="demo-pill" role="button" tabindex="0" onclick="scrollTo('caveman-demo')"><span class="em"><svg class="ico" style="width:18px;height:18px;vertical-align:-3px"><use href="#ic-rock"/></svg></span>穴居人压缩</div>
+      <div class="demo-pill" role="button" tabindex="0" onclick="scrollTo('audit-demo')">代码审计</div>
+      <div class="demo-pill" role="button" tabindex="0" onclick="scrollTo('token-demo')"><span class="em"><svg class="ico" style="width:18px;height:18px;vertical-align:-3px"><use href="#ic-coin"/></svg></span>Token 压缩</div>
     </div>
   </div>
 </section>
@@ -1179,7 +1183,7 @@
     <a href="https://github.com/Lesile-Yin" target="_blank" rel="noopener" class="contact-item reveal rd-2">
       <div class="ci-icon"><svg class="github-svg" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></div><div class="ci-label">GitHub</div><div class="ci-value">Lesile-Yin</div>
     </a>
-    <div class="contact-item reveal rd-3" onclick="openQR()">
+    <div class="contact-item reveal rd-3" onclick="openQR()" role="button" tabindex="0" aria-label="添加微信">
       <div class="ci-icon"><svg class="ico"><use href="#ic-chat"/></svg></div><div class="ci-label">微信</div><div class="ci-value">添加好友</div>
     </div>
     <div class="contact-item reveal rd-3">
@@ -1205,15 +1209,15 @@
 </div>
 
 <!-- Dock -->
-<nav class="dock" id="dock">
-  <div class="dock-item active" onclick="scrollTo('hero')" title="首页"><svg class="ico"><use href="#ic-home"/></svg></div>
-  <div class="dock-item" onclick="scrollTo('metrics')" title="数据"><svg class="ico"><use href="#ic-chart"/></svg></div>
-  <div class="dock-item" onclick="scrollTo('experience')" title="经历"><svg class="ico"><use href="#ic-briefcase"/></svg></div>
-  <div class="dock-item" onclick="scrollTo('skills')" title="技能"><svg class="ico"><use href="#ic-bolt"/></svg></div>
-  <div class="dock-item" onclick="scrollTo('engineering')" title="工程"><svg class="ico"><use href="#ic-puzzle"/></svg></div>
-  <div class="dock-item" onclick="scrollTo('portfolio')" title="作品"><svg class="ico"><use href="#ic-film"/></svg></div>
-  <div class="dock-item" onclick="scrollTo('prompt-demo')" title="演示"><svg class="ico"><use href="#ic-sparkle"/></svg></div>
-  <div class="dock-item" onclick="scrollTo('contact')" title="联系"><svg class="ico"><use href="#ic-mail"/></svg></div>
+<nav class="dock" id="dock" aria-label="快速导航">
+  <div class="dock-item" role="button" tabindex="0" active" onclick="scrollTo('hero')" title="首页"><svg class="ico"><use href="#ic-home"/></svg></div>
+  <div class="dock-item" role="button" tabindex="0"" onclick="scrollTo('metrics')" title="数据"><svg class="ico"><use href="#ic-chart"/></svg></div>
+  <div class="dock-item" role="button" tabindex="0"" onclick="scrollTo('experience')" title="经历"><svg class="ico"><use href="#ic-briefcase"/></svg></div>
+  <div class="dock-item" role="button" tabindex="0"" onclick="scrollTo('skills')" title="技能"><svg class="ico"><use href="#ic-bolt"/></svg></div>
+  <div class="dock-item" role="button" tabindex="0"" onclick="scrollTo('engineering')" title="工程"><svg class="ico"><use href="#ic-puzzle"/></svg></div>
+  <div class="dock-item" role="button" tabindex="0"" onclick="scrollTo('portfolio')" title="作品"><svg class="ico"><use href="#ic-film"/></svg></div>
+  <div class="dock-item" role="button" tabindex="0"" onclick="scrollTo('prompt-demo')" title="演示"><svg class="ico"><use href="#ic-sparkle"/></svg></div>
+  <div class="dock-item" role="button" tabindex="0"" onclick="scrollTo('contact')" title="联系"><svg class="ico"><use href="#ic-mail"/></svg></div>
 </nav>
 
 <script>
@@ -1276,6 +1280,13 @@
     dockItems.forEach((item, i) => item.classList.toggle('active', i === cur));
   });
   function scrollTo(id) { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth' }); }
+  // 键盘可达性（Apple 级 a11y）：role=button + tabindex 元素支持 Enter/Space
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const t = e.target;
+    if (t && t.matches && t.matches('[role="button"][tabindex]')) { e.preventDefault(); t.click(); }
+  });
+
   // Top nav scroll-spy（Apple 式高亮当前区块）
   const tnLinks = document.querySelectorAll('.tn-link');
   const tnSections = ['highlights','profile','experience','skills','engineering','portfolio','demo-hub','contact'];
