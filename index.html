@@ -288,7 +288,9 @@
   .dock { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 9999;
     display: flex; gap: 6px; padding: 10px 14px; background: rgba(255,255,255,0.72); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%);
     border-radius: 24px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-    transition: transform 0.4s var(--spring), opacity 0.4s; }
+    transition: transform 0.4s var(--spring), opacity 0.4s;
+    max-width: calc(100vw - 32px); overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
+  .dock::-webkit-scrollbar { display: none; }
   .dock.hidden { transform: translateX(-50%) translateY(100px); opacity: 0; }
   .dock-item { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--text-3); transition: all 0.3s var(--spring); cursor: pointer; position: relative; }
   .dock-item:hover { transform: scale(1.15); background: rgba(0,0,0,0.04); color: var(--text); }
@@ -315,6 +317,20 @@
   .tech-list li::before { content: ''; position: absolute; left: 0; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
   .tech-list b { color: var(--text); font-weight: 700; }
 
+  /* === JD Capability Map === */
+  .jd-banner { background: linear-gradient(135deg, rgba(0,122,255,0.08), rgba(175,82,222,0.08)); border: 1px solid var(--separator); border-radius: 24px; padding: 22px 26px; margin-bottom: 28px; }
+  .jd-banner h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+  .jd-banner p { font-size: 14px; color: var(--text-2); line-height: 1.65; }
+  .jd-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 40px; }
+  .jd-card { background: var(--surface); border: 1px solid var(--separator); border-radius: 24px; padding: 24px; transition: all 0.35s var(--spring); position: relative; overflow: hidden; }
+  .jd-card:hover { transform: translateY(-4px); border-color: var(--blue); box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
+  .jd-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(to bottom, var(--blue), var(--purple)); }
+  .jd-num { position: absolute; top: 18px; right: 22px; font-size: 28px; font-weight: 800; color: var(--separator); }
+  .jd-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; padding-right: 36px; }
+  .jd-desc { font-size: 13.5px; color: var(--text-2); line-height: 1.6; margin-bottom: 12px; }
+  .jd-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .jd-tag { font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 8px; background: var(--surface-2); color: var(--text-2); }
+
   @media (max-width: 640px) {
     .summary-grid { grid-template-columns: 1fr; }
     .skills-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
@@ -322,6 +338,7 @@
     .portfolio-grid { grid-template-columns: 1fr; }
     .oss-grid { grid-template-columns: 1fr; }
     .tech-grid { grid-template-columns: 1fr; }
+    .jd-grid { grid-template-columns: 1fr; }
     .contact-grid { grid-template-columns: repeat(2, 1fr); }
     .profile-card { flex-direction: column; align-items: center; text-align: center; }
   }
@@ -344,7 +361,7 @@
     <img src="photo.jpg" alt="Lesile Yin">
     <div>
       <span class="din">Lesile Yin</span>
-      <span class="dir">殷南杰 · AIGC Agent Operator</span>
+      <span class="dir">殷南杰 · AI Agent / RAG 平台工程师</span>
     </div>
   </div>
   <div class="di-body">
@@ -362,11 +379,11 @@
       <div class="hero-intro-avatar"><img src="photo.jpg" alt="Lesile Yin"></div>
       <div class="hero-intro-text">
         <div class="hero-intro-name">Lesile Yin</div>
-        <div class="hero-intro-role">殷南杰 · AIGC Agent Operator</div>
+        <div class="hero-intro-role">殷南杰 · AI Agent / RAG 平台工程师</div>
       </div>
     </div>
-    <h1 class="hero-title reveal rd-1">AIGC Agent<br>Operator</h1>
-    <p class="hero-subtitle reveal rd-2">2 年实战经验，主导 AI Agent 短剧生产系统从 0 到 1<br>完成 DeepSeek 等多模型 App 端接入，累计投流 $80万+</p>
+    <h1 class="hero-title reveal rd-1">AI Agent<br>Platform Engineer</h1>
+    <p class="hero-subtitle reveal rd-2">2 年 AI Agent 工程化实战，主导 Agent 生产平台从 0→1<br>覆盖 RAG、多模型调度、Skills / MCP 体系、Prompt 工程与全栈交付</p>
     <a class="hero-cta reveal rd-3" href="#metrics">向下探索</a>
   </div>
 </section>
@@ -406,14 +423,74 @@
     <div class="profile-avatar"><img src="photo.jpg" alt="Lesile Yin"></div>
     <div class="profile-info">
       <h3>Lesile Yin <span class="cn">殷南杰</span></h3>
-      <p class="profile-bio">2 年 AIGC 实战，主导 AI Agent 驱动的短剧生产系统从 0 到 1，完成 DeepSeek V4 等多模态模型 App 端接入。具备 Agent 工程化（Context Engineering / 多智能体编排 / RAG）、后端与全栈交付能力，精通 LLM、多模态模型调度与 Vibe Coding。</p>
+      <p class="profile-bio">2 年 AI Agent 与 RAG 工程化实战，主导 Agent 生产平台从 0→1 落地，覆盖 DAG / State Machine 工作流编排、多智能体协作、会话与上下文记忆、KV Cache、Prompt 工程。熟悉企业级 RAG 全链路（文档/DB/ES/内网多源接入、Embedding、Milvus / PGVector 向量索引、混合检索、重排序、引用溯源、ACL/RBAC）。具备 Python 后端 + React 前端全栈交付能力，掌握模型接入调度、Token 预算、K8s/Docker 私有化与 SaaS 工程化，以及离线/线上评测与全链路可观测体系。</p>
       <div class="profile-tags">
         <span class="profile-tag">yinnanjie@vip.qq.com</span>
         <span class="profile-tag">182 0867 7740</span>
         <span class="profile-tag">北京</span>
-        <span class="profile-tag">20-35K</span>
+        <span class="profile-tag">30-50K</span>
         <a class="profile-tag" href="https://github.com/Lesile-Yin" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;text-decoration:none;color:inherit"><svg class="github-svg" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>github.com/Lesile-Yin</a>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- JD Capability Map -->
+<section class="section" id="jd-match">
+  <div class="section-label reveal">岗位匹配</div>
+  <h2 class="section-headline reveal rd-1">Agent (RAG) 平台工程师能力全景</h2>
+  <div class="jd-banner reveal rd-2">
+    <h3>🎯 面向 Agent / RAG 平台岗位优化</h3>
+    <p>本页围绕「AI Agent 平台架构、RAG 知识库、Agent 工具工程化、模型调度、全栈交付、私有化/SaaS、评测可观测、前沿技术规划」八大职责重新组织，确保 HR 在 30 秒内看到匹配度。</p>
+  </div>
+  <div class="jd-grid">
+    <div class="jd-card reveal">
+      <div class="jd-num">01</div>
+      <div class="jd-title">AI Agent 平台架构</div>
+      <div class="jd-desc">主导 Agent 生产平台从 0→1，落地 DAG / State Machine 工作流编排、多智能体协作、会话管理、异步长任务、记忆与上下文管理、KV Cache、Prompt 工程。</div>
+      <div class="jd-tags"><span class="jd-tag">DAG</span><span class="jd-tag">State Machine</span><span class="jd-tag">多智能体</span><span class="jd-tag">KV Cache</span></div>
+    </div>
+    <div class="jd-card reveal rd-1">
+      <div class="jd-num">02</div>
+      <div class="jd-title">Agent 工具工程化</div>
+      <div class="jd-desc">沉淀 80+ Skills，覆盖注册/版本兼容、JSON Schema / Pydantic 参数约束、租户隔离、鉴权、重试、限流、熔断、审计回放，保障工具链稳定可靠。</div>
+      <div class="jd-tags"><span class="jd-tag">Skills</span><span class="jd-tag">MCP</span><span class="jd-tag">JSON Schema</span><span class="jd-tag">限流熔断</span></div>
+    </div>
+    <div class="jd-card reveal rd-2">
+      <div class="jd-num">03</div>
+      <div class="jd-title">企业级 RAG 知识库</div>
+      <div class="jd-desc">多源数据接入（文档 / DB / ES / 内网）、解析切分、Embedding、Milvus / PGVector 向量索引、混合检索、重排序、引用溯源、增量更新、ACL / RBAC 权限过滤。</div>
+      <div class="jd-tags"><span class="jd-tag">Embedding</span><span class="jd-tag">Milvus</span><span class="jd-tag">混合检索</span><span class="jd-tag">ACL/RBAC</span></div>
+    </div>
+    <div class="jd-card reveal rd-3">
+      <div class="jd-num">04</div>
+      <div class="jd-title">全栈交付 Python + React</div>
+      <div class="jd-desc">独立完成 Python 后端（API / 队列 / 调度 / 权限 / 审计 / 配置）与 React 前端（对话 / 管理界面 / 可视化），保障前后端一体化交付。</div>
+      <div class="jd-tags"><span class="jd-tag">Python</span><span class="jd-tag">React</span><span class="jd-tag">API</span><span class="jd-tag">可视化</span></div>
+    </div>
+    <div class="jd-card reveal">
+      <div class="jd-num">05</div>
+      <div class="jd-title">模型接入与调度体系</div>
+      <div class="jd-desc">构建统一模型适配层，支持公有云 / 私有推理；实现智能路由、降级容灾、KV 缓存、开发控制、Token 预算与成本优化，缓存命中率 99.82%。</div>
+      <div class="jd-tags"><span class="jd-tag">模型路由</span><span class="jd-tag">降级容灾</span><span class="jd-tag">Token 预算</span><span class="jd-tag">99.82% 缓存</span></div>
+    </div>
+    <div class="jd-card reveal rd-1">
+      <div class="jd-num">06</div>
+      <div class="jd-title">私有化与 SaaS 工程化</div>
+      <div class="jd-desc">熟悉 K8s / Helm、Docker Compose、离线包、镜像 / 模型 / 依赖打包、升级迁移、回滚预案、多租户配额，具备私有化部署与 SaaS 化交付能力。</div>
+      <div class="jd-tags"><span class="jd-tag">K8s</span><span class="jd-tag">Helm</span><span class="jd-tag">Docker</span><span class="jd-tag">多租户</span></div>
+    </div>
+    <div class="jd-card reveal rd-2">
+      <div class="jd-num">07</div>
+      <div class="jd-title">评测与可观测体系</div>
+      <div class="jd-desc">搭建离线评测、线上指标（成功率 / 工具成功率 / 引用命中率 / 延迟 / 成本）、A/B 回归、全链路 Tracing、日志监控与问题复现，形成数据驱动优化闭环。</div>
+      <div class="jd-tags"><span class="jd-tag">离线评测</span><span class="jd-tag">A/B 回归</span><span class="jd-tag">Tracing</span><span class="jd-tag">日志监控</span></div>
+    </div>
+    <div class="jd-card reveal rd-3">
+      <div class="jd-num">08</div>
+      <div class="jd-title">前沿技术研究与规划</div>
+      <div class="jd-desc">持续跟踪 LLM / Agent / Skills / MCP / Long Graph / RAG / 微调等技术，制定技术路线、选型与优化方案，推动平台能力迭代。</div>
+      <div class="jd-tags"><span class="jd-tag">LLM</span><span class="jd-tag">MCP</span><span class="jd-tag">Long Graph</span><span class="jd-tag">微调</span></div>
     </div>
   </div>
 </section>
@@ -452,8 +529,8 @@
         </div>
         <div class="exp-company">红松集团 · 北京</div>
         <div class="exp-award">《中国企业家》2026 未来之星 · 21 家高成长性创新企业（银发赛道唯一，与 Kimi、阶跃星辰同台，红杉等一线 VC 评审）</div>
-        <div class="exp-desc">在入选"未来之星"的银发文娱科技平台，主导 AI Agent 驱动短剧生产系统从 0 到 1：6 大模块覆盖工具接入→剧本理解→AI 生成→剪辑合成→投流优化全链路。完成 DeepSeek V4 等多模型 App 端接入与调优，构建统一模型调用层与 RAG 智能助手。沉淀 80+ Skills、120+ Prompt 模板、120+ 标准化案例，优质 Prompt 稳定率 40%→75%；通信优化至 889 tokens/1m22s，缓存命中率 99.82%。单条 30s 内容 3 小时→40 分钟，8 周支撑 3000+ 人次生产 1200+ 条内容。</div>
-        <div class="exp-tags"><span class="exp-tag">Agent 架构</span><span class="exp-tag">DeepSeek App 接入</span><span class="exp-tag">RAG</span><span class="exp-tag">99.82% 缓存命中</span><span class="exp-tag">未来之星</span></div>
+        <div class="exp-desc">在入选"未来之星"的银发文娱科技平台，主导 AI Agent 生产平台从 0→1 架构设计与产品落地：6 大模块覆盖工具接入→剧本理解→AI 生成→剪辑合成→投流优化全链路。完成 DeepSeek V4 等多模型 App 端接入与统一模型适配层调优，构建 RAG 智能助手与 80+ Skills 体系（含 JSON Schema 参数约束、版本兼容与租户隔离）。沉淀 120+ Prompt 模板、120+ 标准化案例，优质 Prompt 稳定率 40%→75%；通过 KV Cache 与通信优化将单次调用压至 889 tokens / 1m22s，缓存命中率 99.82%。搭建覆盖成功率、素材有效率、成本与延迟的线上指标与 A/B 回归体系，有效素材率 58%→88%+。单条 30s 内容 3 小时→40 分钟，8 周支撑 3000+ 人次生产 1200+ 条内容。</div>
+        <div class="exp-tags"><span class="exp-tag">Agent 平台架构</span><span class="exp-tag">RAG</span><span class="exp-tag">Skills / MCP</span><span class="exp-tag">模型调度</span><span class="exp-tag">99.82% KV Cache</span><span class="exp-tag">A/B 评测</span></div>
       </div>
     </div>
     <div class="exp-item reveal rd-1">
@@ -465,8 +542,8 @@
         </div>
         <div class="exp-company">新阅科技 · 北京</div>
         <div class="exp-award">GoodShort 全球短剧平台 TOP7（电影级品质路线，巴西 iOS 免费榜 #1）</div>
-        <div class="exp-desc">依托 GoodNovel（全球图书收入榜 TOP3）IP 池评估 500+ 部、筛选 14 部完成短剧全球化发行。总消耗 $80万+、峰值单日 $82K，ROI 稳定 35%+。设计 Seedance / Kling / Runway 多模型编排与差异化路由，角色一致性 95%+、崩坏率 <5%；有效素材占比 58%→88%+。独立开发 MacOS 端 AI 剧集管理系统，接入钉钉 API 实现多项目实时追踪与协同调度。</div>
-        <div class="exp-tags"><span class="exp-tag">GoodShort TOP7</span><span class="exp-tag">$80万+ 投流</span><span class="exp-tag">多模型调度</span><span class="exp-tag">Vibe Coding</span><span class="exp-tag">出海</span></div>
+        <div class="exp-desc">依托 GoodNovel（全球图书收入榜 TOP3）IP 池评估 500+ 部、筛选 14 部完成短剧全球化发行。总消耗 $80万+、峰值单日 $82K，ROI 稳定 35%+。设计 Seedance / Kling / Runway 多模型编排与智能路由（含降级容灾与成本优化），角色一致性 95%+、崩坏率 <5%；通过离线评测 + 线上指标（素材有效率 / 崩坏率 / ROI）驱动迭代，有效素材占比 58%→88%+。独立开发 macOS 端 AI 剧集管理系统（Python + Swift 全栈），接入钉钉 API 实现多项目实时追踪、会话管理与协同调度。</div>
+        <div class="exp-tags"><span class="exp-tag">GoodShort TOP7</span><span class="exp-tag">$80万+ 投流</span><span class="exp-tag">模型智能路由</span><span class="exp-tag">评测可观测</span><span class="exp-tag">全栈系统</span><span class="exp-tag">出海</span></div>
       </div>
     </div>
     <div class="exp-item reveal rd-2">
@@ -493,8 +570,8 @@
         </div>
         <div class="exp-company">个人开源项目 · <a href="https://github.com/Lesile-Yin/agent-skills" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center"><svg class="github-svg" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>github.com/Lesile-Yin/agent-skills</a></div>
         <div class="exp-award">Python · 3 Stars · 适配 Claude Code / Codex CLI</div>
-        <div class="exp-desc">面向 AI 编码 Agent 的 4 个实用 Skill：prompt-forge（CRAFT 提示词工程）、prism-review（四维并行代码审查）、token-warden（Token 预算管理）等。以 SKILL.md 标准化封装，从一线 Agent 实战中沉淀，开源供社区复用。</div>
-        <div class="exp-tags"><span class="exp-tag">开源</span><span class="exp-tag">Python</span><span class="exp-tag">4 Skills</span><span class="exp-tag">prompt-forge</span><span class="exp-tag">Claude Code</span></div>
+        <div class="exp-desc">面向 AI 编码 Agent 的实用 Skill 体系：prompt-forge（CRAFT 提示词工程）、prism-review（四维并行代码审查）、token-warden（Token 预算管理）等。以 SKILL.md 标准化封装，实践 Skills 注册、版本兼容、JSON Schema / Pydantic 参数约束与 MCP 式工具调用，从一线 Agent 工程实战中沉淀并开源。</div>
+        <div class="exp-tags"><span class="exp-tag">开源</span><span class="exp-tag">Python</span><span class="exp-tag">Skills 注册</span><span class="exp-tag">JSON Schema</span><span class="exp-tag">MCP</span><span class="exp-tag">Claude Code</span></div>
       </div>
     </div>
     <div class="exp-item reveal">
@@ -518,8 +595,8 @@
         </div>
         <div class="exp-company">个人开源项目 · <a href="https://github.com/Lesile-Yin/JobCopilot" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center"><svg class="github-svg" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>github.com/Lesile-Yin/JobCopilot</a></div>
         <div class="exp-award">JavaScript · 基于智谱 GLM-4-Flash</div>
-        <div class="exp-desc">Chrome 扩展形态的求职助手：AI 解析 JD 完成岗位筛选，自动审核勾选匹配项，并按策略批量自动投递 BOSS 直聘职位。把重复的人工海投流程用 Agent 自动化，提升求职投递效率。</div>
-        <div class="exp-tags"><span class="exp-tag">开源</span><span class="exp-tag">JavaScript</span><span class="exp-tag">智谱 GLM-4</span><span class="exp-tag">BOSS 直聘</span><span class="exp-tag">自动化投递</span></div>
+        <div class="exp-desc">Chrome 扩展形态的求职 Agent：AI 解析 JD 提取岗位要求，匹配简历关键词，自动审核勾选并批量投递 BOSS 直聘职位。实践 Agent 从需求拆解→工具调用→结果反馈的完整工作流，可视为 Agent 工具工程化的小型沙盒。</div>
+        <div class="exp-tags"><span class="exp-tag">开源</span><span class="exp-tag">JavaScript</span><span class="exp-tag">智谱 GLM-4</span><span class="exp-tag">JD 解析</span><span class="exp-tag">Agent 工作流</span></div>
       </div>
     </div>
     <div class="exp-item reveal rd-1">
@@ -589,11 +666,20 @@
     </div>
   </div>
   <div class="skill-tags">
-    <span class="skill-tag">DeepSeek</span><span class="skill-tag">GPT</span><span class="skill-tag">Claude</span><span class="skill-tag">RAG</span><span class="skill-tag">Seedance</span><span class="skill-tag">Kling</span><span class="skill-tag">Runway</span><span class="skill-tag">Midjourney</span><span class="skill-tag">Python</span><span class="skill-tag">TypeScript</span><span class="skill-tag">ROI 优化</span><span class="skill-tag">A/B 测试</span>
+    <span class="skill-tag">Agent</span><span class="skill-tag">RAG</span><span class="skill-tag">LLM</span><span class="skill-tag">MCP</span><span class="skill-tag">Long Graph</span><span class="skill-tag">Embedding</span><span class="skill-tag">Milvus</span><span class="skill-tag">PGVector</span><span class="skill-tag">Python</span><span class="skill-tag">React</span><span class="skill-tag">TypeScript</span><span class="skill-tag">K8s</span><span class="skill-tag">Docker</span><span class="skill-tag">Helm</span><span class="skill-tag">JSON Schema</span><span class="skill-tag">Pydantic</span><span class="skill-tag">Prompt Engineering</span><span class="skill-tag">A/B 测试</span>
   </div>
 
   <div class="skills-detail">
     <div class="skills-category reveal">
+      <div class="skills-cat-header"><div class="skills-cat-bar cb-sys"></div><div class="skills-cat-title">Agent / RAG 平台（4）</div></div>
+      <div class="skills-list">
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">Agent 工作流编排</span><span class="skills-badge">DAG / State Machine</span></div><div class="skills-item-desc">设计多智能体协作、会话管理、异步长任务、记忆与上下文管理、KV Cache 的 Agent 生产平台</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">企业级 RAG</span><span class="skills-badge">Milvus / ES</span></div><div class="skills-item-desc">文档 / DB / ES / 内网多源接入、解析切分、Embedding、向量索引、混合检索、重排序、引用溯源、ACL/RBAC</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">Agent 工具工程化</span><span class="skills-badge">Skills / MCP</span></div><div class="skills-item-desc">Skills 注册与版本兼容、JSON Schema / Pydantic 参数、租户隔离、鉴权、重试 / 限流 / 熔断 / 审计回放</div></div>
+        <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">模型接入与调度</span><span class="skills-badge">智能路由</span></div><div class="skills-item-desc">统一模型适配层、公有云 / 私有推理、智能路由、降级容灾、Token 预算、成本优化与 99.82% 缓存命中</div></div>
+      </div>
+    </div>
+    <div class="skills-category reveal rd-1">
       <div class="skills-cat-header"><div class="skills-cat-bar cb-dev"></div><div class="skills-cat-title">编程与开发效率（5）</div></div>
       <div class="skills-list">
         <div class="skills-item"><div class="skills-item-row"><span class="skills-item-name">token-saviour</span><span class="skills-badge">节省 ~70% token</span></div><div class="skills-item-desc">按任务类型智能路由到最优 token 效率工具，四层工具路由（serena / rtk / caveman / Ponytail）</div></div>
@@ -698,34 +784,34 @@
   <h2 class="section-headline reveal rd-1">从 Agent 到全栈的落地能力</h2>
   <div class="eng-grid">
     <div class="eng-card reveal">
-      <div class="eng-card-title">🤖 Agent Harness 工程</div>
-      <div class="eng-card-desc">Context Engineering / Tool Use / 任务编排 / 多智能体协作 / DAG 工作流；精通 LangChain / LangGraph / OpenViking / AutoGen。曾用 Agent 跑通 50 部短剧全链路制片（总消耗 $80万），覆盖任务拆解、工具调度、质量交付。</div>
-      <div class="eng-card-tags"><span class="eng-card-tag">Prompt 优化</span><span class="eng-card-tag">异步长任务</span><span class="eng-card-tag">记忆管理</span></div>
+      <div class="eng-card-title">🤖 Agent 平台架构</div>
+      <div class="eng-card-desc">主导 Agent 生产平台从 0→1，落地 DAG / State Machine 工作流编排、多智能体协作、会话管理、异步长任务、记忆与上下文管理、KV Cache、Prompt 工程。沉淀 80+ Skills，具备 MCP / Tools 体系化建设经验。</div>
+      <div class="eng-card-tags"><span class="eng-card-tag">DAG</span><span class="eng-card-tag">State Machine</span><span class="eng-card-tag">多智能体</span><span class="eng-card-tag">MCP</span></div>
     </div>
     <div class="eng-card reveal rd-1">
-      <div class="eng-card-title">🔍 RAG 全流程调优</div>
-      <div class="eng-card-desc">熟悉向量库（Milvus / PGVector）、Embedding 模型、文档切分、混合检索、重排序、溯源校验等关键环节，落地过生产级知识检索。</div>
-      <div class="eng-card-tags"><span class="eng-card-tag">Milvus</span><span class="eng-card-tag">混合检索</span><span class="eng-card-tag">重排序</span></div>
+      <div class="eng-card-title">🔍 企业级 RAG</div>
+      <div class="eng-card-desc">完整落地 RAG 知识库：文档 / DB / ES / 内网多源接入、解析切分、Embedding、Milvus / PGVector 向量索引、混合检索、重排序、引用溯源、增量更新、ACL / RBAC 权限过滤。</div>
+      <div class="eng-card-tags"><span class="eng-card-tag">Embedding</span><span class="eng-card-tag">Milvus</span><span class="eng-card-tag">混合检索</span><span class="eng-card-tag">ACL/RBAC</span></div>
     </div>
     <div class="eng-card reveal rd-2">
-      <div class="eng-card-title">🧩 后端 & 全栈</div>
-      <div class="eng-card-desc">熟练掌握 Python / Swift，熟悉 TypeScript / Go。可独立完成前后端开发、接口设计、联调、交付、上线；熟悉微服务、消息队列、分布式、高并发、K8s / Docker / CI-CD。具备系统级开发经验（iOS 虚拟化 vphone-cli，60+ Swift 文件，自研 ARM64 反汇编器/编码器），可开发结合硬件的 AI 应用原型。</div>
-      <div class="eng-card-tags"><span class="eng-card-tag">Python</span><span class="eng-card-tag">Swift</span><span class="eng-card-tag">Go</span><span class="eng-card-tag">CI/CD</span></div>
+      <div class="eng-card-title">🧩 Python + React 全栈交付</div>
+      <div class="eng-card-desc">独立完成 Python 后端（API / 队列 / 调度 / 权限 / 审计 / 配置）与 React 前端（对话 / 管理界面 / 可视化）。熟悉微服务、消息队列、分布式高并发、K8s / Docker / Helm / CI-CD，可私有化与 SaaS 化交付。</div>
+      <div class="eng-card-tags"><span class="eng-card-tag">Python</span><span class="eng-card-tag">React</span><span class="eng-card-tag">K8s</span><span class="eng-card-tag">Docker</span><span class="eng-card-tag">CI/CD</span></div>
     </div>
     <div class="eng-card reveal">
-      <div class="eng-card-title">⚡ LLM Agent 技术栈</div>
-      <div class="eng-card-desc">深入理解 Prompt Engineering、Tool Use / Function Calling、Context Window 等核心概念；熟练 LangChain / LangGraph，有 Codex CLI、Reasonix 自研 Agent 框架实战。</div>
-      <div class="eng-card-tags"><span class="eng-card-tag">Function Calling</span><span class="eng-card-tag">自研框架</span></div>
+      <div class="eng-card-title">⚡ 模型接入与调度</div>
+      <div class="eng-card-desc">构建统一模型适配层，支持公有云 / 私有推理；实现智能路由、降级容灾、KV 缓存、开发控制、Token 预算与成本优化。接入 DeepSeek / GPT / Claude / 智谱 / 豆包 / Seedance / Kling / Runway 等 20+ 模型。</div>
+      <div class="eng-card-tags"><span class="eng-card-tag">智能路由</span><span class="eng-card-tag">降级容灾</span><span class="eng-card-tag">Token 预算</span><span class="eng-card-tag">成本优化</span></div>
     </div>
     <div class="eng-card reveal rd-1">
-      <div class="eng-card-title">🏗 系统设计</div>
-      <div class="eng-card-desc">能独立设计高可用、高并发分布式系统。做过 Agent 生产调度系统，涉及多工具并发调用、资源编排与任务分发，对分布式场景有直接积累。</div>
-      <div class="eng-card-tags"><span class="eng-card-tag">高并发</span><span class="eng-card-tag">调度编排</span></div>
+      <div class="eng-card-title">🏗 Agent 工具工程化</div>
+      <div class="eng-card-desc">设计 Skills 注册与版本兼容机制，使用 JSON Schema / Pydantic 约束参数，实现租户隔离、鉴权、重试、限流、熔断、审计回放等全链路能力，保障工具稳定可靠可复用。</div>
+      <div class="eng-card-tags"><span class="eng-card-tag">JSON Schema</span><span class="eng-card-tag">Pydantic</span><span class="eng-card-tag">限流熔断</span><span class="eng-card-tag">审计回放</span></div>
     </div>
     <div class="eng-card reveal rd-2">
-      <div class="eng-card-title">📡 可观测性闭环</div>
-      <div class="eng-card-desc">搭建过覆盖 trace / metrics / logging 的监控体系，通过 Replay 机制定位问题并推动迭代，将有效素材产出率从 58% 提升至 88%+，形成"评测→归因→优化→再评测"闭环。</div>
-      <div class="eng-card-tags"><span class="eng-card-tag">监控体系</span><span class="eng-card-tag">58%→88%+</span></div>
+      <div class="eng-card-title">📡 评测与可观测</div>
+      <div class="eng-card-desc">搭建离线评测、线上指标（成功率 / 工具成功率 / 引用命中率 / 延迟 / 成本）、A/B 回归、全链路 Tracing、日志监控与问题复现体系，形成"评测→归因→优化→再评测"闭环，有效素材率 58%→88%+。</div>
+      <div class="eng-card-tags"><span class="eng-card-tag">离线评测</span><span class="eng-card-tag">A/B 回归</span><span class="eng-card-tag">Tracing</span><span class="eng-card-tag">58%→88%+</span></div>
     </div>
   </div>
 </section>
@@ -930,48 +1016,48 @@
   <p class="section-desc reveal rd-2">从单文件架构到零依赖部署——下面是构成本站的全部技术。所有交互均为原生实现，无框架、无构建步骤，整站自包含于一个 HTML 文件，可直接双击打开或静态托管。</p>
   <div class="tech-grid">
     <div class="tech-card reveal">
-      <div class="tech-cat"><span class="tech-emoji">🧱</span> 前端架构</div>
+      <div class="tech-cat"><span class="tech-emoji">🧱</span> 前端与可视化</div>
       <ul class="tech-list">
-        <li><b>HTML5</b> · 语义化单文件结构</li>
-        <li><b>原生 CSS3</b> · 变量主题 / 玻璃拟态 / 流式排版</li>
-        <li><b>原生 JavaScript</b> · 零框架、零打包</li>
+        <li><b>React</b> · 组件化对话 / 管理界面 / 可视化</li>
+        <li><b>HTML5 + CSS3</b> · 单文件 / 变量主题 / 玻璃拟态</li>
+        <li><b>原生 JavaScript</b> · 零框架 / 零打包（本站）</li>
         <li><b>SVG 内联图标</b> · 零外部图片依赖</li>
       </ul>
     </div>
     <div class="tech-card reveal rd-1">
-      <div class="tech-cat"><span class="tech-emoji">🎨</span> 视觉与响应式</div>
+      <div class="tech-cat"><span class="tech-emoji">🐍</span> Python 后端</div>
       <ul class="tech-list">
-        <li><b>CSS 变量</b> 主题（--blue / --orange / --pink…）</li>
-        <li><b>clamp()</b> 流体字号 + Grid / Flexbox 布局</li>
-        <li><b>backdrop-filter</b> 毛玻璃 Dock 与弹窗</li>
-        <li><b>系统字体栈</b> PingFang SC / 微软雅黑</li>
+        <li><b>API / 队列 / 调度</b> · 异步任务与权限审计</li>
+        <li><b>JSON Schema / Pydantic</b> · 参数校验与 Skills 注册</li>
+        <li><b>RAG 管线</b> · 解析切分 / Embedding / 向量检索</li>
+        <li><b>模型适配层</b> · 统一路由 / 降级容灾 / Token 预算</li>
       </ul>
     </div>
     <div class="tech-card reveal rd-2">
-      <div class="tech-cat"><span class="tech-emoji">⚡</span> 交互与动效</div>
+      <div class="tech-cat"><span class="tech-emoji">⚡</span> Agent 与交互</div>
       <ul class="tech-list">
+        <li><b>DAG / State Machine</b> · 工作流编排</li>
+        <li><b>Skills / MCP</b> · 工具注册、版本与租户隔离</li>
         <li><b>IntersectionObserver</b> 滚动入场动画</li>
-        <li><b>Smooth Scroll</b> + Dock 滚动高亮联动</li>
-        <li><b>滚动进度条</b> / Dynamic Island 收缩</li>
         <li><b>搜索 · 筛选 · 排序</b> 作品集交互页</li>
       </ul>
     </div>
     <div class="tech-card reveal rd-3">
-      <div class="tech-cat"><span class="tech-emoji">🗂️</span> 数据管线</div>
+      <div class="tech-cat"><span class="tech-emoji">🗂️</span> 数据与 RAG</div>
       <ul class="tech-list">
         <li><b>Python + python-docx</b> 解析作品集</li>
         <li><b>WebFetch / WebSearch</b> 核实剧集链接</li>
-        <li><b>JSON 内嵌</b> 驱动前端渲染</li>
-        <li><b>零接口依赖</b> · 可离线完整浏览</li>
+        <li><b>Embedding + 向量库</b> · Milvus / PGVector / ES</li>
+        <li><b>JSON 内嵌</b> · 零接口依赖 / 可离线浏览</li>
       </ul>
     </div>
     <div class="tech-card reveal">
-      <div class="tech-cat"><span class="tech-emoji">🚀</span> 部署与托管</div>
+      <div class="tech-cat"><span class="tech-emoji">🚀</span> 部署与工程化</div>
       <ul class="tech-list">
         <li><b>GitHub Pages</b> · 静态托管 + gh api 推送</li>
         <li><b>CloudStudio</b> · 国内可访问镜像</li>
-        <li><b>Git / GitHub API</b> 内容同步</li>
-        <li><b>纯静态</b> · 无需服务器与数据库</li>
+        <li><b>K8s / Helm / Docker</b> · 私有化与 SaaS 交付</li>
+        <li><b>纯静态 / 微服务</b> · 按需选择架构</li>
       </ul>
     </div>
     <div class="tech-card reveal rd-1">
@@ -980,7 +1066,7 @@
         <li><b>WorkBuddy</b> 智能体端到端生成与迭代</li>
         <li><b>智谱 GLM-4-Flash</b> 演示中心真实后端</li>
         <li><b>DeepSeek / GPT / Claude</b> 撰写与编码</li>
-        <li><b>AI 生成</b> 文案 · 图标 · 页面结构</li>
+        <li><b>AI Coding</b> · Vibe Coding / Codex / Claude Code</li>
       </ul>
     </div>
   </div>
@@ -1028,6 +1114,7 @@
 <nav class="dock" id="dock">
   <div class="dock-item active" onclick="scrollTo('hero')" title="首页">🏠</div>
   <div class="dock-item" onclick="scrollTo('metrics')" title="数据">📊</div>
+  <div class="dock-item" onclick="scrollTo('jd-match')" title="匹配">🎯</div>
   <div class="dock-item" onclick="scrollTo('experience')" title="经历">💼</div>
   <div class="dock-item" onclick="scrollTo('skills')" title="技能">⚡</div>
   <div class="dock-item" onclick="scrollTo('engineering')" title="工程">🧩</div>
@@ -1057,7 +1144,7 @@
   });
 
   const dockItems = document.querySelectorAll('.dock-item');
-  const sections = ['hero','metrics','experience','skills','engineering','portfolio','prompt-demo','contact'];
+  const sections = ['hero','metrics','jd-match','experience','skills','engineering','portfolio','prompt-demo','contact'];
   window.addEventListener('scroll', () => {
     const y = window.scrollY + 300; let cur = 0;
     sections.forEach((id, i) => { const el = document.getElementById(id); if (el && el.offsetTop <= y) cur = i; });
