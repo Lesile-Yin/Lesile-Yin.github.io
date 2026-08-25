@@ -64,19 +64,24 @@
   .di-expanded .di-close { align-self: center; font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px; cursor: pointer; }
   .di-expanded .di-close:hover { color: rgba(255,255,255,0.7); }
 
-  /* === Hero (Left-aligned) === */
-  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 80px 20px; position: relative; }
-  .hero-inner { max-width: 920px; margin: 0 auto; width: 100%; }
-  .hero-intro { display: flex; align-items: center; gap: 16px; margin-bottom: 40px; }
-  .hero-intro-avatar { width: 64px; height: 64px; border-radius: 50%; overflow: hidden; flex-shrink: 0; box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+  /* === Hero (Apple-style centered) === */
+  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 100px 20px 120px; position: relative; overflow: hidden; }
+  .hero-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: clamp(120px, 30vw, 360px); font-weight: 900; letter-spacing: -12px; color: rgba(0,0,0,0.035); z-index: 0; pointer-events: none; white-space: nowrap; will-change: transform; }
+  .hero-inner { max-width: 920px; margin: 0 auto; width: 100%; text-align: center; position: relative; z-index: 1; will-change: transform, opacity; }
+  .hero-intro { display: inline-flex; align-items: center; gap: 14px; margin-bottom: 36px; padding: 7px 16px 7px 7px; border-radius: 999px; background: rgba(255,255,255,0.6); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 8px 32px rgba(0,0,0,0.06); }
+  .hero-intro-avatar { width: 42px; height: 42px; border-radius: 50%; overflow: hidden; flex-shrink: 0; box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
   .hero-intro-avatar img { width: 100%; height: 100%; object-fit: cover; }
-  .hero-intro-text { display: flex; flex-direction: column; gap: 2px; }
-  .hero-intro-name { font-size: 20px; font-weight: 700; color: var(--text); }
-  .hero-intro-role { font-size: 14px; color: var(--text-3); }
-  .hero-title { font-size: clamp(40px, 8vw, 80px); font-weight: 800; letter-spacing: -3px; line-height: 1.05; margin-bottom: 16px; }
-  .hero-subtitle { font-size: clamp(18px, 3vw, 24px); font-weight: 400; color: var(--text-2); max-width: 560px; line-height: 1.4; margin-bottom: 48px; }
-  .hero-cta { display: inline-flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 600; color: var(--blue); transition: opacity 0.3s; }
-  .hero-cta:hover { opacity: 0.7; }
+  .hero-intro-text { display: flex; flex-direction: column; gap: 1px; text-align: left; }
+  .hero-intro-name { font-size: 15px; font-weight: 700; color: var(--text); }
+  .hero-intro-role { font-size: 12px; color: var(--text-3); }
+  .hero-title { font-size: clamp(46px, 11vw, 108px); font-weight: 800; letter-spacing: -4px; line-height: 0.98; margin-bottom: 22px; background: linear-gradient(180deg, #1d1d1f, #4a4a52); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero-subtitle { font-size: clamp(17px, 2.6vw, 22px); font-weight: 400; color: var(--text-2); max-width: 680px; line-height: 1.5; margin: 0 auto 40px; }
+  .hero-cta { display: inline-flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 600; color: #fff; background: var(--blue); padding: 14px 34px; border-radius: 999px; transition: all 0.3s var(--spring); box-shadow: 0 8px 24px rgba(0,122,255,0.3); }
+  .hero-cta:hover { transform: scale(1.04); box-shadow: 0 12px 32px rgba(0,122,255,0.4); }
+  .hero-scroll { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 7px; color: var(--text-3); font-size: 12px; font-weight: 500; z-index: 2; }
+  .hero-scroll .mouse { width: 24px; height: 38px; border: 2px solid var(--text-3); border-radius: 14px; position: relative; }
+  .hero-scroll .mouse::before { content: ''; position: absolute; top: 7px; left: 50%; transform: translateX(-50%); width: 3px; height: 7px; border-radius: 2px; background: var(--text-3); animation: wheel 1.6s infinite; }
+  @keyframes wheel { 0% { opacity: 1; top: 7px; } 100% { opacity: 0; top: 18px; } }
   .hero-cta::after { content: '↓'; animation: bounce 2s infinite; }
   @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
   @keyframes breathe { 0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(52,199,89,0.4); } 50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(52,199,89,0); } }
@@ -301,13 +306,13 @@
   .dock-item.active { background: rgba(0,122,255,0.1); color: var(--blue); }
   .dock-item.active::after { content: ''; position: absolute; bottom: -3px; width: 4px; height: 4px; border-radius: 50%; background: var(--blue); }
 
-  /* === Reveal === */
-  .reveal { opacity: 0; transform: translateY(40px); transition: all 0.9s var(--ease); }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-  .rd-1 { transition-delay: 0.1s; }
-  .rd-2 { transition-delay: 0.2s; }
-  .rd-3 { transition-delay: 0.3s; }
-  .rd-4 { transition-delay: 0.4s; }
+  /* === Reveal (scroll-driven, Apple-style) === */
+  .reveal { opacity: 0; transform: translateY(48px) scale(0.98); filter: blur(6px); transition: opacity 0.9s var(--ease), transform 0.9s var(--spring), filter 0.9s var(--ease); }
+  .reveal.visible { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+  .rd-1 { transition-delay: 0.08s; }
+  .rd-2 { transition-delay: 0.16s; }
+  .rd-3 { transition-delay: 0.24s; }
+  .rd-4 { transition-delay: 0.32s; }
 
   /* === Tech Stack === */
   .tech-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
@@ -356,6 +361,19 @@
   .lightbox img { max-width: 92vw; max-height: 92vh; border-radius: 14px; box-shadow: 0 24px 80px rgba(0,0,0,0.6); }
   .lightbox-caption { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.85); font-size: 13px; padding: 6px 14px; background: rgba(0,0,0,0.45); border-radius: 20px; pointer-events: none; }
 
+
+  /* === Apple-style section headlines === */
+  .section-headline { font-size: clamp(30px, 5.5vw, 60px); letter-spacing: -2px; line-height: 1.05; }
+
+  /* === Highlights quick-nav (先刷重点) === */
+  .highlights { max-width: 920px; margin: 0 auto; padding: 56px 20px 0; }
+  .hl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
+  .hl-card { background: rgba(255,255,255,0.7); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid rgba(0,0,0,0.06); border-radius: 22px; padding: 22px 20px; cursor: pointer; transition: all 0.35s var(--spring); text-align: left; }
+  .hl-card:hover { transform: translateY(-6px); box-shadow: 0 18px 48px rgba(0,0,0,0.12); border-color: var(--blue); }
+  .hl-emoji { font-size: 26px; margin-bottom: 10px; display: block; }
+  .hl-title { font-size: 16px; font-weight: 700; margin-bottom: 3px; }
+  .hl-desc { font-size: 12.5px; color: var(--text-3); line-height: 1.4; }
+  @media (max-width: 640px) { .hl-grid { grid-template-columns: repeat(2, 1fr); } }
 </style>
 </head>
 <body>
@@ -388,7 +406,8 @@
 
 <!-- Hero -->
 <section class="hero" id="hero">
-  <div class="hero-inner">
+  <div class="hero-watermark" aria-hidden="true">AGENT</div>
+  <div class="hero-inner" id="heroInner">
     <div class="hero-intro reveal">
       <div class="hero-intro-avatar"><img src="photo.jpg" alt="Lesile Yin"></div>
       <div class="hero-intro-text">
@@ -399,6 +418,21 @@
     <h1 class="hero-title reveal rd-1">AI Agent<br>Platform Engineer</h1>
     <p class="hero-subtitle reveal rd-2">2 年 AI Agent 工程化实战，主导 Agent 生产平台从 0→1<br>覆盖 RAG、多模型调度、Skills / MCP 体系、Prompt 工程与全栈交付<br>（目标：字节跳动 AI Agent 平台 · 扣子 Coze / 火山方舟 / 豆包）</p>
     <a class="hero-cta reveal rd-3" href="#metrics">向下探索</a>
+  </div>
+  <div class="hero-scroll reveal rd-3"><div class="mouse"></div><span>向下滚动</span></div>
+</section>
+
+<!-- Highlights (先刷重点) -->
+<section class="highlights" id="highlights">
+  <div class="section-label reveal">先刷重点</div>
+  <h2 class="section-headline reveal rd-1">一份简历，<br>能聊的不止履历。</h2>
+  <div class="hl-grid">
+    <div class="hl-card reveal rd-1" onclick="scrollTo('metrics')"><span class="hl-emoji">📊</span><div class="hl-title">核心数据</div><div class="hl-desc">30+ 短剧 · $80万 投流 · 80+ Skills</div></div>
+    <div class="hl-card reveal rd-1" onclick="scrollTo('jd-match')"><span class="hl-emoji">🎯</span><div class="hl-title">字节岗位匹配</div><div class="hl-desc">Coze / 火山方舟 / 豆包能力全景</div></div>
+    <div class="hl-card reveal rd-2" onclick="scrollTo('experience')"><span class="hl-emoji">💼</span><div class="hl-title">工作经历</div><div class="hl-desc">Agent 平台 0→1 主导落地</div></div>
+    <div class="hl-card reveal rd-2" onclick="scrollTo('oss-skills')"><span class="hl-emoji">🛠</span><div class="hl-title">开源 Agent</div><div class="hl-desc">Hermes Agent · super-tart</div></div>
+    <div class="hl-card reveal rd-3" onclick="scrollTo('deskill-demo')"><span class="hl-emoji">🖼</span><div class="hl-title">项目 Demo</div><div class="hl-desc">agent-skills 真实运行演示</div></div>
+    <div class="hl-card reveal rd-3" onclick="scrollTo('prompt-demo')"><span class="hl-emoji">✨</span><div class="hl-title">交互演示</div><div class="hl-desc">4 个 Skill 接入真实 AI 后端</div></div>
   </div>
 </section>
 
@@ -1154,6 +1188,38 @@
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
   document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  // Hero parallax (scroll-scrub): title lifts/fades, watermark drifts
+  const heroInner = document.getElementById('heroInner');
+  const heroWM = document.querySelector('.hero-watermark');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y < window.innerHeight) {
+      const p = y / window.innerHeight;
+      if (heroInner) { heroInner.style.transform = 'translateY(' + (y * 0.35) + 'px)'; heroInner.style.opacity = (1 - p * 1.15).toFixed(3); }
+      if (heroWM) { heroWM.style.transform = 'translate(-50%,-50%) translateY(' + (y * 0.18) + 'px) scale(' + (1 + p * 0.12) + ')'; }
+    }
+  }, { passive: true });
+
+  // Count-up for metric numbers when they enter view
+  function splitNum(str){ const m = str.match(/^([^\d]*)([\d.]+)(.*)$/); if(!m) return null; const dec = (m[2].indexOf('.')>=0) ? m[2].split('.')[1].length : 0; return { prefix:m[1], num:parseFloat(m[2]), suffix:m[3], dec:dec }; }
+  function animateCount(el){
+    const info = splitNum(el.textContent);
+    if(!info || isNaN(info.num)) return;
+    const dur = 1300, start = performance.now();
+    function tick(now){
+      const t = Math.min(1, (now - start) / dur);
+      const e = 1 - Math.pow(1 - t, 3);
+      const val = info.num * e;
+      el.textContent = info.prefix + (info.dec ? val.toFixed(info.dec) : Math.round(val)) + info.suffix;
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const countObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { animateCount(e.target); countObs.unobserve(e.target); } });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.sc-value').forEach(el => countObs.observe(el));
 
   let lastY = 0;
   const dock = document.getElementById('dock');
