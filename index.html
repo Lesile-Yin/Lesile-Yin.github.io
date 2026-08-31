@@ -1244,11 +1244,11 @@
     <div class="contact-item reveal rd-3">
       <div class="ci-icon"><svg class="ico" style="width:16px;height:16px;vertical-align:-3px"><use href="#ic-pin"/></svg></div><div class="ci-label">城市</div><div class="ci-value">北京</div>
     </div>
-    <a href="https://lesile-yin.github.io" target="_blank" rel="noopener" class="contact-item reveal">
-      <div class="ci-icon"><svg class="ico"><use href="#ic-globe"/></svg></div><div class="ci-label">主页</div><div class="ci-value">lesile-yin.github.io</div>
+    <a href="https://jay2217-d1guaifym2f21e570-1437141048.tcloudbaseapp.com" target="_blank" rel="noopener" class="contact-item reveal">
+      <div class="ci-icon"><svg class="ico"><use href="#ic-globe"/></svg></div><div class="ci-label">主页</div><div class="ci-value">CloudBase 托管（稳定）</div>
     </a>
-    <a href="https://lesileyin.bj7.agentos-app.net" target="_blank" rel="noopener" class="contact-item reveal">
-      <div class="ci-icon"><svg class="ico"><use href="#ic-shield"/></svg></div><div class="ci-label">主页·备用</div><div class="ci-value">CloudStudio 镜像</div>
+    <a href="https://lesile-yin.github.io" target="_blank" rel="noopener" class="contact-item reveal">
+      <div class="ci-icon"><svg class="ico"><use href="#ic-shield"/></svg></div><div class="ci-label">主页·备用</div><div class="ci-value">lesile-yin.github.io</div>
     </a>
   </div>
 </section>
@@ -1355,9 +1355,9 @@
 
 
 
-  // Prompt Optimizer Demo — calls backend proxy (/api/optimize), falls back to smart template
-  // API_BASE：统一指向腾讯云 CloudBase 云接入域名（CORS 已开 *，所有域名均可调）
-  const API_BASE = 'https://jay2217-d1guaifym2f21e570-1437141048.ap-shanghai.app.tcloudbase.com';
+  // Prompt Optimizer Demo — calls backend proxy (/optimizeApi), falls back to smart template
+  // API_BASE：指向腾讯云 CloudBase 静态托管域名（若未部署云函数，会自动走离线模板兜底，不会崩溃）
+  const API_BASE = 'https://jay2217-d1guaifym2f21e570-1437141048.tcloudbaseapp.com';
   function setExample(text) { document.getElementById('promptInput').value = text; document.getElementById('promptOutput').classList.remove('show'); }
 
   // 保存最近一次「真实 AI 优化出的提示词」，供「生成实际结果」按钮使用
