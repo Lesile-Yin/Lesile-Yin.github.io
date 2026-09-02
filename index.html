@@ -195,6 +195,24 @@
   .demo-live { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: #fff; background: var(--green); padding: 4px 11px; border-radius: 10px; margin-left: auto; flex-shrink: 0; }
   .demo-live .dot { width: 6px; height: 6px; border-radius: 50%; background: #fff; animation: breathe 2s ease-in-out infinite; }
 
+  /* === Live Skill Demo (真实云终端) === */
+  .live-demo-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #1a7f37; background: rgba(52,199,89,0.12); border: 1px solid rgba(52,199,89,0.35); padding: 6px 14px; border-radius: 20px; margin-top: 20px; }
+  .live-demo-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: breathe 2s ease-in-out infinite; }
+  .live-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
+  .live-card { background: var(--surface); border: 1px solid var(--separator); border-radius: 20px; padding: 22px; box-shadow: var(--shadow-1); transition: all 0.3s var(--spring); display: flex; flex-direction: column; }
+  .live-card:hover { transform: translateY(-4px); border-color: var(--blue); box-shadow: var(--shadow-2); }
+  .live-card-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .live-card-desc { font-size: 13.5px; color: var(--text-2); line-height: 1.55; }
+  .live-card-cmd { margin-top: 12px; font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 12.5px; color: var(--text); background: var(--surface-2); border: 1px solid var(--separator); border-radius: 10px; padding: 8px 12px; word-break: break-all; }
+  .live-card-btn { margin-top: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 18px; border-radius: 980px; background: rgba(0,113,227,0.08); border: 1px solid rgba(0,113,227,0.25); color: var(--blue); font-size: 14px; font-weight: 500; transition: all 0.2s var(--ease); }
+  .live-card-btn:hover { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .live-card-btn:active { transform: scale(0.97); }
+  .live-demo-cta { margin-top: 40px; text-align: center; }
+  .live-demo-btn { display: inline-flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 400; color: #fff; background: var(--blue); padding: 14px 32px; border-radius: 980px; box-shadow: var(--shadow-1); transition: background 0.2s var(--ease), transform 0.2s var(--ease); }
+  .live-demo-btn:hover { background: var(--blue-hover); }
+  .live-demo-btn:active { transform: scale(0.97); }
+  .live-demo-note { margin-top: 14px; font-size: 12.5px; color: var(--text-3); line-height: 1.5; }
+
   /* === Open Source Skills === */
   .oss-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 48px; }
   .oss-card { background: var(--surface); border: 1px solid var(--separator); border-radius: 20px; padding: 22px; box-shadow: var(--shadow-1); transition: all 0.3s var(--spring); text-decoration: none; display: block; }
@@ -385,7 +403,7 @@
   /* === 响应式：手机竖屏（单列窄屏）=== */
   @media (orientation: portrait) and (max-width: 734px) {
     .section, .hero-inner, .highlights { max-width: 100%; }
-    .summary-grid, .portfolio-grid, .tech-grid, .jd-grid, .eng-grid, .oss-grid { grid-template-columns: 1fr; }
+    .summary-grid, .portfolio-grid, .tech-grid, .jd-grid, .eng-grid, .oss-grid, .live-grid { grid-template-columns: 1fr; }
     .skills-grid { grid-template-columns: repeat(4, 1fr); }
     .contact-grid { grid-template-columns: repeat(2, 1fr); }
     .hl-grid { grid-template-columns: repeat(2, 1fr); }
@@ -964,6 +982,38 @@
       <div class="demo-pill" role="button" tabindex="0" onclick="scrollTo('audit-demo')">代码审计</div>
       <div class="demo-pill" role="button" tabindex="0" onclick="scrollTo('token-demo')"><span class="em"><svg class="ico" style="width:18px;height:18px;vertical-align:-3px"><use href="#ic-coin"/></svg></span>Token 压缩</div>
     </div>
+  </div>
+</section>
+
+<!-- Live Skill Demo (真实云终端) -->
+<section class="section" id="live-demo">
+  <div class="section-label reveal"><svg class="ico sl-ico" aria-hidden="true"><use href="#ic-code"/></svg>Skill 实时演示</div>
+  <h2 class="section-headline reveal rd-1">🖥️ Skill 实时演示（真实云终端）</h2>
+  <p class="section-desc reveal rd-2">以下演示运行在真实 Linux 云服务器（腾讯云轻量），点击按钮进入终端，亲手运行 demo 命令查看输出。</p>
+  <div class="live-demo-badge reveal rd-2"><span class="dot"></span>真实云终端在线 · ttyd 可交互 · 沙箱 demo 用户</div>
+  <div class="live-grid">
+    <div class="live-card reveal">
+      <div class="live-card-title"><svg class="ico" style="width:20px;height:20px;color:var(--blue)"><use href="#ic-database"/></svg> 企业级 RAG 检索</div>
+      <div class="live-card-desc">混合检索 BM25+Dense → Rerank → 引用溯源 + ACL 权限过滤，完整企业级 RAG 链路真实跑通。</div>
+      <div class="live-card-cmd">$ ./skills/rag-demo.sh</div>
+      <a class="live-card-btn" href="http://192.144.219.209:7681" target="_blank" rel="noopener">在终端运行 ↗</a>
+    </div>
+    <div class="live-card reveal rd-1">
+      <div class="live-card-title"><svg class="ico" style="width:20px;height:20px;color:var(--blue)"><use href="#ic-layers"/></svg> Agent 工作流编排</div>
+      <div class="live-card-desc">DAG 规划 + 4 节点工具调用（SQL / 图表 / 文档），亲眼看 Agent 拆解任务并逐步执行。</div>
+      <div class="live-card-cmd">$ ./skills/agent-demo.sh</div>
+      <a class="live-card-btn" href="http://192.144.219.209:7681" target="_blank" rel="noopener">在终端运行 ↗</a>
+    </div>
+    <div class="live-card reveal rd-2">
+      <div class="live-card-title"><svg class="ico" style="width:20px;height:20px;color:var(--blue)"><use href="#ic-bolt"/></svg> KV Cache 前缀复用</div>
+      <div class="live-card-desc">首 token 延迟 180ms→100ms，缓存命中 98%+，直观感受推理加速效果。</div>
+      <div class="live-card-cmd">$ ./skills/cache-demo.sh</div>
+      <a class="live-card-btn" href="http://192.144.219.209:7681" target="_blank" rel="noopener">在终端运行 ↗</a>
+    </div>
+  </div>
+  <div class="live-demo-cta reveal rd-3">
+    <a class="live-demo-btn" href="http://192.144.219.209:7681" target="_blank" rel="noopener">进入真实云终端 ↗</a>
+    <p class="live-demo-note">终端为沙箱 demo 用户，可自由体验；若页面提示不安全属正常（http 内网演示）。</p>
   </div>
 </section>
 
